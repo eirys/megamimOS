@@ -2,33 +2,29 @@ OUTPUT_FORMAT(elf32-i386)
 OUTPUT_ARCH(i386)
 ENTRY(megamimOS_entrypoint)
 
-SECTIONS {
-    . = 1M;
+SECTIONS
+{
+	. = 2M;
 
-    .text : {
-        KEEP(*(.megamimOS_handle))
-        *(.text .text.*)
-    }
+	.text BLOCK(4K) : ALIGN(4K)
+	{
+		*(.megamimOS_handle)
+		*(.text)
+	}
 
-    . += CONSTANT(MAXPAGESIZE);
+	.rodata BLOCK(4K) : ALIGN(4K)
+	{
+		*(.rodata)
+	}
 
-    .rodata : {
-        *(.rodata .rodata.*)
-    }
+	.data BLOCK(4K) : ALIGN(4K)
+	{
+		*(.data)
+	}
 
-    . += CONSTANT(MAXPAGESIZE);
-
-    .data : {
-        *(.data .data.*)
-    }
-
-    .bss : {
-        *(COMMON)
-        *(.bss .bss.*)
-    }
-
-    /DISCARD/ : {
-        *(.eh_frame)
-        *(.note .note.*)
-    }
+	.bss BLOCK(4K) : ALIGN(4K)
+	{
+		*(COMMON)
+		*(.bss)
+	}
 }

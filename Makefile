@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/01/30 15:48:21 by etran            ###   ########.fr        #
+#    Updated: 2024/01/30 17:52:18 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,12 +19,11 @@ OBJ_CPP	:=	$(SRC_CPP:.cpp=.o)
 OBJ_ASM	:=	$(SRC_ASM:.s=.o)
 
 
-
 # ----------------- COMPILATION ---------------- #
 ASM			:=	nasm
 ASFLAGS		:=	-felf32
 
-CXX			:=	c++
+CXX			:=	gcc #c++
 CFLAGS		:=	-fno-builtin \
 				-fno-exceptions \
 				-fno-stack-protector \
@@ -34,16 +33,17 @@ CFLAGS		:=	-fno-builtin \
 				-m32
 
 LD			:=	ld
-LFLAGS		:=
+LD_SCRIPT	:=	megamimOS.ld
+LFLAGS		:=	-T$(LD_SCRIPT)
 
 RM			:=	rm -rf
 
 .PHONY: all
 all: $(NAME)
 
-$(NAME): $(OBJ_CPP) $(OBJ_ASM)
+$(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 	@echo "Linking file $(NAME)..."
-	@$(LD) -TmegamimOS.ld $(LFLAGS) -o $(NAME) $(OBJ_CPP) $(OBJ_ASM)
+	@$(LD) $(LFLAGS) $(OBJ_CPP) $(OBJ_ASM) -o $(NAME)
 
 .cpp.o:
 	@echo "Compiling file $<..."
@@ -55,7 +55,16 @@ $(NAME): $(OBJ_CPP) $(OBJ_ASM)
 
 .PHONY: run
 run: $(NAME)
-	qemu-system-i386 -kernel $(NAME) --machine q35
+	qemu-system-i386 -kernel megamimOS
+
+#TODO
+.PHONY: run-grub
+run-grub: $(NAME)
+	mkdir -p isodir/boot/grub
+	cp $(NAME) isodir/boot/megamimOS
+	cp grub.cfg isodir/boot/grub/grub.cfg
+	grub-mkrescue -o megamimOS.iso isodir
+	qemu-system-i386 -cdrom megamimOS.iso
 
 .PHONY: clean
 clean:
@@ -64,4 +73,5 @@ clean:
 	@echo "Removing ASM objects."
 	@$(RM) $(OBJ_ASM)
 
-# .PHONY: fclean re # etc tmtc
+.PHONY: re
+re: clean all
