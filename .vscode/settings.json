@@ -1,0 +1,6 @@
+{
+    "comment-divider.lineFiller": "-",
+    "comment-divider.shouldLengthIncludeIndent": true,
+    "comment-divider.subheaderTransform": "uppercase",
+    "comment-divider.mainHeaderTransform": "uppercase"
+}

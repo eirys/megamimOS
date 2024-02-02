@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/01/30 17:52:18 by etran            ###   ########.fr        #
+#    Updated: 2024/02/02 17:35:30 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ SRC_ASM	:=	$(shell find src/ -name '*.s')
 
 OBJ_CPP	:=	$(SRC_CPP:.cpp=.o)
 OBJ_ASM	:=	$(SRC_ASM:.s=.o)
+
+ISO_DIR	:=	isodir
 
 
 # ----------------- COMPILATION ---------------- #
@@ -60,10 +62,10 @@ run: $(NAME)
 #TODO
 .PHONY: run-grub
 run-grub: $(NAME)
-	mkdir -p isodir/boot/grub
-	cp $(NAME) isodir/boot/megamimOS
-	cp grub.cfg isodir/boot/grub/grub.cfg
-	grub-mkrescue -o megamimOS.iso isodir
+	mkdir -p $(ISO_DIR)/boot/grub
+	cp $(NAME) $(ISO_DIR)/boot/megamimOS
+	cp grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
+	grub-mkrescue -o megamimOS.iso $(ISO_DIR)
 	qemu-system-i386 -cdrom megamimOS.iso
 
 .PHONY: clean
@@ -75,3 +77,4 @@ clean:
 
 .PHONY: re
 re: clean all
+	$(RM) $(ISO_DIR)
