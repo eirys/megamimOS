@@ -2,5 +2,10 @@
     "comment-divider.lineFiller": "-",
     "comment-divider.shouldLengthIncludeIndent": true,
     "comment-divider.subheaderTransform": "uppercase",
-    "comment-divider.mainHeaderTransform": "uppercase"
+    "comment-divider.mainHeaderTransform": "uppercase",
+    "comment-divider.subheaderFiller": "-",
+    "comment-divider.length": 50,
+    "comment-divider.mainHeaderAlign": "center",
+    "comment-divider.subheaderAlign": "center",
+    "comment-divider.mainHeaderFiller": "-"
 }

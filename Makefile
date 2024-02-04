@@ -6,26 +6,33 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/02 17:35:30 by etran            ###   ########.fr        #
+#    Updated: 2024/02/04 22:43:26 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	:=	megamimOS
+# ------------------- KERNEL ------------------- #
+NAME		:=	megamimOS
 
-SRC_CPP	:=	$(shell find src/ -name '*.cpp')
-SRC_ASM	:=	$(shell find src/ -name '*.s')
+# --------------- DIRECTORY NAMES -------------- #
+SRC_DIR		:=	src
+OBJ_DIR		:=	obj
+ISO_DIR		:=	isodir
 
-OBJ_CPP	:=	$(SRC_CPP:.cpp=.o)
-OBJ_ASM	:=	$(SRC_ASM:.s=.o)
+SUBDIRS		:=
 
-ISO_DIR	:=	isodir
+# ---------------- SOURCE FILES ---------------- #
 
+SRC_CPP		:=	$(shell find src/ -name '*.cpp')
+SRC_ASM		:=	$(shell find src/ -name '*.s')
+
+OBJ_CPP		:=	$(SRC_CPP:.cpp=.o)
+OBJ_ASM		:=	$(SRC_ASM:.s=.o)
 
 # ----------------- COMPILATION ---------------- #
 ASM			:=	nasm
 ASFLAGS		:=	-felf32
 
-CXX			:=	gcc #c++
+CXX			:=	c++
 CFLAGS		:=	-fno-builtin \
 				-fno-exceptions \
 				-fno-stack-protector \
@@ -57,16 +64,16 @@ $(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 
 .PHONY: run
 run: $(NAME)
-	qemu-system-i386 -kernel megamimOS
+	@qemu-system-i386 -kernel $(NAME)
 
 #TODO
 .PHONY: run-grub
 run-grub: $(NAME)
 	mkdir -p $(ISO_DIR)/boot/grub
-	cp $(NAME) $(ISO_DIR)/boot/megamimOS
+	cp $(NAME) $(ISO_DIR)/boot/$(NAME)
 	cp grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
-	grub-mkrescue -o megamimOS.iso $(ISO_DIR)
-	qemu-system-i386 -cdrom megamimOS.iso
+	grub-mkrescue -o $(NAME).iso $(ISO_DIR)
+	qemu-system-i386 -cdrom $(NAME).iso
 
 .PHONY: clean
 clean:
@@ -74,7 +81,8 @@ clean:
 	@$(RM) $(OBJ_CPP)
 	@echo "Removing ASM objects."
 	@$(RM) $(OBJ_ASM)
+	@echo "Removing $(ISO_DIR)".
+	@$(RM) $(ISO_DIR)
 
 .PHONY: re
 re: clean all
-	$(RM) $(ISO_DIR)
