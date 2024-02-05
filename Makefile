@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/05 16:21:01 by etran            ###   ########.fr        #
+#    Updated: 2024/02/05 16:43:12 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,12 +25,12 @@ CONFIG_DIR		:=	config
 ISO_DIR			:=	isodir
 
 DRIVER_DIR		:=	drivers
-TERMINAL_DIR	:=	terminal
+WINDOW_DIR		:=	window
 
 # ---------------- SUB DIRECTORIES ------------- #
 SUBDIRS			:=	. \
 					$(DRIVER_DIR) \
-					$(TERMINAL_DIR)
+					$(WINDOW_DIR)
 
 # OBJ_SUBDIRS	:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))

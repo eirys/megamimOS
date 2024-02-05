@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:40:56 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 15:40:59 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/05 19:11:54 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,18 @@ static constexpr const uint8_t COMMAND_PORT = 0x64;
  * This is used to send commands to the PS/2 controller.
 */
 static inline
-uint8_t in_b(uint16_t port) {
+uint8_t inB(uint16_t port) {
     uint8_t ret;
 
     asm volatile ("inb %1, %0" : "=a" (ret) : "dN" (port));
     return ret;
 }
+
+static inline
+void outB(uint16_t port, uint8_t data) {
+    asm volatile ("outb %0, %1" : : "a" (data), "dN" (port));
+}
+
 
 /**
  * @brief Pause the CPU until the next interrupt.
@@ -64,7 +70,7 @@ void pause() {
 */
 static inline
 uint8_t readStatus() {
-    return in_b(COMMAND_PORT);
+    return inB(COMMAND_PORT);
 }
 
 /**
@@ -78,7 +84,7 @@ uint8_t readStatus() {
  */
 static inline
 uint8_t readData() {
-    return in_b(DATA_PORT);
+    return inB(DATA_PORT);
 }
 
 /**
@@ -104,7 +110,7 @@ bool poll() {
 
 static inline
 void read() {
-    uint8_t data = ps2::readData();
+    // uint8_t data = ps2::readData();
 
     // Interpret the scancode
 }

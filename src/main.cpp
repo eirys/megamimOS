@@ -1,11 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
+/*   Updated: 2024/02/05 19:52:34 by etran            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "window.h"
-#include "history.h"
 #include "ps2.h"
 #include "vga.h"
+#include "history.h"
+#include "window_manager.h"
 
 #define KERNEL_NAME         "megamimOS"
 #define KERNEL_NAME_LEN     9
+
+/* -------------------------------------------- */
 
 /**
  * @todo :P)
@@ -13,10 +26,13 @@
 struct MultibootInfo {
 };
 
+/* -------------------------------------------- */
+
 static inline
 void _init() {
     vga::clearBuffer();
     ps2::readData();
+    // vga::g_cursor.update();
 }
 
 /* -------------------------------------------- */
@@ -26,15 +42,14 @@ extern "C"
 void megamimOS_cpp(const MultibootInfo& info);
 
 void megamimOS_cpp(const MultibootInfo& info) {
+    WindowManager winManager;
+
     _init();
 
     ps2::poll();
     ps2::read();
 
-    vga::putString(KERNEL_NAME, 0, 0);
-    vga::putChar(vga::Char::Heart, KERNEL_NAME_LEN + 1, 0, vga::Color::Cherry);
-
-    // Testing lol
-    // ps2::poll();
-    // vga::scrollDown();
+    winManager << KERNEL_NAME;
+    // vga::putString(KERNEL_NAME, 0, 0);
+    // vga::putChar(vga::Char::Heart, KERNEL_NAME_LEN + 1, 0, vga::Color::Cherry);
 }
