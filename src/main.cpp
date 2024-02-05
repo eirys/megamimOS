@@ -1,48 +1,40 @@
 
+#include "window.h"
+#include "history.h"
 #include "ps2.h"
 #include "vga.h"
 
-struct MultibootInfo {
+#define KERNEL_NAME         "megamimOS"
+#define KERNEL_NAME_LEN     9
 
+/**
+ * @todo :P)
+*/
+struct MultibootInfo {
 };
 
+static inline
+void _init() {
+    vga::clearBuffer();
+    ps2::readData();
+}
 
-// visib pr asm
+/* -------------------------------------------- */
+
+// Enable ASM linkage
 extern "C"
 void megamimOS_cpp(const MultibootInfo& info);
 
-
 void megamimOS_cpp(const MultibootInfo& info) {
-    uint8_t* vga = (uint8_t*)0xb8000;
-    vga::clearBuffer();
+    _init();
 
-    // o k ou
-    ps2::readData();
+    ps2::poll();
+    ps2::read();
 
-    while (!ps2::isOutputFull()) {
-        ps2::pause();
-    }
+    vga::putString(KERNEL_NAME, 0, 0);
+    vga::putChar(vga::Char::Heart, KERNEL_NAME_LEN + 1, 0, vga::Color::Cherry);
 
-    uint8_t data = ps2::readData();
-
-    vga[0] = 'm';
-    vga[1] = (uint8_t)vga::Color::Immaculate;
-    vga[2] = 'e';
-    vga[3] = (uint8_t)vga::Color::Immaculate;
-    vga[4] = 'g';
-    vga[5] = (uint8_t)vga::Color::Immaculate;
-    vga[6] = 'a';
-    vga[7] = (uint8_t)vga::Color::Immaculate;
-    vga[8] = 'm';
-    vga[9] = (uint8_t)vga::Color::Immaculate;
-    vga[10] = 'i';
-    vga[11] = (uint8_t)vga::Color::Immaculate;
-    vga[12] = 'm';
-    vga[13] = (uint8_t)vga::Color::Immaculate;
-    vga[14] = 'O';
-    vga[15] = (uint8_t)vga::Color::Immaculate;
-    vga[16] = 'S';
-    vga[17] = (uint8_t)vga::Color::Immaculate;
-    vga[20] = vga::Char::Heart;
-    vga[21] = (uint8_t)vga::Color::Cherry;
+    // Testing lol
+    // ps2::poll();
+    // vga::scrollDown();
 }

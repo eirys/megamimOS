@@ -6,59 +6,97 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/04 22:43:26 by etran            ###   ########.fr        #
+#    Updated: 2024/02/05 16:21:01 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# ---------------------------------------------- #
+#                     TARGETS                    #
+# ---------------------------------------------- #
+
 # ------------------- KERNEL ------------------- #
-NAME		:=	megamimOS
+NAME			:=	megamimOS
+ISO				:=	$(NAME).iso
 
 # --------------- DIRECTORY NAMES -------------- #
-SRC_DIR		:=	src
-OBJ_DIR		:=	obj
-ISO_DIR		:=	isodir
+SRC_DIR			:=	src
+OBJ_DIR			:=	obj
+CONFIG_DIR		:=	config
+ISO_DIR			:=	isodir
 
-SUBDIRS		:=
+DRIVER_DIR		:=	drivers
+TERMINAL_DIR	:=	terminal
+
+# ---------------- SUB DIRECTORIES ------------- #
+SUBDIRS			:=	. \
+					$(DRIVER_DIR) \
+					$(TERMINAL_DIR)
+
+# OBJ_SUBDIRS	:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
+INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
 
 # ---------------- SOURCE FILES ---------------- #
+SRC_FILES_CPP	:=	main.cpp
+SRC_FILES_ASM	:=	entrypoint.s
 
-SRC_CPP		:=	$(shell find src/ -name '*.cpp')
-SRC_ASM		:=	$(shell find src/ -name '*.s')
+SRC_ASM			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_ASM))
+SRC_CPP			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_CPP))
 
-OBJ_CPP		:=	$(SRC_CPP:.cpp=.o)
-OBJ_ASM		:=	$(SRC_ASM:.s=.o)
+OBJ_ASM			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES_ASM:.s=.o))
+OBJ_CPP			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES_CPP:.cpp=.o))
+DEP				:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES_CPP:.cpp=.d))
 
 # ----------------- COMPILATION ---------------- #
-ASM			:=	nasm
-ASFLAGS		:=	-felf32
+ASM				:=	nasm
+ASFLAGS			:=	-felf32
 
-CXX			:=	c++
-CFLAGS		:=	-fno-builtin \
-				-fno-exceptions \
-				-fno-stack-protector \
-				-fno-rtti \
-				-nostdlib \
-				-nodefaultlibs \
-				-m32
+CXX				:=	c++
+INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS))
+CFLAGS			:=	-std=c++20 \
+					-MMD \
+					-MP \
+					-fno-builtin \
+					-fno-exceptions \
+					-fno-stack-protector \
+					-fno-rtti \
+					-nostdlib \
+					-nodefaultlibs \
+					-m32 \
+					$(INCLUDES)
 
-LD			:=	ld
-LD_SCRIPT	:=	megamimOS.ld
-LFLAGS		:=	-T$(LD_SCRIPT)
+LD				:=	ld
+LD_SCRIPT		:=	$(CONFIG_DIR)/megamimOS.ld
+LFLAGS			:=	-T$(LD_SCRIPT)
 
-RM			:=	rm -rf
+GRUB_CFG		:=	grub.cfg
+GRUB			:=	grub-mkrescue
+
+# -------------------- MISC -------------------- #
+RM				:=	rm -rf
+
+# ---------------------------------------------- #
+#                      RULES                     #
+# ---------------------------------------------- #
 
 .PHONY: all
 all: $(NAME)
 
+-include $(DEP)
+
+# Compile kernel
 $(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 	@echo "Linking file $(NAME)..."
 	@$(LD) $(LFLAGS) $(OBJ_CPP) $(OBJ_ASM) -o $(NAME)
 
-.cpp.o:
+# Compile obj files (cpp)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(OBJ_DIR)
 	@echo "Compiling file $<..."
 	@$(CXX) $(CFLAGS) -c $< -o $@
 
-.s.o:
+# Compile obj files (asm)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
+	@mkdir -p $(OBJ_DIR)
 	@echo "Compiling file $<..."
 	@$(ASM) $(ASFLAGS) $< -o $@
 
@@ -66,23 +104,27 @@ $(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 run: $(NAME)
 	@qemu-system-i386 -kernel $(NAME)
 
-#TODO
 .PHONY: run-grub
 run-grub: $(NAME)
 	mkdir -p $(ISO_DIR)/boot/grub
 	cp $(NAME) $(ISO_DIR)/boot/$(NAME)
-	cp grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
-	grub-mkrescue -o $(NAME).iso $(ISO_DIR)
-	qemu-system-i386 -cdrom $(NAME).iso
+	cp $(GRUB_CFG)/$(GRUB_CFG) $(ISO_DIR)/boot/grub/$(GRUB_CFG)
+	$(GRUB) -o $(ISO) $(ISO_DIR)
+	qemu-system-i386 -cdrom $(ISO)
 
 .PHONY: clean
 clean:
-	@echo "Removing CPP objects."
-	@$(RM) $(OBJ_CPP)
-	@echo "Removing ASM objects."
-	@$(RM) $(OBJ_ASM)
-	@echo "Removing $(ISO_DIR)".
+	@echo "Removing objects."
+	@$(RM) $(OBJ_DIR)
+	@echo "Removing $(ISO)".
+	@$(RM) $(ISO)
+
+.PHONY: fclean
+fclean: clean
+	@echo "Removing $(NAME)."
+	@$(RM) $(NAME)
+	@echo "Removing $(ISO_DIR)."
 	@$(RM) $(ISO_DIR)
 
 .PHONY: re
-re: clean all
+re: fclean all
