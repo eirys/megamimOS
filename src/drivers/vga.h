@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 20:09:30 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/05 20:48:36 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,22 @@ public:
         return m_inner;
     }
 
+    /* ---------------------------------------- */
+
+    bool operator==(const Char& other) const {
+        return m_inner == other.m_inner;
+    }
+
+    bool operator!=(const Char& other) const {
+        return m_inner != other.m_inner;
+    }
+
 private:
     /* ---------------------------------------- */
     /*                   DATA                   */
     /* ---------------------------------------- */
 
-    uint8_t m_inner = 0U;
+    uint8_t m_inner = Empty;
 
 }; // class Char
 
