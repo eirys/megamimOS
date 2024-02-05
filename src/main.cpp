@@ -6,17 +6,16 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 21:12:21 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/06 00:10:42 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ps2.h"
 #include "vga.h"
-#include "history.h"
 #include "window_manager.h"
-#include "scancode.h"
+#include "qwerty.h"
 
-#define KERNEL_NAME         "megamimOS"
+// #define KERNEL_NAME
 #define KERNEL_NAME_LEN     9
 
 /* -------------------------------------------- */
@@ -33,22 +32,18 @@ static inline
 void _init() {
     vga::clearBuffer();
     ps2::readData();
-    // vga::g_cursor.update();
 }
 
 /* -------------------------------------------- */
 
 extern "C"
 void megamimOS_cpp(const MultibootInfo& info) {
-    WindowManager winManager;
+    WindowManager       winManager;
+    ui::QwertyLayout    layout;
 
     _init();
 
-    winManager << KERNEL_NAME;
-    // vga::putString(KERNEL_NAME, 0, 0);
-    // vga::putChar(vga::Char::Heart, KERNEL_NAME_LEN + 1, 0, vga::Color::Cherry);
-
-    ui::QwertyLayout layout;
+    winManager << STR(KERNEL_NAME);
 
     for (;;) {
         ui::KeyEvent event;

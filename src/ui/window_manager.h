@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 20:10:00 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/05 23:31:01 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "terminal.h"
 
-enum class TerminalID: uint8_t {
+enum class TerminalID: u8 {
     User0 = 0,
     User1,
     User2,
@@ -32,8 +32,8 @@ public:
     /* ---------------------------------------- */
 
     WindowManager() {
-        for (uint8_t id = 0; id < TERMINAL_COUNT; id++) {
-            const uint8_t colorRaw = (uint8_t)id + (uint8_t)vga::Color::Indigo;
+        for (u8 id = 0; id < TERMINAL_COUNT; id++) {
+            const u8 colorRaw = (u8)id + (u8)vga::Color::Indigo;
             m_terminals[id].setColor((vga::Color)colorRaw);
         }
     }
@@ -49,12 +49,12 @@ public:
 
     inline
     Terminal& operator[](const TerminalID id) {
-        return m_terminals[static_cast<uint8_t>(id)];
+        return m_terminals[static_cast<u8>(id)];
     }
 
     inline
     const Terminal& operator[](const TerminalID id) const {
-        return m_terminals[static_cast<uint8_t>(id)];
+        return m_terminals[static_cast<u8>(id)];
     }
 
     /* ---------------------------------------- */
@@ -66,24 +66,24 @@ public:
 
     inline
     Terminal& currentTerminal() {
-        return m_terminals[static_cast<uint8_t>(m_current)];
+        return m_terminals[static_cast<u8>(m_current)];
     }
 
     inline
     const Terminal& currentTerminal() const {
-        return m_terminals[static_cast<uint8_t>(m_current)];
+        return m_terminals[static_cast<u8>(m_current)];
     }
 
     /* ---------------------------------------- */
 
     inline
     void write(const char* str) const {
-        m_terminals[static_cast<uint8_t>(m_current)].putString(str);
+        m_terminals[static_cast<u8>(m_current)].putString(str);
     }
 
     inline
     void write(const vga::Char character) const {
-        m_terminals[static_cast<uint8_t>(m_current)].putChar(character);
+        m_terminals[static_cast<u8>(m_current)].putChar(character);
     }
 
 private:
@@ -91,7 +91,7 @@ private:
     /*              STATIC MEMBERS              */
     /* ---------------------------------------- */
 
-    static const constexpr uint8_t TERMINAL_COUNT = enumSize<TerminalID>();
+    static const constexpr u8 TERMINAL_COUNT = enumSize<TerminalID>();
 
     /* ---------------------------------------- */
     /*                   DATA                   */

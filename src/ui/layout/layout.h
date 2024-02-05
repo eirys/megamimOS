@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   runtime.cpp                                        :+:      :+:    :+:   */
+/*   layout.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 21:06:45 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 23:39:10 by etran            ###   ########.fr       */
+/*   Created: 2024/02/05 23:42:17 by etran             #+#    #+#             */
+/*   Updated: 2024/02/05 23:44:40 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * This file is necessary for inheritance, for some reason...
-*/
+#pragma once
 
-extern "C"
-void __cxa_pure_virtual() {
-    asm volatile("hlt");
-}
+#include "types.h"
 
-// void operator delete(void *) {}
+namespace ui {
 
-void operator delete(void *, unsigned int) {}
+struct KeyEvent;
+
+class Layout {
+public:
+    virtual ~Layout() = default;
+
+protected:
+
+    virtual
+    bool translate(const u8 scancode, KeyEvent& out) = 0;
+
+};
+
+} // namespace ui

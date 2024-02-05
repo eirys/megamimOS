@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/05 21:08:17 by etran            ###   ########.fr        #
+#    Updated: 2024/02/06 00:10:33 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,20 +24,24 @@ OBJ_DIR			:=	obj
 CONFIG_DIR		:=	config
 ISO_DIR			:=	isodir
 
+CORE_DIR		:=	core
 DRIVER_DIR		:=	drivers
-WINDOW_DIR		:=	window
+UI_DIR			:=	ui
+LAYOUT_DIR		:=	$(UI_DIR)/layout
 
 # ---------------- SUB DIRECTORIES ------------- #
 SUBDIRS			:=	. \
+					$(CORE_DIR) \
 					$(DRIVER_DIR) \
-					$(WINDOW_DIR)
+					$(UI_DIR) \
+					$(LAYOUT_DIR)
 
 OBJ_SUBDIRS		:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
 
 # ---------------- SOURCE FILES ---------------- #
 SRC_FILES_CPP	:=	main.cpp \
-					$(DRIVER_DIR)/runtime.cpp
+					$(CORE_DIR)/runtime.cpp
 SRC_FILES_ASM	:=	entrypoint.s
 
 SRC_ASM			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_ASM))
@@ -52,7 +56,8 @@ ASM				:=	nasm
 ASFLAGS			:=	-felf32
 
 CXX				:=	c++
-INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS))
+MACROS			:=	KERNEL_NAME=$(NAME)
+
 CFLAGS			:=	-std=c++20 \
 					-MMD \
 					-MP \
@@ -62,8 +67,9 @@ CFLAGS			:=	-std=c++20 \
 					-fno-rtti \
 					-nostdlib \
 					-nodefaultlibs \
-					-m32 \
-					$(INCLUDES)
+					-m32
+INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS))
+DEFINES			:=	$(addprefix -D,$(MACROS))
 
 LD				:=	ld
 LD_SCRIPT		:=	$(CONFIG_DIR)/megamimOS.ld
@@ -93,7 +99,7 @@ $(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR) $(OBJ_SUBDIRS)
 	@echo "Compiling file $<..."
-	@$(CXX) $(CFLAGS) -c $< -o $@
+	@$(CXX) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 # Compile obj files (asm)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s

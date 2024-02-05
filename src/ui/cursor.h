@@ -6,18 +6,19 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:37:50 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 19:39:13 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/05 23:34:55 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <stdint.h>
+#include "types.h"
+#include "core.h"
 
 namespace vga {
 
-static constexpr const uint32_t WIDTH = 80;
-static constexpr const uint32_t HEIGHT = 25;
+static constexpr const u32 WIDTH = 80;
+static constexpr const u32 HEIGHT = 25;
 
 /**
  * @brief Keeps track of the current position
@@ -30,8 +31,8 @@ public:
     /* ---------------------------------------- */
 
     union {
-        struct { uint8_t m_x, m_y; };
-        uint8_t m_elem[2];
+        struct { u8 m_x, m_y; };
+        u8 m_elem[2];
     };
 
     /* ---------------------------------------- */
@@ -39,7 +40,7 @@ public:
     /* ---------------------------------------- */
 
     Cursor(): m_x(0U), m_y(0U) {}
-    Cursor(const uint8_t x, const uint8_t y): m_x(x), m_y(y) {}
+    Cursor(const u8 x, const u8 y): m_x(x), m_y(y) {}
 
     Cursor(Cursor&& other) = default;
     Cursor(const Cursor& other) = default;
@@ -50,19 +51,19 @@ public:
     /* ---------------------------------------- */
 
     inline
-    uint8_t& operator[](const uint32_t index) {
+    u8& operator[](const u32 index) {
         return m_elem[index];
     }
 
     inline
-    const uint8_t& operator[](const uint32_t index) const {
+    const u8& operator[](const u32 index) const {
         return m_elem[index];
     }
 
     /* ---------------------------------------- */
 
     inline
-    void move(const uint8_t dx, const uint8_t dy) {
+    void move(const u8 dx, const u8 dy) {
         if (m_x + dx < vga::WIDTH)
             m_x += dx;
         if (m_y + dy < vga::HEIGHT)
@@ -71,12 +72,12 @@ public:
 
     inline
     void update() const {
-        uint16_t pos = m_y * WIDTH + m_x;
+        u16 pos = m_y * WIDTH + m_x;
 
-        ps2::outB(0x3D4, 0x0F);
-        ps2::outB(0x3D5, (uint8_t)(pos & 0xFF));
-        ps2::outB(0x3D4, 0x0E);
-        ps2::outB(0x3D5, (uint8_t)((pos >> 8) & 0xFF));
+        core::outB(0x3D4, 0x0F);
+        core::outB(0x3D5, (u8)(pos & 0xFF));
+        core::outB(0x3D4, 0x0E);
+        core::outB(0x3D5, (u8)((pos >> 8) & 0xFF));
     }
 
 }; // class Cursor
