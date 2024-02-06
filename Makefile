@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/06 00:10:33 by etran            ###   ########.fr        #
+#    Updated: 2024/02/06 16:18:58 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ ASM				:=	nasm
 ASFLAGS			:=	-felf32
 
 CXX				:=	c++
-MACROS			:=	KERNEL_NAME=$(NAME)
+MACROS			:=	KERNEL_NAME=\"$(NAME)\"
 
 CFLAGS			:=	-std=c++20 \
 					-MMD \
@@ -67,6 +67,7 @@ CFLAGS			:=	-std=c++20 \
 					-fno-rtti \
 					-nostdlib \
 					-nodefaultlibs \
+					-O3 \
 					-m32
 INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS))
 DEFINES			:=	$(addprefix -D,$(MACROS))
@@ -99,7 +100,7 @@ $(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR) $(OBJ_SUBDIRS)
 	@echo "Compiling file $<..."
-	@$(CXX) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c $< -o $@
 
 # Compile obj files (asm)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s

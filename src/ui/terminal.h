@@ -6,13 +6,16 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 23:31:19 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/06 16:26:38 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "utils.h"
+#include "input_manager.h"
+
+namespace ui {
 
 /**
  * @brief Virtual console to run a pseudo-shell.
@@ -42,13 +45,16 @@ public:
     /* ---------------------------------------- */
 
     inline
-    void putString(const char* str) const {
-        vga::putString(str, m_cursor.m_x, m_cursor.m_y, m_color);
+    void putString(const char* str) {
+        while (*str)
+            putChar(vga::Char(*str++));
     }
 
     inline
-    void putChar(const vga::Char character) const {
+    void putChar(const vga::Char character) {
         vga::putChar(character, m_cursor.m_x, m_cursor.m_y, m_color);
+        if (m_cursor.moveX(1U))
+            vga::scrollUp(m_cursor);
     }
 
 private:
@@ -57,6 +63,7 @@ private:
     /* ---------------------------------------- */
 
     // History         m_history;
+    // InputManager    m_inputManager;
     vga::Cursor     m_cursor;
     vga::Color      m_color;
 
@@ -71,3 +78,5 @@ Terminal& operator<<(Terminal& term, const vga::Char character) {
     term.putChar(character);
     return term;
 }
+
+} // namespace ui

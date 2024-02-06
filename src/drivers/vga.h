@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 00:03:43 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/06 15:48:53 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void clearBuffer() {
 /* ------------------ CURSOR ------------------ */
 
 static inline
-void scrollUp() {
+void scrollUp(Cursor& cursor) {
     for (u32 y = 1; y < HEIGHT; y++) {
         for (u32 x = 0; x < WIDTH; x++) {
             BUFFER[2 * ((y - 1) * WIDTH + x)] = BUFFER[2 * (y * WIDTH + x)];
@@ -141,11 +141,11 @@ void scrollUp() {
         BUFFER[2 * ((HEIGHT - 1) * WIDTH + x)] = 0;
         BUFFER[2 * ((HEIGHT - 1) * WIDTH + x) + 1] = 0;
     }
-    // g_cursor.move(0, -1);
+    cursor.move(0, -1);
 }
 
 static inline
-void scrollDown() {
+void scrollDown(Cursor& cursor) {
     for (u32 y = HEIGHT - 1; y > 0; y--) {
         for (u32 x = 0; x < WIDTH; x++) {
             BUFFER[2 * (y * WIDTH + x)] = BUFFER[2 * ((y - 1) * WIDTH + x)];
@@ -156,7 +156,7 @@ void scrollDown() {
         BUFFER[2 * (x)] = 0;
         BUFFER[2 * (x) + 1] = 0;
     }
-    // g_cursor.move(0, 1);
+    cursor.move(0, -1);
 }
 
 static inline

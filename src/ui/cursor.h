@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:37:50 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 23:34:55 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/06 16:21:30 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,28 @@ public:
     /* ---------------------------------------- */
 
     inline
-    void move(const u8 dx, const u8 dy) {
-        if (m_x + dx < vga::WIDTH)
+    bool moveX(const u8 dx) {
+        if (m_x + dx < vga::WIDTH) {
             m_x += dx;
-        if (m_y + dy < vga::HEIGHT)
+        } else {
+            m_x = 0;
+            // moveY(1U);
+            return true;
+        }
+        return false;
+    }
+
+    inline
+    void moveY(const u8 dy) {
+        if (m_y + dy < vga::HEIGHT) {
             m_y += dy;
+        }
+    }
+
+    inline
+    void move(const u8 dx, const u8 dy) {
+        moveX(dx);
+        moveY(dy);
     }
 
     inline

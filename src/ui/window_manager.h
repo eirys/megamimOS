@@ -6,13 +6,16 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 23:31:01 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/06 15:45:52 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "terminal.h"
+#include "scancode.h"
+
+namespace ui {
 
 enum class TerminalID: u8 {
     User0 = 0,
@@ -77,12 +80,12 @@ public:
     /* ---------------------------------------- */
 
     inline
-    void write(const char* str) const {
+    void write(const char* str) {
         m_terminals[static_cast<u8>(m_current)].putString(str);
     }
 
     inline
-    void write(const vga::Char character) const {
+    void write(const vga::Char character) {
         m_terminals[static_cast<u8>(m_current)].putChar(character);
     }
 
@@ -111,3 +114,10 @@ WindowManager& operator<<(WindowManager& wm, const vga::Char character) {
     wm.write(character);
     return wm;
 }
+
+WindowManager& operator<<(WindowManager& wm, const ui::KeyEvent& event) {
+    wm.write(event.character);
+    return wm;
+}
+
+} // namespace ui

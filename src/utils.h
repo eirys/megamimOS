@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:17:25 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 00:07:43 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/06 15:33:59 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,17 @@ template <class Enum>
 static inline
 constexpr Enum addFlag(const Enum value, const Enum flag) {
     return static_cast<Enum>(static_cast<u32>(value) | static_cast<u32>(flag));
+}
+
+template <class Enum>
+static inline
+constexpr Enum removeFlag(const Enum value, const Enum flag) {
+    return static_cast<Enum>(static_cast<u32>(value) & ~static_cast<u32>(flag));
+}
+
+static inline
+constexpr u32 strlen(const char* str) {
+    u32 len = 0;
+    while (str[len]) ++len;
+    return len;
 }

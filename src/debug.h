@@ -1,0 +1,1 @@
+#define LOG(X) vga::putString(X, 0, 0)

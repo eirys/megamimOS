@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 00:10:42 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/06 16:30:06 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 #include "window_manager.h"
 #include "qwerty.h"
 
-// #define KERNEL_NAME
-#define KERNEL_NAME_LEN     9
+#ifndef KERNEL_NAME
+# define KERNEL_NAME "undefined kernel name :("
+#endif
 
 /* -------------------------------------------- */
 
@@ -38,22 +39,28 @@ void _init() {
 
 extern "C"
 void megamimOS_cpp(const MultibootInfo& info) {
-    WindowManager       winManager;
-    ui::QwertyLayout    layout;
-
     _init();
 
-    winManager << STR(KERNEL_NAME);
+    ui::WindowManager   winManager;
+    ui::QwertyLayout    layout;
+
+    winManager << KERNEL_NAME << ' ' << vga::Char::Heart;
 
     for (;;) {
         ui::KeyEvent event;
-        if (!layout.translate(ps2::poll(), event))
-            continue;
+        ui::TranslateResult result = layout.translate(ps2::poll(), event);
 
-        if (!event.pressed)
+        if (result == ui::TranslateResult::Invalid)
+            // kernel panic
             continue;
-
-        if (event.character != vga::Char::Empty)
+        else if (result == ui::TranslateResult::Escape)
+            break;
+        else if (result == ui::TranslateResult::Ignore)
+            continue;
+        else if (result == ui::TranslateResult::SpecialAction)
+            // handle special action
+            continue;
+        else
             winManager << event.character;
     }
 }

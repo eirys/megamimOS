@@ -1,42 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   layout.h                                           :+:      :+:    :+:   */
+/*   input_manager.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 23:42:17 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 15:17:35 by etran            ###   ########.fr       */
+/*   Created: 2024/02/06 13:37:24 by etran             #+#    #+#             */
+/*   Updated: 2024/02/06 15:17:40 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "types.h"
+#include "layout.h"
 
 namespace ui {
 
-enum class TranslateResult: u8 {
-    Print,
-    Ignore,
-    Escape,
+enum class SpecialAction {
 
-    SpecialAction,
-
-    Invalid
 };
 
-struct KeyEvent;
+class InputManager {
 
-class Layout {
 public:
-    virtual ~Layout() = default;
 
-protected:
+private:
+	/* ------------------------------------------- */
+	/*                     DATA                    */
+	/* ------------------------------------------- */
 
-    virtual
-    TranslateResult translate(const u8 scancode, KeyEvent& out) = 0;
+	Layout*	m_layout;
 
-};
+}; // class InputManager
 
 } // namespace ui
