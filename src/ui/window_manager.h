@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 20:46:59 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 22:13:02 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,12 @@ public:
 
     inline
     void write(const i8* str) {
-        m_terminals[static_cast<u8>(m_current)].putString(str);
+        m_terminals[static_cast<u8>(m_current)] << str;
     }
 
     inline
     void write(const vga::Char character) {
-        m_terminals[static_cast<u8>(m_current)].putChar(character);
+        m_terminals[static_cast<u8>(m_current)] << character;
     }
 
     inline
@@ -117,18 +117,15 @@ private:
 
 }; // class WindowManager
 
+inline
 WindowManager& operator<<(WindowManager& wm, const i8* str) {
     wm.write(str);
     return wm;
 }
 
+inline
 WindowManager& operator<<(WindowManager& wm, const vga::Char character) {
     wm.write(character);
-    return wm;
-}
-
-WindowManager& operator<<(WindowManager& wm, const ui::KeyEvent& event) {
-    wm.write(event.character);
     return wm;
 }
 

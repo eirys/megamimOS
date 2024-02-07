@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:34:43 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 23:34:44 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 22:41:53 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ u8 inB(u16 port) {
     return ret;
 }
 
+/**
+ * @brief Retrieve a byte from a port.
+ */
 static inline
 void outB(u16 port, u8 data) {
     asm volatile ("outb %0, %1" : : "a" (data), "dN" (port));
@@ -40,6 +43,16 @@ void outB(u16 port, u8 data) {
 static inline
 void pause() {
 	asm volatile ("pause");
+}
+
+static inline
+void panic() {
+    asm volatile ("cli");
+}
+
+static inline
+void hlt() {
+    asm volatile ("hlt");
 }
 
 } // namespace core

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:42:17 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 19:46:39 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 22:05:06 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ enum class TranslateResult: u8 {
     Print,
     Ignore,
     Exit,
-
-    SpecialAction,
 
     Invalid
 };

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 21:17:21 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 22:47:00 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,29 @@ void _init() {
 }
 
 static inline
-void _handleSpecialEvent(ui::WindowManager& winManager, const ui::Key key) {
-    switch (key) {
-        case ui::Key::Backspace:    return winManager.eraseChar();
-        case ui::Key::Enter:        return winManager.newLine();
-        case ui::Key::Tab:          return winManager.switchToNext();
-        default:                    break;
-    }
-}
-
-static inline
 void _exit(ui::WindowManager& winManager) {
     winManager.newLine();
     winManager << (i8*)"Good bye!";
     vga::disableCursor();
 }
 
+static
+void _print(ui::WindowManager& winManager, const ui::KeyEvent& event) {
+    switch (event.key) {
+        case ui::Key::Backspace:    return winManager.eraseChar();
+        case ui::Key::Enter:        return winManager.newLine();
+        case ui::Key::Tab:          return winManager.switchToNext();
+        default:                    winManager << event.character; break;
+    }
+}
+
+static inline
+void _panic(ui::WindowManager& winManager) {
+    core::panic();
+    winManager.newLine();
+    winManager << (i8*)"PANIC KERNEL PANIC! ABORTING!";
+    vga::disableCursor();
+}
 /* -------------------------------------------- */
 
 extern "C"
@@ -66,23 +73,10 @@ void megamimOS_cpp(const MultibootInfo& info) {
         ui::TranslateResult result = layout.translate(ps2::poll(), event);
 
         switch (result) {
-            case ui::TranslateResult::Invalid:
-                break; // kernel panic
-
-            case ui::TranslateResult::SpecialAction:
-                _handleSpecialEvent(winManager, event.key);
-                break;
-
-            case ui::TranslateResult::Print:
-                winManager << event.character;
-                break;
-
-            case ui::TranslateResult::Exit:
-                return _exit(winManager);
-
-            case ui::TranslateResult::Ignore:
-            default:
-                break;
+            case ui::TranslateResult::Print:    _print(winManager, event); break;
+            case ui::TranslateResult::Invalid:  return _panic(winManager);
+            case ui::TranslateResult::Exit:     return _exit(winManager);
+            case ui::TranslateResult::Ignore:   break;
         }
     }
 }

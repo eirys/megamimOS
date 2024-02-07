@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:44:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 19:46:54 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 22:15:25 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 #include "scancode.h"
 #include "layout.h"
 #include "vga.h"
-#include "debug.h"
-
 
 namespace ui {
 
@@ -29,10 +27,21 @@ public:
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
+    QwertyLayout() = default;
     ~QwertyLayout() = default;
+
+    QwertyLayout(QwertyLayout&& other) = delete;
+    QwertyLayout(const QwertyLayout& other) = delete;
+    QwertyLayout& operator=(QwertyLayout&& other) = delete;
+    QwertyLayout& operator=(const QwertyLayout& other) = delete;
 
     /* ---------------------------------------- */
 
+    /**
+     * @brief Given a scancode, translates it to a KeyEvent.
+     * @param input The scancode to translate.
+     * @param out The output KeyEvent.
+     */
     TranslateResult translate(const u8 input, KeyEvent& out) override {
         out.character = vga::Char::Empty;
         out.action = isPressed(input);
@@ -112,12 +121,13 @@ public:
 
             case Key::Space:        out.character = ' '; break;
 
-            case Key::Escape:
-                return TranslateResult::Exit;
             case Key::Enter:
             case Key::Backspace:
             case Key::Tab:
-                return TranslateResult::SpecialAction;
+                break;
+
+            case Key::Escape:
+                return TranslateResult::Exit;
 
             default:
                 return TranslateResult::Invalid;

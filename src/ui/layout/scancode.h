@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 20:14:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 19:57:20 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 21:35:54 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,36 +92,29 @@ Modifier operator~(const Modifier value) {
 /*                   FUNCTIONS                  */
 /* -------------------------------------------- */
 
+/**
+ * @brief Checks if the modifier contains the Shift key.
+ */
 static inline
 bool isShifted(const Modifier mods) {
     return (bool)(mods & (Modifier::LShift | Modifier::RShift));
 }
 
+/**
+ * @brief Verifies that either the Caps or the Shift modifier is set.
+ */
 static inline
 bool isUppercase(const Modifier mods) {
     return  (bool)(mods & Modifier::Caps) ^
             isShifted(mods);
 }
 
+/**
+ * @brief Returns whether the input is pressed or released.
+ */
 static inline
 Action isPressed(const u8 input) {
     return (input & 0x80) ? Action::Released : Action::Pressed;
-}
-
-/**
- * @brief Removes the RELEASED bit from the input.
- */
-static inline
-u8 toReleased(const u8 input) {
-    return input & 0x7F;
-}
-
-/**
- * @brief Adds the pressed byte to the input.
-*/
-static inline
-bool isExtend(const u8 input) {
-    return input == 0xE0;
 }
 
 } // namespace ui
