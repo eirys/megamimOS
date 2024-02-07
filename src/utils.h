@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:17:25 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 15:33:59 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 00:55:36 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ constexpr Enum removeFlag(const Enum value, const Enum flag) {
 }
 
 static inline
-constexpr u32 strlen(const char* str) {
+constexpr u32 strlen(const i8* str) {
     u32 len = 0;
     while (str[len]) ++len;
     return len;

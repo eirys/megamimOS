@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/06 16:18:58 by etran            ###   ########.fr        #
+#    Updated: 2024/02/07 00:48:01 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,6 +69,7 @@ CFLAGS			:=	-std=c++20 \
 					-nodefaultlibs \
 					-O3 \
 					-m32
+
 INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS))
 DEFINES			:=	$(addprefix -D,$(MACROS))
 
@@ -78,6 +79,9 @@ LFLAGS			:=	-T$(LD_SCRIPT)
 
 GRUB_CFG		:=	grub.cfg
 GRUB			:=	grub-mkrescue
+
+QEMU			:=	qemu-system-i386
+QEMU_FLAGS		:=	-serial stdio
 
 # -------------------- MISC -------------------- #
 RM				:=	rm -rf
@@ -110,7 +114,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 
 .PHONY: run
 run: $(NAME)
-	@qemu-system-i386 -kernel $(NAME)
+	@$(QEMU) -kernel $(NAME) $(QEMU_FLAGS)
 
 .PHONY: run-grub
 run-grub: $(NAME)
@@ -118,7 +122,7 @@ run-grub: $(NAME)
 	cp $(NAME) $(ISO_DIR)/boot/$(NAME)
 	cp $(GRUB_CFG)/$(GRUB_CFG) $(ISO_DIR)/boot/grub/$(GRUB_CFG)
 	$(GRUB) -o $(ISO) $(ISO_DIR)
-	qemu-system-i386 -cdrom $(ISO)
+	$(QEMU) -cdrom $(ISO)
 
 .PHONY: clean
 clean:

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 15:45:52 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 01:20:03 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ public:
             const u8 colorRaw = (u8)id + (u8)vga::Color::Indigo;
             m_terminals[id].setColor((vga::Color)colorRaw);
         }
+        currentTerminal().reset();
     }
 
     ~WindowManager() = default;
@@ -65,6 +66,7 @@ public:
     inline
     void switchTo(const TerminalID id) {
         m_current = id;
+        currentTerminal().reset();
     }
 
     inline
@@ -80,7 +82,7 @@ public:
     /* ---------------------------------------- */
 
     inline
-    void write(const char* str) {
+    void write(const i8* str) {
         m_terminals[static_cast<u8>(m_current)].putString(str);
     }
 
@@ -105,7 +107,7 @@ private:
 
 }; // class WindowManager
 
-WindowManager& operator<<(WindowManager& wm, const char* str) {
+WindowManager& operator<<(WindowManager& wm, const i8* str) {
     wm.write(str);
     return wm;
 }

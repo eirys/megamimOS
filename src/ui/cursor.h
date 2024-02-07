@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:37:50 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 16:21:30 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 01:25:38 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "types.h"
 #include "core.h"
+
 
 namespace vga {
 
@@ -63,28 +64,27 @@ public:
     /* ---------------------------------------- */
 
     inline
-    bool moveX(const u8 dx) {
-        if (m_x + dx < vga::WIDTH) {
+    bool moveX(const i8 dx) {
+        if ((i8)m_x + dx < vga::WIDTH) {
             m_x += dx;
         } else {
-            m_x = 0;
-            // moveY(1U);
+            m_x = 0U;
             return true;
         }
         return false;
     }
 
     inline
-    void moveY(const u8 dy) {
+    void moveY(const i8 dy) {
         if (m_y + dy < vga::HEIGHT) {
             m_y += dy;
         }
     }
 
     inline
-    void move(const u8 dx, const u8 dy) {
-        moveX(dx);
-        moveY(dy);
+    void move(const i8 x, const i8 y) {
+        m_x = x;
+        m_y = y;
     }
 
     inline

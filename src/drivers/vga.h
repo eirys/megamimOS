@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 15:48:53 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 00:53:45 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,23 +106,23 @@ void putChar(
     BUFFER[2 * (y * WIDTH + x) + 1] = (u8)color;
 }
 
-static inline
-void putString(
-    const char* string,
-    const u32 x_begin,
-    const u32 y_begin,
-    const Color color = Color::Immaculate
-) {
-    for (u32 i = 0; string[i] != 0; i++) {
-        putChar(string[i], x_begin + i, y_begin, color);
-    }
-}
+// static inline
+// void putString(
+//     const char* string,
+//     const u32 x_begin,
+//     const u32 y_begin,
+//     const Color color = Color::Immaculate
+// ) {
+//     for (u32 i = 0; string[i] != 0; i++) {
+//         putChar(string[i], x_begin + i, y_begin, color);
+//     }
+// }
 
 static inline
-void clearBuffer() {
+void clearBuffer(Color color = Color::Immaculate) {
     for (u32 i = 0; i < WIDTH; i++) {
         for (u32 j = 0; j < HEIGHT; j++) {
-            putChar(Char::Empty, i, j, Color::Immaculate);
+            putChar(Char::Empty, i, j, color);
         }
     }
 }
@@ -130,7 +130,7 @@ void clearBuffer() {
 /* ------------------ CURSOR ------------------ */
 
 static inline
-void scrollUp(Cursor& cursor) {
+void scrollUp(Color color) {
     for (u32 y = 1; y < HEIGHT; y++) {
         for (u32 x = 0; x < WIDTH; x++) {
             BUFFER[2 * ((y - 1) * WIDTH + x)] = BUFFER[2 * (y * WIDTH + x)];
@@ -139,13 +139,12 @@ void scrollUp(Cursor& cursor) {
     }
     for (u32 x = 0; x < WIDTH; x++) {
         BUFFER[2 * ((HEIGHT - 1) * WIDTH + x)] = 0;
-        BUFFER[2 * ((HEIGHT - 1) * WIDTH + x) + 1] = 0;
+        BUFFER[2 * ((HEIGHT - 1) * WIDTH + x) + 1] = (u8)color;
     }
-    cursor.move(0, -1);
 }
 
 static inline
-void scrollDown(Cursor& cursor) {
+void scrollDown(Color color) {
     for (u32 y = HEIGHT - 1; y > 0; y--) {
         for (u32 x = 0; x < WIDTH; x++) {
             BUFFER[2 * (y * WIDTH + x)] = BUFFER[2 * ((y - 1) * WIDTH + x)];
@@ -154,9 +153,8 @@ void scrollDown(Cursor& cursor) {
     }
     for (u32 x = 0; x < WIDTH; x++) {
         BUFFER[2 * (x)] = 0;
-        BUFFER[2 * (x) + 1] = 0;
+        BUFFER[2 * (x) + 1] = (u8)color;
     }
-    cursor.move(0, -1);
 }
 
 static inline
@@ -172,16 +170,6 @@ static inline
 void disableCursor() {
 	core::outB(0x3D4, 0x0A);
 	core::outB(0x3D5, 0x20);
-}
-
-static inline
-void updateCursor(const u8 x, const u8 y) {
-	u16 pos = y * WIDTH + x;
-
-	core::outB(0x3D4, 0x0F);
-	core::outB(0x3D5, (u8)(pos & 0xFF));
-	core::outB(0x3D4, 0x0E);
-	core::outB(0x3D5, (u8)((pos >> 8) & 0xFF));
 }
 
 } // namespace vga

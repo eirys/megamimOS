@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 16:30:06 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 01:21:26 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,7 @@
 #include "vga.h"
 #include "window_manager.h"
 #include "qwerty.h"
-
-#ifndef KERNEL_NAME
-# define KERNEL_NAME "undefined kernel name :("
-#endif
+#include "serial.h"
 
 /* -------------------------------------------- */
 
@@ -33,6 +30,7 @@ static inline
 void _init() {
     vga::clearBuffer();
     ps2::readData();
+    serial::init();
 }
 
 /* -------------------------------------------- */
@@ -43,8 +41,6 @@ void megamimOS_cpp(const MultibootInfo& info) {
 
     ui::WindowManager   winManager;
     ui::QwertyLayout    layout;
-
-    winManager << KERNEL_NAME << ' ' << vga::Char::Heart;
 
     for (;;) {
         ui::KeyEvent event;

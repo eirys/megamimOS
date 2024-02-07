@@ -9,6 +9,7 @@
     "comment-divider.subheaderAlign": "center",
     "comment-divider.mainHeaderFiller": "-",
     "files.associations": {
+        "*.glslh": "glsl",
         "atomic": "cpp",
         "*.tcc": "cpp",
         "deque": "cpp",
@@ -27,7 +28,10 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "system_error": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "array": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
     },
     "editor.useTabStops": false
 }

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 16:26:38 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 01:26:56 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 #include "utils.h"
 #include "input_manager.h"
+
+#ifndef KERNEL_NAME
+# define KERNEL_NAME "undefined kernel name :("
+#endif
 
 namespace ui {
 
@@ -26,8 +30,7 @@ public:
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    Terminal(): m_cursor(0U, vga::HEIGHT - 2U) {}
-
+    Terminal() = default;
     Terminal(const Terminal& other) = default;
     Terminal& operator=(const Terminal& other) = default;
     ~Terminal() = default;
@@ -45,7 +48,7 @@ public:
     /* ---------------------------------------- */
 
     inline
-    void putString(const char* str) {
+    void putString(const i8* str) {
         while (*str)
             putChar(vga::Char(*str++));
     }
@@ -54,7 +57,17 @@ public:
     void putChar(const vga::Char character) {
         vga::putChar(character, m_cursor.m_x, m_cursor.m_y, m_color);
         if (m_cursor.moveX(1U))
-            vga::scrollUp(m_cursor);
+            vga::scrollUp(m_color);
+        m_cursor.update();
+    }
+
+    inline
+    void reset() {
+        vga::clearBuffer(m_color);
+        m_cursor.move(vga::WIDTH / 2U, vga::HEIGHT / 2U);
+        putString((i8*)KERNEL_NAME);
+        m_cursor.move(0U, vga::HEIGHT - 1U);
+        m_cursor.update();
     }
 
 private:
@@ -69,7 +82,7 @@ private:
 
 }; // class Terminal
 
-Terminal& operator<<(Terminal& term, const char* str) {
+Terminal& operator<<(Terminal& term, const i8* str) {
     term.putString(str);
     return term;
 }
