@@ -6,14 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 01:26:56 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 21:18:45 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "utils.h"
-#include "input_manager.h"
+#include "cursor.h"
 
 #ifndef KERNEL_NAME
 # define KERNEL_NAME "undefined kernel name :("
@@ -56,27 +56,50 @@ public:
     inline
     void putChar(const vga::Char character) {
         vga::putChar(character, m_cursor.m_x, m_cursor.m_y, m_color);
-        if (m_cursor.moveX(1U))
+        if (m_cursor.moveX(1) == vga::CursorPosResult::PastRight)
             vga::scrollUp(m_color);
         m_cursor.update();
     }
 
-    inline
     void reset() {
         vga::clearBuffer(m_color);
-        m_cursor.move(vga::WIDTH / 2U, vga::HEIGHT / 2U);
+        constexpr u32 halfKernelNameLength = KERNEL_NAME_LEN / 2U;
+        m_cursor.setTo(
+            (i32)(vga::WIDTH / 2) - halfKernelNameLength,
+            (i32)(vga::HEIGHT / 2));
+
         putString((i8*)KERNEL_NAME);
-        m_cursor.move(0U, vga::HEIGHT - 1U);
+        m_cursor.setTo(0U, vga::HEIGHT - 1);
         m_cursor.update();
     }
 
+    inline
+    void eraseChar() {
+        m_cursor.moveX(-1);
+        vga::putChar(vga::Char::Empty, m_cursor.m_x, m_cursor.m_y, m_color);
+        m_cursor.update();
+    }
+
+    inline
+    void insertNewline() {
+        vga::scrollUp(m_color);
+        m_cursor.setTo(0U, vga::HEIGHT - 1);
+        m_cursor.update();
+    }
+
+
 private:
+    /* ---------------------------------------- */
+    /*              STATIC MEMBERS              */
+    /* ---------------------------------------- */
+
+    static constexpr u32  KERNEL_NAME_LEN = sizeof(KERNEL_NAME);
+
     /* ---------------------------------------- */
     /*                   DATA                   */
     /* ---------------------------------------- */
 
     // History         m_history;
-    // InputManager    m_inputManager;
     vga::Cursor     m_cursor;
     vga::Color      m_color;
 

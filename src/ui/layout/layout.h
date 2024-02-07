@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:42:17 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 15:17:35 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 19:46:39 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ namespace ui {
 enum class TranslateResult: u8 {
     Print,
     Ignore,
-    Escape,
+    Exit,
 
     SpecialAction,
 
@@ -30,13 +30,19 @@ struct KeyEvent;
 
 class Layout {
 public:
+    /* ---------------------------------------- */
+    /*                  METHODS                 */
+    /* ---------------------------------------- */
+
     virtual ~Layout() = default;
 
 protected:
+    /* ---------------------------------------- */
+    /*                  METHODS                 */
+    /* ---------------------------------------- */
 
     virtual
     TranslateResult translate(const u8 scancode, KeyEvent& out) = 0;
-
 };
 
 } // namespace ui

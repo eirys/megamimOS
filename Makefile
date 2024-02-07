@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/07 00:48:01 by etran            ###   ########.fr        #
+#    Updated: 2024/02/07 19:29:15 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
 # ---------------- SOURCE FILES ---------------- #
 SRC_FILES_CPP	:=	main.cpp \
 					$(CORE_DIR)/runtime.cpp
+
 SRC_FILES_ASM	:=	entrypoint.s
 
 SRC_ASM			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_ASM))
@@ -81,7 +82,7 @@ GRUB_CFG		:=	grub.cfg
 GRUB			:=	grub-mkrescue
 
 QEMU			:=	qemu-system-i386
-QEMU_FLAGS		:=	-serial stdio
+QEMU_FLAGS		:=	-serial stdio -no-reboot
 
 # -------------------- MISC -------------------- #
 RM				:=	rm -rf
@@ -122,7 +123,7 @@ run-grub: $(NAME)
 	cp $(NAME) $(ISO_DIR)/boot/$(NAME)
 	cp $(GRUB_CFG)/$(GRUB_CFG) $(ISO_DIR)/boot/grub/$(GRUB_CFG)
 	$(GRUB) -o $(ISO) $(ISO_DIR)
-	$(QEMU) -cdrom $(ISO)
+	$(QEMU) -cdrom $(ISO) $(QEMU_FLAGS)
 
 .PHONY: clean
 clean:

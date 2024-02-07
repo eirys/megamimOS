@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 20:14:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 16:08:10 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 19:57:20 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ bool isUppercase(const Modifier mods) {
 
 static inline
 Action isPressed(const u8 input) {
-    return (input & 0x80) ? Action::Pressed : Action::Released;
+    return (input & 0x80) ? Action::Released : Action::Pressed;
 }
 
 /**

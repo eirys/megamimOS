@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:37:50 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 01:25:38 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 21:02:00 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,16 @@
 #include "types.h"
 #include "core.h"
 
-
 namespace vga {
 
-static constexpr const u32 WIDTH = 80;
-static constexpr const u32 HEIGHT = 25;
+enum class CursorPosResult: u8 {
+    Valid,
+
+    PastLeft,
+    PastRight,
+    PastTop,
+    PastBottom
+};
 
 /**
  * @brief Keeps track of the current position
@@ -63,38 +68,50 @@ public:
 
     /* ---------------------------------------- */
 
-    inline
-    bool moveX(const i8 dx) {
-        if ((i8)m_x + dx < vga::WIDTH) {
-            m_x += dx;
-        } else {
-            m_x = 0U;
-            return true;
-        }
-        return false;
+    /**
+     * @brief Updates the cursor's X position.
+     */
+    CursorPosResult moveX(const i8 dx) {
+        const i8 newX = (i8)m_x + dx;
+
+        m_x = 0U;
+        if (newX <= 0)
+            return CursorPosResult::PastLeft;
+        else if (newX >= vga::WIDTH)
+            return CursorPosResult::PastRight;
+
+        m_x = newX;
+        return CursorPosResult::Valid;
     }
 
-    inline
-    void moveY(const i8 dy) {
-        if (m_y + dy < vga::HEIGHT) {
-            m_y += dy;
-        }
+    /**
+     * @brief Updates the cursor's Y position.
+     */
+    CursorPosResult moveY(const i8 dy) {
+        const i8 newY = (i8)m_y + dy;
+
+        m_y = 0U;
+        if (newY <= 0)
+            return CursorPosResult::PastTop;
+        else if (m_y + dy >= vga::HEIGHT)
+            return CursorPosResult::PastBottom;
+
+        m_y = newY;
+        return CursorPosResult::Valid;
     }
 
+    /**
+     * @brief Sets the cursor to the given position.
+     */
     inline
-    void move(const i8 x, const i8 y) {
+    void setTo(const i8 x, const i8 y) {
         m_x = x;
         m_y = y;
     }
 
     inline
     void update() const {
-        u16 pos = m_y * WIDTH + m_x;
-
-        core::outB(0x3D4, 0x0F);
-        core::outB(0x3D5, (u8)(pos & 0xFF));
-        core::outB(0x3D4, 0x0E);
-        core::outB(0x3D5, (u8)((pos >> 8) & 0xFF));
+        vga::setCursorPos(m_x, m_y);
     }
 
 }; // class Cursor

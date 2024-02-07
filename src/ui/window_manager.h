@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 01:20:03 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 20:46:59 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ public:
     /* ---------------------------------------- */
 
     inline
-    void switchTo(const TerminalID id) {
-        m_current = id;
+    void switchToNext() {
+        m_current = static_cast<TerminalID>((static_cast<u8>(m_current) + 1) % TERMINAL_COUNT);
         currentTerminal().reset();
     }
 
@@ -91,12 +91,22 @@ public:
         m_terminals[static_cast<u8>(m_current)].putChar(character);
     }
 
+    inline
+    void eraseChar() {
+        m_terminals[static_cast<u8>(m_current)].eraseChar();
+    }
+
+    inline
+    void newLine() {
+        m_terminals[static_cast<u8>(m_current)].insertNewline();
+    }
+
 private:
     /* ---------------------------------------- */
     /*              STATIC MEMBERS              */
     /* ---------------------------------------- */
 
-    static const constexpr u8 TERMINAL_COUNT = enumSize<TerminalID>();
+    static constexpr u8 TERMINAL_COUNT = enumSize<TerminalID>();
 
     /* ---------------------------------------- */
     /*                   DATA                   */

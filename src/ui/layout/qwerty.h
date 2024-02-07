@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:44:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/06 16:29:34 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 19:46:54 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ public:
 
             case Key::Space:        out.character = ' '; break;
 
+            case Key::Escape:
+                return TranslateResult::Exit;
             case Key::Enter:
             case Key::Backspace:
             case Key::Tab:
@@ -135,6 +137,12 @@ private:
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
+    /**
+     * @brief Translates a scancode to a key.
+     * @param makecode The input scancode.
+     * @param isExtended Whether the scancode is part of an escape sequence.
+     * @param out The output key.
+     */
     bool _translateKey(u8 makecode, const bool isExtended, Key& out) {
         switch (makecode) {
             case 0x01: out = Key::Escape; break;

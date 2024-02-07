@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:40:56 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 00:41:44 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 21:03:37 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ namespace ps2 {
  * @brief The data port of the PS/2 controller.
  * Used to interpret scancodes and commands.
 */
-static constexpr const u8 DATA_PORT = 0x60;
+static constexpr const u16 DATA_PORT = 0x60;
 
 /**
  * @brief The command port of the PS/2 controller.
  * Used to send commands to the PS/2 controller.
 */
-static constexpr const u8 COMMAND_PORT = 0x64;
+static constexpr const u16 COMMAND_PORT = 0x64;
 
 /* -------------------------------------------- */
 /*                   FUNCTIONS                  */

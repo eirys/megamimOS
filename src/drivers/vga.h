@@ -6,15 +6,19 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 00:53:45 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/07 21:04:53 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "cursor.h"
-
 namespace vga {
+
+static constexpr const u16 CONTROL_PORT = 0x3D4;
+static constexpr const u16 DATA_PORT = 0x3D5;
+
+static constexpr const u32 WIDTH = 80;
+static constexpr const u32 HEIGHT = 25;
 
 u8* const  BUFFER = (u8*)0xB8000;
 
@@ -74,10 +78,12 @@ public:
 
     /* ---------------------------------------- */
 
+    inline
     bool operator==(const Char& other) const {
         return m_inner == other.m_inner;
     }
 
+    inline
     bool operator!=(const Char& other) const {
         return m_inner != other.m_inner;
     }
@@ -106,18 +112,6 @@ void putChar(
     BUFFER[2 * (y * WIDTH + x) + 1] = (u8)color;
 }
 
-// static inline
-// void putString(
-//     const char* string,
-//     const u32 x_begin,
-//     const u32 y_begin,
-//     const Color color = Color::Immaculate
-// ) {
-//     for (u32 i = 0; string[i] != 0; i++) {
-//         putChar(string[i], x_begin + i, y_begin, color);
-//     }
-// }
-
 static inline
 void clearBuffer(Color color = Color::Immaculate) {
     for (u32 i = 0; i < WIDTH; i++) {
@@ -129,7 +123,7 @@ void clearBuffer(Color color = Color::Immaculate) {
 
 /* ------------------ CURSOR ------------------ */
 
-static inline
+static
 void scrollUp(Color color) {
     for (u32 y = 1; y < HEIGHT; y++) {
         for (u32 x = 0; x < WIDTH; x++) {
@@ -143,7 +137,7 @@ void scrollUp(Color color) {
     }
 }
 
-static inline
+static
 void scrollDown(Color color) {
     for (u32 y = HEIGHT - 1; y > 0; y--) {
         for (u32 x = 0; x < WIDTH; x++) {
@@ -157,19 +151,32 @@ void scrollDown(Color color) {
     }
 }
 
-static inline
+static
 void enableCursor(u8 cursorStart, u8 cursorEnd) {
-	core::outB(0x3D4, 0x0A);
-	core::outB(0x3D5, (core::inB(0x3D5) & 0xC0) | cursorStart);
+	core::outB(CONTROL_PORT, 0x0A);
+	core::outB(DATA_PORT, (core::inB(DATA_PORT) & 0xC0) | cursorStart);
 
-	core::outB(0x3D4, 0x0B);
-	core::outB(0x3D5, (core::inB(0x3D5) & 0xE0) | cursorEnd);
+	core::outB(CONTROL_PORT, 0x0B);
+	core::outB(DATA_PORT, (core::inB(DATA_PORT) & 0xE0) | cursorEnd);
 }
 
 static inline
 void disableCursor() {
-	core::outB(0x3D4, 0x0A);
-	core::outB(0x3D5, 0x20);
+	core::outB(CONTROL_PORT, 0x0A);
+	core::outB(DATA_PORT, 0x20);
+}
+
+static inline
+void setCursorPos(u8 x, u8 y) {
+    const u16 pos = y * WIDTH + x;
+
+    // Set low cursor byte
+    core::outB(CONTROL_PORT, 0x0F);
+    core::outB(DATA_PORT, (u8)(pos & 0xFF));
+
+    // Set high cursor byte
+    core::outB(CONTROL_PORT, 0x0E);
+    core::outB(DATA_PORT, (u8)((pos >> 8) & 0xFF));
 }
 
 } // namespace vga
