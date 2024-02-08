@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 17:54:01 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 18:08:50 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "history.h"
 
 #ifndef KERNEL_NAME
-# define KERNEL_NAME "undefined kernel name :("
+# define KERNEL_NAME "No name :("
 #endif
 
 namespace ui {
@@ -89,10 +89,14 @@ public:
 
     void reset() {
         vga::clearBuffer(m_color);
-        constexpr u32 halfKernelNameLength = KERNEL_NAME_LEN / 2U;
+        m_cursor.setTo(
+            (i32)(vga::WIDTH / 2) - 1,
+            (i32)(vga::HEIGHT / 2) - 1);
+        putString("42");
+        constexpr u32 halfKernelNameLength = (KERNEL_NAME_LEN  + 3) /* For the extra ' #{id}' */ / 2U;
         m_cursor.setTo(
             (i32)(vga::WIDTH / 2) - halfKernelNameLength,
-            (i32)(vga::HEIGHT / 2) - 1);
+            (i32)(vga::HEIGHT / 2));
         putString(KERNEL_NAME);
         putString(" #");
         putNbr(m_id);
@@ -131,7 +135,7 @@ private:
     /*              STATIC MEMBERS              */
     /* ---------------------------------------- */
 
-    static constexpr u32  KERNEL_NAME_LEN = sizeof(KERNEL_NAME) + 3;
+    static constexpr u32  KERNEL_NAME_LEN = sizeof(KERNEL_NAME);
 
     /* ---------------------------------------- */
     /*                   DATA                   */
