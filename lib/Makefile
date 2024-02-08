@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/08 15:45:29 by etran            ###   ########.fr        #
+#    Updated: 2024/02/08 20:05:01 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ NAME		:=	libmegamim.a
 SRC_DIR		:=	src
 OBJ_DIR		:=	obj
 
-SRC_FILES	:=	strlen.cpp
+SRC_FILES	:=	strlen.cpp \
+				memcpy.cpp
 OBJ_FILES	:=	$(SRC_FILES:.cpp=.o)
 
 SRC			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES))

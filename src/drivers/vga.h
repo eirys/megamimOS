@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 17:46:14 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 20:44:46 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,9 @@ void clearBuffer(Color color = Color::Immaculate) {
 
 /* ------------------ CURSOR ------------------ */
 
+/**
+ * @brief Moves the screen up by one line.
+*/
 static
 void scrollUp(Color color) {
     for (u32 y = 1; y < HEIGHT; y++) {
@@ -137,6 +140,9 @@ void scrollUp(Color color) {
     }
 }
 
+/**
+ * @brief Moves the screen down by one line.
+*/
 static
 void scrollDown(Color color) {
     for (u32 y = HEIGHT - 1; y > 0; y--) {

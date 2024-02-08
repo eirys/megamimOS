@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 18:08:50 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 21:27:27 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,15 +87,17 @@ public:
         m_cursor.update();
     }
 
+    /* ---------------------------------------- */
+
     void reset() {
         vga::clearBuffer(m_color);
         m_cursor.setTo(
             (i32)(vga::WIDTH / 2) - 1,
             (i32)(vga::HEIGHT / 2) - 1);
         putString("42");
-        constexpr u32 halfKernelNameLength = (KERNEL_NAME_LEN  + 3) /* For the extra ' #{id}' */ / 2U;
+        constexpr u32 halfTitle = (KERNEL_NAME_LEN  + 3) /* For the extra ' #{id}' */ / 2U;
         m_cursor.setTo(
-            (i32)(vga::WIDTH / 2) - halfKernelNameLength,
+            (i32)(vga::WIDTH / 2) - halfTitle,
             (i32)(vga::HEIGHT / 2));
         putString(KERNEL_NAME);
         putString(" #");
@@ -120,12 +122,17 @@ public:
 
     inline
     void offsetDownward() {
-        insertNewline(); // For now, just insert a newline
+        insertNewline();
     }
 
     inline
     void offsetUpward() {
         vga::scrollDown(m_color);
+
+        // u8 buffer[vga::WIDTH + 1];
+        // lib::memset((i32*)buffer, 0, vga::WIDTH + 1);
+        // m_history.pop(buffer);
+
         m_cursor.setTo(0U, vga::HEIGHT - 1);
         m_cursor.update();
     }
@@ -141,10 +148,10 @@ private:
     /*                   DATA                   */
     /* ---------------------------------------- */
 
-    // History         m_history;
+    History         m_history;
+    u32             m_id;
     vga::Cursor     m_cursor;
     vga::Color      m_color;
-    u32             m_id;
 
 }; // class Terminal
 
