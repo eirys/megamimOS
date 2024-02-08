@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/08 15:36:02 by etran            ###   ########.fr        #
+#    Updated: 2024/02/08 15:45:29 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,8 +39,6 @@ CFLAGS		:=	-Wall \
 				-O3 \
 				-m32
 
-INCLUDES	:=	-I.
-
 ARCHIVER	:=	ar
 ARFLAGS		:=	rcs
 
@@ -66,7 +64,7 @@ $(NAME): $(OBJ)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR)
 	@echo "Compiling file $<..."
-	@$(CXX) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CXX) $(CFLAGS) -c $< -o $@
 
 .PHONY: clean
 clean:
