@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 13:38:34 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 15:07:13 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "utils.h"
 #include "cursor.h"
+#include "history.h"
 
 #ifndef KERNEL_NAME
 # define KERNEL_NAME "undefined kernel name :("
@@ -99,7 +100,7 @@ private:
     /*                   DATA                   */
     /* ---------------------------------------- */
 
-    // History         m_history;
+    History         m_history;
     vga::Cursor     m_cursor;
     vga::Color      m_color;
 

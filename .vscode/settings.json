@@ -33,6 +33,5 @@
         "type_traits": "cpp",
         "utility": "cpp"
     },
-    "editor.useTabStops": false,
-    "C_Cpp.errorSquiggles": "disabled"
+    "editor.useTabStops": false
 }

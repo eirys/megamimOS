@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   runtime.cpp                                        :+:      :+:    :+:   */
+/*   strlen.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 21:06:45 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 13:44:52 by etran            ###   ########.fr       */
+/*   Created: 2024/02/08 14:38:57 by etran             #+#    #+#             */
+/*   Updated: 2024/02/08 15:23:19 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * This file is necessary for inheritance, for some reason...
-*/
+#include "types.h"
 
-extern "C"
-void __cxa_pure_virtual() {
-    asm volatile("hlt");
+namespace lib {
+
+u32 strlen(const i8* str) noexcept {
+    u32 len = 0;
+    while (str[len]) ++len;
+    return len;
 }
 
-void operator delete(void *) {}
-void operator delete(void *, unsigned int) {}
+} // namespace lib

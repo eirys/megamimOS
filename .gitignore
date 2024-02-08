@@ -1,4 +1,10 @@
-megamimOS
-megamimOS.iso
-isodir
-obj
+/*
+
+!src
+!lib
+!config
+
+!.gitignore
+!Makefile
+!README.md
+!.vscode
