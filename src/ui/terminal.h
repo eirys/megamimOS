@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 15:07:13 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 17:54:01 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,37 @@ public:
         m_color = color;
     }
 
+    inline
+    void setId(const u32 id) {
+        m_id = id;
+    }
+
     /* ---------------------------------------- */
 
     inline
     void putString(const i8* str) {
         while (*str)
             putChar(vga::Char(*str++));
+    }
+
+    inline
+    void putNbr(u32 nbr) {
+        i8 buf[32];
+        u32 cur = 32;
+
+        if (nbr == 0) {
+            putChar('0');
+            return;
+        }
+        while (nbr) {
+            --cur;
+            buf[cur] = '0' + (nbr % 10);
+            nbr /= 10;
+        }
+
+        for (u32 i = cur; i < 32; i++) {
+            putChar(buf[i]);
+        }
     }
 
     inline
@@ -67,9 +92,10 @@ public:
         constexpr u32 halfKernelNameLength = KERNEL_NAME_LEN / 2U;
         m_cursor.setTo(
             (i32)(vga::WIDTH / 2) - halfKernelNameLength,
-            (i32)(vga::HEIGHT / 2));
-
-        putString((i8*)KERNEL_NAME);
+            (i32)(vga::HEIGHT / 2) - 1);
+        putString(KERNEL_NAME);
+        putString(" #");
+        putNbr(m_id);
         m_cursor.setTo(0U, vga::HEIGHT - 1);
         m_cursor.update();
     }
@@ -88,21 +114,33 @@ public:
         m_cursor.update();
     }
 
+    inline
+    void offsetDownward() {
+        insertNewline(); // For now, just insert a newline
+    }
+
+    inline
+    void offsetUpward() {
+        vga::scrollDown(m_color);
+        m_cursor.setTo(0U, vga::HEIGHT - 1);
+        m_cursor.update();
+    }
 
 private:
     /* ---------------------------------------- */
     /*              STATIC MEMBERS              */
     /* ---------------------------------------- */
 
-    static constexpr u32  KERNEL_NAME_LEN = sizeof(KERNEL_NAME);
+    static constexpr u32  KERNEL_NAME_LEN = sizeof(KERNEL_NAME) + 3;
 
     /* ---------------------------------------- */
     /*                   DATA                   */
     /* ---------------------------------------- */
 
-    History         m_history;
+    // History         m_history;
     vga::Cursor     m_cursor;
     vga::Color      m_color;
+    u32             m_id;
 
 }; // class Terminal
 
@@ -113,6 +151,11 @@ Terminal& operator<<(Terminal& term, const i8* str) {
 
 Terminal& operator<<(Terminal& term, const vga::Char character) {
     term.putChar(character);
+    return term;
+}
+
+Terminal& operator<<(Terminal& term, const u32 nbr) {
+    term.putNbr(nbr);
     return term;
 }
 

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:34:43 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 22:41:53 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 16:35:28 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@
 namespace core {
 
 /**
- * @brief Write a byte to a port.
- * This is used to send commands to the PS/2 controller.
-*/
+ * @brief Read a byte from a port.
+ */
 static inline
 u8 inB(u16 port) {
     u8 ret;
@@ -29,7 +28,8 @@ u8 inB(u16 port) {
 }
 
 /**
- * @brief Retrieve a byte from a port.
+ * @brief Write a byte to a port.
+ * This is used to send commands to the PS/2 controller.
  */
 static inline
 void outB(u16 port, u8 data) {

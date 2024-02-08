@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 15:33:43 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 17:31:41 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,17 @@ void _exit(ui::WindowManager& winManager) {
 }
 
 static
-void _print(ui::WindowManager& winManager, const ui::KeyEvent& event) {
+void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
     switch (event.m_key) {
         case ui::Key::Backspace:    return winManager.eraseChar();
         case ui::Key::Enter:        return winManager.newLine();
         case ui::Key::Tab:          return event.m_uppercase ? winManager.switchToPrevious() : winManager.switchToNext();
-        // case ui::Key::CursorUp:
-        // case ui::Key::CursorDown:
-        // case ui::Key::CursorLeft:
-        // case ui::Key::CursorRight:
-        default:                    winManager << event.m_character; break;
+        case ui::Key::CursorUp:     return winManager.scrollUp();
+        case ui::Key::CursorDown:   return winManager.scrollDown();
+        case ui::Key::CursorLeft:
+        case ui::Key::CursorRight:
+        default:
+            break;
     }
 }
 
@@ -78,10 +79,11 @@ void megamimOS_cpp(const MultibootInfo& info) {
         ui::TranslateResult result = layout.translate(ps2::poll(), event);
 
         switch (result) {
-            case ui::TranslateResult::Print:    _print(winManager, event); break;
-            case ui::TranslateResult::Invalid:  /* return */ _panic(winManager); break;
+            case ui::TranslateResult::Print:    winManager << event.m_character; break;
+            case ui::TranslateResult::Invalid:  /* return */ /* _panic(winManager); */ break;
             case ui::TranslateResult::Exit:     return _exit(winManager);
             case ui::TranslateResult::Ignore:   break;
+            case ui::TranslateResult::Command:  _handleCommand(winManager, event); break;
         }
     }
 }

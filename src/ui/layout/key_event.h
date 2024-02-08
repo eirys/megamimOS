@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 13:13:09 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 13:39:45 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 17:11:42 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ struct KeyEvent {
     Action      m_action;
     Key         m_key;
     vga::Char   m_character;
+
     bool        m_uppercase;
 };
 
@@ -123,6 +124,14 @@ bool isUppercase(const Modifier mods) {
 static inline
 Action isPressed(const u8 input) {
     return (input & 0x80) ? Action::Released : Action::Pressed;
+}
+
+/**
+ * @brief Verifies that numlock is set.
+ */
+static inline
+bool isNumlock(const Modifier mods) {
+    return (bool)(mods & Modifier::Num);
 }
 
 } // namespace ui

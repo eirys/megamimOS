@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 13:35:18 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 17:48:00 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ public:
         for (u8 id = 0; id < TERMINAL_COUNT; id++) {
             const u8 colorRaw = (u8)id + (u8)vga::Color::Indigo;
             m_terminals[id].setColor((vga::Color)colorRaw);
+            m_terminals[id].setId(id);
         }
         currentTerminal().reset();
     }
@@ -105,6 +106,16 @@ public:
     inline
     void newLine() {
         currentTerminal().insertNewline();
+    }
+
+    inline
+    void scrollUp() {
+        currentTerminal().offsetUpward();
+    }
+
+    inline
+    void scrollDown() {
+        currentTerminal().offsetDownward();
     }
 
 private:

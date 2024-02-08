@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:40:56 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 21:03:37 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 17:03:51 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,16 @@ namespace ps2 {
 static constexpr const u16 DATA_PORT = 0x60;
 
 /**
- * @brief The command port of the PS/2 controller.
+ * @brief The command register of the PS/2 controller.
  * Used to send commands to the PS/2 controller.
 */
-static constexpr const u16 COMMAND_PORT = 0x64;
+static constexpr const u16 COMMAND_REGISTER = 0x64;
+
+enum class Led: u8 {
+    ScrollLock  = 1 << 0,
+    NumLock     = 1 << 1,
+    CapsLock    = 1 << 2
+};
 
 /* -------------------------------------------- */
 /*                   FUNCTIONS                  */
@@ -44,7 +50,7 @@ static constexpr const u16 COMMAND_PORT = 0x64;
 */
 static inline
 u8 readStatus() {
-    return core::inB(COMMAND_PORT);
+    return core::inB(COMMAND_REGISTER);
 }
 
 /**
@@ -80,6 +86,16 @@ u8 poll() {
         core::pause();
     }
     return readData();
+}
+
+/**
+ * @brief Tests if the keyboard LED is on.
+*/
+static inline
+bool isLedOn(const u8 led_mask) {
+    core::outB(COMMAND_REGISTER, 0xED);
+    core::outB(DATA_PORT, led_mask);
+    return readData() == 0xFA;
 }
 
 } // namespace ps2

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:14:28 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 14:38:14 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 17:22:37 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 
 namespace ui {
 
+/**
+ * @brief Maximum number of lines in the history.
+*/
 static constexpr u8 HISTORY_SIZE = 10;
 
 class HistoryInternal final {
@@ -37,12 +40,12 @@ public:
 
     inline
     void replaceLine(const i8* line, const u8 lineIndex) {
-        u8 index = 0;
-        while (line[index] && index < vga::WIDTH) {
-            m_data[lineIndex][index] = line[index];
-            index++;
-        }
-        m_data[lineIndex][index] = '\0';
+        // u8 index = 0;
+        // while (line[index] && index < vga::WIDTH) {
+        //     m_data[lineIndex][index] = line[index];
+        //     index++;
+        // }
+        // m_data[lineIndex][index] = '\0';
     }
 
 private:

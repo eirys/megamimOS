@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:44:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 13:40:12 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 17:29:41 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,18 +127,34 @@ public:
 
             case Key::Space:        out.m_character = ' '; break;
 
+            case Key::Numpad0:      out.m_character = '0'; break;
+            case Key::Numpad1:      out.m_character = '1'; break;
+            case Key::Numpad2:      out.m_character = '2'; break;
+            case Key::Numpad3:      out.m_character = '3'; break;
+            case Key::Numpad4:      out.m_character = '4'; break;
+            case Key::Numpad5:      out.m_character = '5'; break;
+            case Key::Numpad6:      out.m_character = '6'; break;
+            case Key::Numpad7:      out.m_character = '7'; break;
+            case Key::Numpad8:      out.m_character = '8'; break;
+            case Key::Numpad9:      out.m_character = '9'; break;
+            case Key::NumpadDot:    out.m_character = '.'; break;
+            case Key::NumpadSlash:  out.m_character = '/'; break;
+            case Key::NumpadMinus:  out.m_character = '-'; break;
+            case Key::NumpadPlus:   out.m_character = '+'; break;
+
             /* -------------------------------- */
             /*               OTHER              */
             /* -------------------------------- */
 
             case Key::Enter:
+            case Key::NumpadEnter:
             case Key::Backspace:
             case Key::Tab:
             case Key::CursorUp:
             case Key::CursorDown:
             case Key::CursorLeft:
             case Key::CursorRight:
-                break;
+                return TranslateResult::Command;
 
             case Key::Escape:
                 return TranslateResult::Exit;
@@ -168,6 +184,8 @@ private:
      * @param out The output key.
      */
     bool _translateKey(u8 makecode, const bool isExtended, Key& out) {
+        bool numlock = isNumlock(m_modifiers);
+
         switch (makecode) {
             /* --------- MISCELLANEOUS -------- */
             case 0x01: out = Key::Escape; break;
@@ -184,16 +202,16 @@ private:
             case 0x0A: out = Key::Key9; break;
             case 0x0B: out = Key::Key0; break;
 
-            case 0x52: out = Key::Numpad0; break;
-            case 0x4F: out = Key::Numpad1; break;
-            case 0x50: out = isExtended ? Key::CursorDown : Key::Numpad2; break;
-            case 0x51: out = Key::Numpad3; break;
-            case 0x4B: out = isExtended ? Key::CursorLeft : Key::Numpad4; break;
+            case 0x52: out = numlock ? Key::Numpad0 : Key::Insert; break;
+            case 0x4F: out = numlock ? Key::Numpad1 : Key::End; break;
+            case 0x50: out = isExtended ? Key::CursorDown : (numlock ? Key::Numpad2 : Key::CursorDown); break;
+            case 0x51: out = numlock ? Key::Numpad3 : Key::PageDown ; break;
+            case 0x4B: out = isExtended ? Key::CursorLeft : (numlock? Key::Numpad4 : Key::CursorLeft); break;
             case 0x4C: out = Key::Numpad5; break;
-            case 0x4D: out = isExtended ? Key::CursorRight : Key::Numpad6; break;
-            case 0x47: out = Key::Numpad7; break;
-            case 0x48: out = isExtended ? Key::CursorUp : Key::Numpad8; break;
-            case 0x49: out = Key::Numpad9; break;
+            case 0x4D: out = isExtended ? Key::CursorRight : (numlock ? Key::Numpad6 : Key::CursorRight); break;
+            case 0x47: out = numlock ? Key::Numpad7 : Key::Home; break;
+            case 0x48: out = isExtended ? Key::CursorUp : (numlock ? Key::Numpad8 : Key::CursorUp); break;
+            case 0x49: out = numlock ? Key::Numpad9 : Key::PageUp; break;
 
             case 0x10: out = Key::Q; break;
             case 0x11: out = Key::W; break;
@@ -230,7 +248,7 @@ private:
             case 0x28: out = Key::Quote; break;
             case 0x33: out = Key::Comma; break;
             case 0x34: out = Key::Dot; break;
-            case 0x53: out = Key::NumpadDot; break;
+            case 0x53: out = numlock ? Key::NumpadDot : Key::Delete; break;
             case 0x35: out = isExtended ? Key::NumpadSlash : Key::Slash; break;
             case 0x2B: out = Key::Backslash; break;
 
