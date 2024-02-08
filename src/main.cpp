@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 22:47:00 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 13:43:04 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,15 @@ void _exit(ui::WindowManager& winManager) {
 
 static
 void _print(ui::WindowManager& winManager, const ui::KeyEvent& event) {
-    switch (event.key) {
+    switch (event.m_key) {
         case ui::Key::Backspace:    return winManager.eraseChar();
         case ui::Key::Enter:        return winManager.newLine();
-        case ui::Key::Tab:          return winManager.switchToNext();
-        default:                    winManager << event.character; break;
+        case ui::Key::Tab:          return event.m_uppercase ? winManager.switchToPrevious() : winManager.switchToNext();
+        // case ui::Key::CursorUp:
+        // case ui::Key::CursorDown:
+        // case ui::Key::CursorLeft:
+        // case ui::Key::CursorRight:
+        default:                    winManager << event.m_character; break;
     }
 }
 
@@ -55,7 +59,7 @@ void _panic(ui::WindowManager& winManager) {
     core::panic();
     winManager.newLine();
     winManager << (i8*)"PANIC KERNEL PANIC! ABORTING!";
-    vga::disableCursor();
+    // vga::disableCursor();
 }
 /* -------------------------------------------- */
 
@@ -66,7 +70,7 @@ void megamimOS_cpp(const MultibootInfo& info) {
     ui::WindowManager   winManager;
     ui::QwertyLayout    layout;
 
-   vga::enableCursor(0xb, 0xf);
+   vga::enableCursor(0xe, 0xf);
 
     for (;;) {
         ui::KeyEvent event;
@@ -74,7 +78,7 @@ void megamimOS_cpp(const MultibootInfo& info) {
 
         switch (result) {
             case ui::TranslateResult::Print:    _print(winManager, event); break;
-            case ui::TranslateResult::Invalid:  return _panic(winManager);
+            case ui::TranslateResult::Invalid:  /* return */ _panic(winManager); break;
             case ui::TranslateResult::Exit:     return _exit(winManager);
             case ui::TranslateResult::Ignore:   break;
         }

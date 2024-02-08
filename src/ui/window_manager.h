@@ -6,14 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 22:13:02 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 13:35:18 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "terminal.h"
-#include "scancode.h"
+#include "key_event.h"
 
 namespace ui {
 
@@ -70,6 +70,12 @@ public:
     }
 
     inline
+    void switchToPrevious() {
+        m_current = static_cast<TerminalID>((static_cast<u8>(m_current) + TERMINAL_COUNT - 1) % TERMINAL_COUNT);
+        currentTerminal().reset();
+    }
+
+    inline
     Terminal& currentTerminal() {
         return m_terminals[static_cast<u8>(m_current)];
     }
@@ -83,22 +89,22 @@ public:
 
     inline
     void write(const i8* str) {
-        m_terminals[static_cast<u8>(m_current)] << str;
+        currentTerminal() << str;
     }
 
     inline
     void write(const vga::Char character) {
-        m_terminals[static_cast<u8>(m_current)] << character;
+        currentTerminal() << character;
     }
 
     inline
     void eraseChar() {
-        m_terminals[static_cast<u8>(m_current)].eraseChar();
+        currentTerminal().eraseChar();
     }
 
     inline
     void newLine() {
-        m_terminals[static_cast<u8>(m_current)].insertNewline();
+        currentTerminal().insertNewline();
     }
 
 private:

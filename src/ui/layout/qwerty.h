@@ -6,14 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:44:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 22:15:25 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 13:40:12 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "scancode.h"
-#include "layout.h"
+#include "key_event.h"
+#include "ilayout.h"
 #include "vga.h"
 
 namespace ui {
@@ -21,7 +21,7 @@ namespace ui {
 /**
  * @brief Scancode interpreter for the US-QWERTY layout.
  */
-class QwertyLayout final: public Layout {
+class QwertyLayout final: public ILayout {
 public:
     /* ---------------------------------------- */
     /*                  METHODS                 */
@@ -43,8 +43,8 @@ public:
      * @param out The output KeyEvent.
      */
     TranslateResult translate(const u8 input, KeyEvent& out) override {
-        out.character = vga::Char::Empty;
-        out.action = isPressed(input);
+        out.m_character = vga::Char::Empty;
+        out.m_action = isPressed(input);
 
         if (input == 0xE0) {
             // The scancode is part of an escape sequence.
@@ -55,75 +55,89 @@ public:
         const bool isExtended = m_isExtended;
         m_isExtended = false;
 
-        if (!_translateKey(input & 0x7F, isExtended, out.key)) {
+        if (!_translateKey(input & 0x7F, isExtended, out.m_key)) {
             return TranslateResult::Invalid;
         }
 
-        _setModifiers(out, isExtended);
-
-        if (out.action == Action::Released) {
+        if (_setModifiers(out, isExtended)) {
             return TranslateResult::Ignore;
         }
 
-        bool uppercase = isUppercase(m_modifiers);
+        if (out.m_action == Action::Released) {
+            return TranslateResult::Ignore;
+        }
 
-        switch (out.key) {
-            case Key::Key1:         out.character = uppercase ? '!' : '1'; break;
-            case Key::Key2:         out.character = uppercase ? '@' : '2'; break;
-            case Key::Key3:         out.character = uppercase ? '#' : '3'; break;
-            case Key::Key4:         out.character = uppercase ? '$' : '4'; break;
-            case Key::Key5:         out.character = uppercase ? '%' : '5'; break;
-            case Key::Key6:         out.character = uppercase ? '^' : '6'; break;
-            case Key::Key7:         out.character = uppercase ? '&' : '7'; break;
-            case Key::Key8:         out.character = uppercase ? '*' : '8'; break;
-            case Key::Key9:         out.character = uppercase ? '(' : '9'; break;
-            case Key::Key0:         out.character = uppercase ? ')' : '0'; break;
+        out.m_uppercase = isUppercase(m_modifiers);
 
-            case Key::Minus:        out.character = uppercase ? '_' : '-'; break;
-            case Key::Equals:       out.character = uppercase ? '+' : '='; break;
+        switch (out.m_key) {
+            /* -------------------------------- */
+            /*       PRINTABLE CHARACTERS       */
+            /* -------------------------------- */
 
-            case Key::LBracket:     out.character = uppercase ? '{' : '['; break;
-            case Key::RBracket:     out.character = uppercase ? '}' : ']'; break;
-            case Key::Semicolon:    out.character = uppercase ? ':' : ';'; break;
-            case Key::Quote:        out.character = uppercase ? '"' : '\''; break;
-            case Key::Comma:        out.character = uppercase ? '<' : ','; break;
-            case Key::Dot:          out.character = uppercase ? '>' : '.'; break;
-            case Key::Slash:        out.character = uppercase ? '?' : '/'; break;
-            case Key::Backslash:    out.character = uppercase ? '|' : '\\'; break;
-            case Key::Grave:        out.character = uppercase ? '~' : '`'; break;
+            case Key::Key1:         out.m_character = out.m_uppercase ? '!' : '1'; break;
+            case Key::Key2:         out.m_character = out.m_uppercase ? '@' : '2'; break;
+            case Key::Key3:         out.m_character = out.m_uppercase ? '#' : '3'; break;
+            case Key::Key4:         out.m_character = out.m_uppercase ? '$' : '4'; break;
+            case Key::Key5:         out.m_character = out.m_uppercase ? '%' : '5'; break;
+            case Key::Key6:         out.m_character = out.m_uppercase ? '^' : '6'; break;
+            case Key::Key7:         out.m_character = out.m_uppercase ? '&' : '7'; break;
+            case Key::Key8:         out.m_character = out.m_uppercase ? '*' : '8'; break;
+            case Key::Key9:         out.m_character = out.m_uppercase ? '(' : '9'; break;
+            case Key::Key0:         out.m_character = out.m_uppercase ? ')' : '0'; break;
 
-            case Key::A:            out.character = uppercase ? 'A' : 'a'; break;
-            case Key::B:            out.character = uppercase ? 'B' : 'b'; break;
-            case Key::C:            out.character = uppercase ? 'C' : 'c'; break;
-            case Key::D:            out.character = uppercase ? 'D' : 'd'; break;
-            case Key::E:            out.character = uppercase ? 'E' : 'e'; break;
-            case Key::F:            out.character = uppercase ? 'F' : 'f'; break;
-            case Key::G:            out.character = uppercase ? 'G' : 'g'; break;
-            case Key::H:            out.character = uppercase ? 'H' : 'h'; break;
-            case Key::I:            out.character = uppercase ? 'I' : 'i'; break;
-            case Key::J:            out.character = uppercase ? 'J' : 'j'; break;
-            case Key::K:            out.character = uppercase ? 'K' : 'k'; break;
-            case Key::L:            out.character = uppercase ? 'L' : 'l'; break;
-            case Key::M:            out.character = uppercase ? 'M' : 'm'; break;
-            case Key::N:            out.character = uppercase ? 'N' : 'n'; break;
-            case Key::O:            out.character = uppercase ? 'O' : 'o'; break;
-            case Key::P:            out.character = uppercase ? 'P' : 'p'; break;
-            case Key::Q:            out.character = uppercase ? 'Q' : 'q'; break;
-            case Key::R:            out.character = uppercase ? 'R' : 'r'; break;
-            case Key::S:            out.character = uppercase ? 'S' : 's'; break;
-            case Key::T:            out.character = uppercase ? 'T' : 't'; break;
-            case Key::U:            out.character = uppercase ? 'U' : 'u'; break;
-            case Key::V:            out.character = uppercase ? 'V' : 'v'; break;
-            case Key::W:            out.character = uppercase ? 'W' : 'w'; break;
-            case Key::X:            out.character = uppercase ? 'X' : 'x'; break;
-            case Key::Y:            out.character = uppercase ? 'Y' : 'y'; break;
-            case Key::Z:            out.character = uppercase ? 'Z' : 'z'; break;
+            case Key::Minus:        out.m_character = out.m_uppercase ? '_' : '-'; break;
+            case Key::Equals:       out.m_character = out.m_uppercase ? '+' : '='; break;
 
-            case Key::Space:        out.character = ' '; break;
+            case Key::LBracket:     out.m_character = out.m_uppercase ? '{' : '['; break;
+            case Key::RBracket:     out.m_character = out.m_uppercase ? '}' : ']'; break;
+            case Key::Semicolon:    out.m_character = out.m_uppercase ? ':' : ';'; break;
+            case Key::Quote:        out.m_character = out.m_uppercase ? '"' : '\''; break;
+            case Key::Comma:        out.m_character = out.m_uppercase ? '<' : ','; break;
+            case Key::Dot:          out.m_character = out.m_uppercase ? '>' : '.'; break;
+            case Key::Slash:        out.m_character = out.m_uppercase ? '?' : '/'; break;
+            case Key::Backslash:    out.m_character = out.m_uppercase ? '|' : '\\'; break;
+            case Key::Grave:        out.m_character = out.m_uppercase ? '~' : '`'; break;
+
+            case Key::A:            out.m_character = out.m_uppercase ? 'A' : 'a'; break;
+            case Key::B:            out.m_character = out.m_uppercase ? 'B' : 'b'; break;
+            case Key::C:            out.m_character = out.m_uppercase ? 'C' : 'c'; break;
+            case Key::D:            out.m_character = out.m_uppercase ? 'D' : 'd'; break;
+            case Key::E:            out.m_character = out.m_uppercase ? 'E' : 'e'; break;
+            case Key::F:            out.m_character = out.m_uppercase ? 'F' : 'f'; break;
+            case Key::G:            out.m_character = out.m_uppercase ? 'G' : 'g'; break;
+            case Key::H:            out.m_character = out.m_uppercase ? 'H' : 'h'; break;
+            case Key::I:            out.m_character = out.m_uppercase ? 'I' : 'i'; break;
+            case Key::J:            out.m_character = out.m_uppercase ? 'J' : 'j'; break;
+            case Key::K:            out.m_character = out.m_uppercase ? 'K' : 'k'; break;
+            case Key::L:            out.m_character = out.m_uppercase ? 'L' : 'l'; break;
+            case Key::M:            out.m_character = out.m_uppercase ? 'M' : 'm'; break;
+            case Key::N:            out.m_character = out.m_uppercase ? 'N' : 'n'; break;
+            case Key::O:            out.m_character = out.m_uppercase ? 'O' : 'o'; break;
+            case Key::P:            out.m_character = out.m_uppercase ? 'P' : 'p'; break;
+            case Key::Q:            out.m_character = out.m_uppercase ? 'Q' : 'q'; break;
+            case Key::R:            out.m_character = out.m_uppercase ? 'R' : 'r'; break;
+            case Key::S:            out.m_character = out.m_uppercase ? 'S' : 's'; break;
+            case Key::T:            out.m_character = out.m_uppercase ? 'T' : 't'; break;
+            case Key::U:            out.m_character = out.m_uppercase ? 'U' : 'u'; break;
+            case Key::V:            out.m_character = out.m_uppercase ? 'V' : 'v'; break;
+            case Key::W:            out.m_character = out.m_uppercase ? 'W' : 'w'; break;
+            case Key::X:            out.m_character = out.m_uppercase ? 'X' : 'x'; break;
+            case Key::Y:            out.m_character = out.m_uppercase ? 'Y' : 'y'; break;
+            case Key::Z:            out.m_character = out.m_uppercase ? 'Z' : 'z'; break;
+
+            case Key::Space:        out.m_character = ' '; break;
+
+            /* -------------------------------- */
+            /*               OTHER              */
+            /* -------------------------------- */
 
             case Key::Enter:
             case Key::Backspace:
             case Key::Tab:
+            case Key::CursorUp:
+            case Key::CursorDown:
+            case Key::CursorLeft:
+            case Key::CursorRight:
                 break;
 
             case Key::Escape:
@@ -155,9 +169,10 @@ private:
      */
     bool _translateKey(u8 makecode, const bool isExtended, Key& out) {
         switch (makecode) {
+            /* --------- MISCELLANEOUS -------- */
             case 0x01: out = Key::Escape; break;
 
-            case 0x29: out = Key::Grave; break;
+            /* --------- ALPHANUMERICS -------- */
             case 0x02: out = Key::Key1; break;
             case 0x03: out = Key::Key2; break;
             case 0x04: out = Key::Key3; break;
@@ -168,6 +183,17 @@ private:
             case 0x09: out = Key::Key8; break;
             case 0x0A: out = Key::Key9; break;
             case 0x0B: out = Key::Key0; break;
+
+            case 0x52: out = Key::Numpad0; break;
+            case 0x4F: out = Key::Numpad1; break;
+            case 0x50: out = isExtended ? Key::CursorDown : Key::Numpad2; break;
+            case 0x51: out = Key::Numpad3; break;
+            case 0x4B: out = isExtended ? Key::CursorLeft : Key::Numpad4; break;
+            case 0x4C: out = Key::Numpad5; break;
+            case 0x4D: out = isExtended ? Key::CursorRight : Key::Numpad6; break;
+            case 0x47: out = Key::Numpad7; break;
+            case 0x48: out = isExtended ? Key::CursorUp : Key::Numpad8; break;
+            case 0x49: out = Key::Numpad9; break;
 
             case 0x10: out = Key::Q; break;
             case 0x11: out = Key::W; break;
@@ -189,8 +215,6 @@ private:
             case 0x24: out = Key::J; break;
             case 0x25: out = Key::K; break;
             case 0x26: out = Key::L; break;
-            case 0x27: out = Key::Semicolon; break;
-            case 0x28: out = Key::Quote; break;
 
             case 0x2C: out = Key::Z; break;
             case 0x2D: out = Key::X; break;
@@ -199,19 +223,31 @@ private:
             case 0x30: out = Key::B; break;
             case 0x31: out = Key::N; break;
             case 0x32: out = Key::M; break;
+
+            /* ------ SPECIAL CHARACTERS ------ */
+            case 0x29: out = Key::Grave; break;
+            case 0x27: out = Key::Semicolon; break;
+            case 0x28: out = Key::Quote; break;
             case 0x33: out = Key::Comma; break;
             case 0x34: out = Key::Dot; break;
-            case 0x35: out = Key::Slash; break;
+            case 0x53: out = Key::NumpadDot; break;
+            case 0x35: out = isExtended ? Key::NumpadSlash : Key::Slash; break;
+            case 0x2B: out = Key::Backslash; break;
 
-            case 0x39: out = Key::Space; break;
-
-            case 0x1C: out = Key::Enter; break;
-            case 0x0E: out = Key::Backspace; break;
-            case 0x0F: out = Key::Tab; break;
-
+            case 0x0C: out = Key::Minus; break;
+            case 0x4A: out = Key::NumpadMinus; break;
+            case 0x4E: out = Key::NumpadPlus; break;
+            case 0x37: out = Key::NumpadStar; break;
+            case 0x0D: out = Key::Equals; break;
             case 0x1A: out = Key::LBracket; break;
             case 0x1B: out = Key::RBracket; break;
 
+            case 0x39: out = Key::Space; break;
+            case 0x1C: out = isExtended ? Key::NumpadEnter : Key::Enter; break;
+            case 0x0E: out = Key::Backspace; break;
+            case 0x0F: out = Key::Tab; break;
+
+            /* ----------- MODIFIERS ---------- */
             case 0x3A: out = Key::Caps; break;
             case 0x45: out = Key::NumLock; break;
 
@@ -238,8 +274,8 @@ private:
 
     inline
     bool _setModifiers(const KeyEvent& out, const bool isExtended) {
-        const bool pressed = out.action == Action::Pressed;
-        switch (out.key) {
+        const bool pressed = out.m_action == Action::Pressed;
+        switch (out.m_key) {
             case Key::LShift:   _setMod(Modifier::LShift, pressed); break;
             case Key::RShift:   _setMod(Modifier::RShift, pressed); break;
             case Key::LCtrl:    isExtended ? _setMod(Modifier::RCtrl, pressed): _setMod(Modifier::LCtrl, pressed); break;

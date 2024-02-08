@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scancode.h                                         :+:      :+:    :+:   */
+/*   key_event.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 20:14:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 21:35:54 by etran            ###   ########.fr       */
+/*   Created: 2024/02/08 13:13:09 by etran             #+#    #+#             */
+/*   Updated: 2024/02/08 13:39:45 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,26 @@ namespace ui {
 enum class Action: u8 {
     Released    = 0,
     Pressed     = 1,
-    Repeat      = 2,
+    Repeat      = 2, // Not used
 
     First       = Released,
     Last        = Repeat
 };
 
+/**
+ * @brief Represents a key event.
+ * Used to store the state of a key and the translater character it represents.
+*/
 struct KeyEvent {
-    Action      action;
-    Key         key;
-    vga::Char   character;
+    Action      m_action;
+    Key         m_key;
+    vga::Char   m_character;
+    bool        m_uppercase;
 };
 
+/**
+ * @brief Bitmask of modifier keys.
+*/
 enum class Modifier: u8 {
     None    = 0,
 

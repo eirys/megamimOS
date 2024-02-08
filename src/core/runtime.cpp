@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:06:45 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 22:17:56 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 13:15:57 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,5 @@ void __cxa_pure_virtual() {
     asm volatile("hlt");
 }
 
-// void operator delete(void *) {}
-
+void operator delete(void *) {}
 void operator delete(void *, unsigned int) {}
