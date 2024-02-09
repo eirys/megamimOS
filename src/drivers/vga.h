@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 17:46:14 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 09:57:17 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ namespace vga {
 static constexpr const u16 CONTROL_PORT = 0x3D4;
 static constexpr const u16 DATA_PORT = 0x3D5;
 
-static constexpr const u32 WIDTH = 80;
-static constexpr const u32 HEIGHT = 25;
+static constexpr const u8 WIDTH = 80;
+static constexpr const u8 HEIGHT = 25;
 
 u8* const  BUFFER = (u8*)0xB8000;
 
@@ -104,8 +104,8 @@ private:
 static inline
 void putChar(
     const Char character,
-    const u32 x,
-    const u32 y,
+    const u8 x,
+    const u8 y,
     const Color color = Color::Immaculate
 ) {
     BUFFER[2 * (y * WIDTH + x)] = (u8)character;
@@ -114,8 +114,8 @@ void putChar(
 
 static inline
 void clearBuffer(Color color = Color::Immaculate) {
-    for (u32 i = 0; i < WIDTH; i++) {
-        for (u32 j = 0; j < HEIGHT; j++) {
+    for (u8 i = 0; i < WIDTH; i++) {
+        for (u8 j = 0; j < HEIGHT; j++) {
             putChar(Char::Empty, i, j, color);
         }
     }
@@ -125,28 +125,28 @@ void clearBuffer(Color color = Color::Immaculate) {
 
 static
 void scrollUp(Color color) {
-    for (u32 y = 1; y < HEIGHT; y++) {
-        for (u32 x = 0; x < WIDTH; x++) {
+    for (u8 y = 1; y < HEIGHT; y++) {
+        for (u8 x = 0; x < WIDTH; x++) {
             BUFFER[2 * ((y - 1) * WIDTH + x)] = BUFFER[2 * (y * WIDTH + x)];
             BUFFER[2 * ((y - 1) * WIDTH + x) + 1] = BUFFER[2 * (y * WIDTH + x) + 1];
         }
     }
-    for (u32 x = 0; x < WIDTH; x++) {
-        BUFFER[2 * ((HEIGHT - 1) * WIDTH + x)] = 0;
+    for (u8 x = 0; x < WIDTH; x++) {
+        BUFFER[2 * ((HEIGHT - 1) * WIDTH + x)] = (u8)Char::Empty;;
         BUFFER[2 * ((HEIGHT - 1) * WIDTH + x) + 1] = (u8)color;
     }
 }
 
 static
 void scrollDown(Color color) {
-    for (u32 y = HEIGHT - 1; y > 0; y--) {
-        for (u32 x = 0; x < WIDTH; x++) {
+    for (u8 y = HEIGHT - 1; y > 0; y--) {
+        for (u8 x = 0; x < WIDTH; x++) {
             BUFFER[2 * (y * WIDTH + x)] = BUFFER[2 * ((y - 1) * WIDTH + x)];
             BUFFER[2 * (y * WIDTH + x) + 1] = BUFFER[2 * ((y - 1) * WIDTH + x) + 1];
         }
     }
-    for (u32 x = 0; x < WIDTH; x++) {
-        BUFFER[2 * (x)] = 0;
+    for (u8 x = 0; x < WIDTH; x++) {
+        BUFFER[2 * (x)] = (u8)Char::Empty;
         BUFFER[2 * (x) + 1] = (u8)color;
     }
 }
