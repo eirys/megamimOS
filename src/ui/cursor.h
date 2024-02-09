@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:37:50 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 21:02:00 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 09:59:00 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ public:
 
     union {
         struct { u8 m_x, m_y; };
-        u8 m_elem[2];
+        u8 m_axis[2];
     };
 
     /* ---------------------------------------- */
@@ -57,13 +57,13 @@ public:
     /* ---------------------------------------- */
 
     inline
-    u8& operator[](const u32 index) {
-        return m_elem[index];
+    u8& operator[](const u8 index) {
+        return m_axis[index];
     }
 
     inline
-    const u8& operator[](const u32 index) const {
-        return m_elem[index];
+    u8 operator[](const u8 index) const {
+        return m_axis[index];
     }
 
     /* ---------------------------------------- */
