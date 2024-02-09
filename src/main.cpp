@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/09 17:08:42 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 22:44:42 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "window_manager.h"
 #include "qwerty.h"
 #include "serial.h"
-#include "lib.h"
 
 /* -------------------------------------------- */
 
@@ -50,8 +49,9 @@ void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
         case ui::Key::Tab:          return event.m_uppercase ? winManager.switchToPrevious() : winManager.switchToNext();
         case ui::Key::CursorUp:     return winManager.scrollUp();
         case ui::Key::CursorDown:   return winManager.scrollDown();
-        // case ui::Key::CursorLeft:   return DEBUG();
-        case ui::Key::CursorRight:
+        case ui::Key::CursorLeft:   return winManager.moveCursorLeft();
+        case ui::Key::CursorRight:  return winManager.moveCursorRight();
+        case ui::Key::Delete:       return winManager.deleteChar();
         default:
             break;
     }

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/09 17:15:18 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 22:45:05 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,6 @@
 #include "key_event.h"
 
 namespace ui {
-
-enum class TerminalID: u8 {
-    User0 = 0,
-    User1,
-    User2,
-    User3,
-    User4,
-
-    First = User0,
-    Last = User4
-};
 
 class WindowManager final {
 public:
@@ -38,8 +27,7 @@ public:
         for (u8 id = 0; id < TERMINAL_COUNT; id++) {
             const u8 colorRaw = (u8)id + (u8)vga::Color::Indigo;
             m_terminals[id].setColor((vga::Color)colorRaw);
-            m_terminals[id].setId(id);
-            m_terminals[id].reset();
+            m_terminals[id].init(id);
         }
         currentTerminal().draw();
     }
@@ -54,18 +42,6 @@ public:
     /* ---------------------------------------- */
 
     inline
-    Terminal& operator[](const TerminalID id) {
-        return m_terminals[static_cast<u8>(id)];
-    }
-
-    inline
-    const Terminal& operator[](const TerminalID id) const {
-        return m_terminals[static_cast<u8>(id)];
-    }
-
-    /* ---------------------------------------- */
-
-    inline
     void draw() const {
         currentTerminal().draw();
     }
@@ -74,22 +50,22 @@ public:
 
     inline
     void switchToNext() {
-        m_current = static_cast<TerminalID>((static_cast<u8>(m_current) + 1) % TERMINAL_COUNT);
+        m_currentTerminal = (m_currentTerminal + 1) % TERMINAL_COUNT;
     }
 
     inline
     void switchToPrevious() {
-        m_current = static_cast<TerminalID>((static_cast<u8>(m_current) + TERMINAL_COUNT - 1) % TERMINAL_COUNT);
+        m_currentTerminal = (m_currentTerminal + TERMINAL_COUNT - 1) % TERMINAL_COUNT;
     }
 
     inline
     Terminal& currentTerminal() {
-        return m_terminals[static_cast<u8>(m_current)];
+        return m_terminals[static_cast<u8>(m_currentTerminal)];
     }
 
     inline
     const Terminal& currentTerminal() const {
-        return m_terminals[static_cast<u8>(m_current)];
+        return m_terminals[static_cast<u8>(m_currentTerminal)];
     }
 
     /* ---------------------------------------- */
@@ -104,15 +80,24 @@ public:
         currentTerminal() << character;
     }
 
+    /* ---------------------------------------- */
+
     inline
     void eraseChar() {
-        // currentTerminal().eraseChar();
+        currentTerminal().eraseChar();
+    }
+
+    inline
+    void deleteChar() {
+        currentTerminal().deleteChar();
     }
 
     inline
     void newLine() {
-        currentTerminal().insertNewline();
+        currentTerminal().prompt();
     }
+
+    /* ---------------------------------------- */
 
     inline
     void scrollUp() {
@@ -124,19 +109,29 @@ public:
         currentTerminal().offsetDownward();
     }
 
+    inline
+    void moveCursorLeft() {
+        currentTerminal().moveCursorLeftward();
+    }
+
+    inline
+    void moveCursorRight() {
+        currentTerminal().moveCursorRightward();
+    }
+
 private:
     /* ---------------------------------------- */
     /*              STATIC MEMBERS              */
     /* ---------------------------------------- */
 
-    static constexpr u8 TERMINAL_COUNT = enumSize<TerminalID>();
+    static constexpr u8 TERMINAL_COUNT = 5U;
 
     /* ---------------------------------------- */
     /*                   DATA                   */
     /* ---------------------------------------- */
 
     Terminal    m_terminals[TERMINAL_COUNT];
-    TerminalID  m_current = TerminalID::First;
+    u8          m_currentTerminal = 0U;
 
 }; // class WindowManager
 

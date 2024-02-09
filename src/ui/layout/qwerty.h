@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:44:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 17:29:41 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 22:45:26 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ public:
             /* -------------------------------- */
 
             case Key::Enter:
+            case Key::Delete:
             case Key::NumpadEnter:
             case Key::Backspace:
             case Key::Tab:
