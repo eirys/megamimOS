@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 17:48:00 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 17:15:18 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ public:
             const u8 colorRaw = (u8)id + (u8)vga::Color::Indigo;
             m_terminals[id].setColor((vga::Color)colorRaw);
             m_terminals[id].setId(id);
+            m_terminals[id].reset();
         }
-        currentTerminal().reset();
+        currentTerminal().draw();
     }
 
     ~WindowManager() = default;
@@ -65,15 +66,20 @@ public:
     /* ---------------------------------------- */
 
     inline
+    void draw() const {
+        currentTerminal().draw();
+    }
+
+    /* ---------------------------------------- */
+
+    inline
     void switchToNext() {
         m_current = static_cast<TerminalID>((static_cast<u8>(m_current) + 1) % TERMINAL_COUNT);
-        currentTerminal().reset();
     }
 
     inline
     void switchToPrevious() {
         m_current = static_cast<TerminalID>((static_cast<u8>(m_current) + TERMINAL_COUNT - 1) % TERMINAL_COUNT);
-        currentTerminal().reset();
     }
 
     inline
@@ -100,7 +106,7 @@ public:
 
     inline
     void eraseChar() {
-        currentTerminal().eraseChar();
+        // currentTerminal().eraseChar();
     }
 
     inline

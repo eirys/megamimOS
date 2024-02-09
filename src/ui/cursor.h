@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:37:50 by etran             #+#    #+#             */
-/*   Updated: 2024/02/09 09:59:00 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 15:19:12 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "types.h"
 #include "core.h"
 
-namespace vga {
+namespace ui {
 
 enum class CursorPosResult: u8 {
     Valid,
@@ -93,7 +93,7 @@ public:
         m_y = 0U;
         if (newY <= 0)
             return CursorPosResult::PastTop;
-        else if (m_y + dy >= vga::HEIGHT)
+        else if (newY >= vga::HEIGHT)
             return CursorPosResult::PastBottom;
 
         m_y = newY;
@@ -116,4 +116,4 @@ public:
 
 }; // class Cursor
 
-} // namespace vga
+} // namespace ui

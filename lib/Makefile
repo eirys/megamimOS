@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/08 20:05:01 by etran            ###   ########.fr        #
+#    Updated: 2024/02/09 16:06:26 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,8 @@ SRC_DIR		:=	src
 OBJ_DIR		:=	obj
 
 SRC_FILES	:=	strlen.cpp \
+				strcpy.cpp \
+				memset.cpp \
 				memcpy.cpp
 OBJ_FILES	:=	$(SRC_FILES:.cpp=.o)
 

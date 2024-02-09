@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/09 14:11:11 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 17:05:46 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ static constexpr const u16 DATA_PORT = 0x3D5;
 static constexpr const u8 WIDTH = 80;
 static constexpr const u8 HEIGHT = 25;
 
-u8* const  BUFFER = (u8*)0xB8000;
+class Char;
+
+Char* const  BUFFER = (Char*)0xB8000;
 
 /* -------------------------------------------- */
 
@@ -122,40 +124,6 @@ void clearBuffer(Color color = Color::Immaculate) {
 }
 
 /* ------------------ CURSOR ------------------ */
-
-/**
- * @brief Moves the screen up by one line.
-*/
-static
-void scrollUp(Color color) {
-    for (u8 y = 1; y < HEIGHT; y++) {
-        for (u8 x = 0; x < WIDTH; x++) {
-            BUFFER[2 * ((y - 1) * WIDTH + x)] = BUFFER[2 * (y * WIDTH + x)];
-            BUFFER[2 * ((y - 1) * WIDTH + x) + 1] = BUFFER[2 * (y * WIDTH + x) + 1];
-        }
-    }
-    for (u8 x = 0; x < WIDTH; x++) {
-        BUFFER[2 * ((HEIGHT - 1) * WIDTH + x)] = (u8)Char::Empty;;
-        BUFFER[2 * ((HEIGHT - 1) * WIDTH + x) + 1] = (u8)color;
-    }
-}
-
-/**
- * @brief Moves the screen down by one line.
-*/
-static
-void scrollDown(Color color) {
-    for (u8 y = HEIGHT - 1; y > 0; y--) {
-        for (u8 x = 0; x < WIDTH; x++) {
-            BUFFER[2 * (y * WIDTH + x)] = BUFFER[2 * ((y - 1) * WIDTH + x)];
-            BUFFER[2 * (y * WIDTH + x) + 1] = BUFFER[2 * ((y - 1) * WIDTH + x) + 1];
-        }
-    }
-    for (u8 x = 0; x < WIDTH; x++) {
-        BUFFER[2 * (x)] = (u8)Char::Empty;
-        BUFFER[2 * (x) + 1] = (u8)color;
-    }
-}
 
 static
 void enableCursor(u8 cursorStart, u8 cursorEnd) {

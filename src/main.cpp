@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/09 14:09:28 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 17:08:42 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
         case ui::Key::Tab:          return event.m_uppercase ? winManager.switchToPrevious() : winManager.switchToNext();
         case ui::Key::CursorUp:     return winManager.scrollUp();
         case ui::Key::CursorDown:   return winManager.scrollDown();
-        case ui::Key::CursorLeft:
+        // case ui::Key::CursorLeft:   return DEBUG();
         case ui::Key::CursorRight:
         default:
             break;
@@ -86,5 +86,7 @@ void megamimOS_cpp(const MultibootInfo& info) {
             case ui::TranslateResult::Ignore:   break;
             case ui::TranslateResult::Command:  _handleCommand(winManager, event); break;
         }
+
+        winManager.draw();
     }
 }

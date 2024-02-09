@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 21:27:27 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 17:23:02 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,60 +81,66 @@ public:
 
     inline
     void putChar(const vga::Char character) {
-        vga::putChar(character, m_cursor.m_x, m_cursor.m_y, m_color);
-        if (m_cursor.moveX(1) == vga::CursorPosResult::PastRight)
-            vga::scrollUp(m_color);
-        m_cursor.update();
+        if (m_cursor == vga::WIDTH) {
+            insertNewline();
+        }
+
+        m_data[m_cursor + (TERMINAL_HEIGHT - 1) * vga::WIDTH] = character;
+        m_cursor += 1;
     }
 
     /* ---------------------------------------- */
 
-    void reset() {
-        vga::clearBuffer(m_color);
-        m_cursor.setTo(
-            (i32)(vga::WIDTH / 2) - 1,
-            (i32)(vga::HEIGHT / 2) - 1);
-        putString("42");
-        constexpr u32 halfTitle = (KERNEL_NAME_LEN  + 3) /* For the extra ' #{id}' */ / 2U;
-        m_cursor.setTo(
-            (i32)(vga::WIDTH / 2) - halfTitle,
-            (i32)(vga::HEIGHT / 2));
-        putString(KERNEL_NAME);
-        putString(" #");
-        putNbr(m_id);
-        m_cursor.setTo(0U, vga::HEIGHT - 1);
-        m_cursor.update();
+    /**
+     * @brief Moves the screen up by one line.
+    */
+    void scrollUp() {
+        lib::memmove(m_data, m_data + vga::WIDTH, vga::WIDTH * (TERMINAL_HEIGHT - 1));
+
+        for (u32 i = 0; i < vga::WIDTH; i++) {
+            m_data[vga::WIDTH * (TERMINAL_HEIGHT - 1) + i] = (u8)vga::Char::Empty;
+        }
     }
 
-    inline
-    void eraseChar() {
-        m_cursor.moveX(-1);
-        vga::putChar(vga::Char::Empty, m_cursor.m_x, m_cursor.m_y, m_color);
-        m_cursor.update();
+    void reset() {
+        vga::clearBuffer(m_color);
+        _putTitle();
     }
 
     inline
     void insertNewline() {
-        vga::scrollUp(m_color);
-        m_cursor.setTo(0U, vga::HEIGHT - 1);
-        m_cursor.update();
+        scrollUp();
+        m_cursor = 0;
     }
+
+    /* ---------------------------------------- */
 
     inline
     void offsetDownward() {
-        insertNewline();
+        if (m_scrollAmount != 0) {
+            m_scrollAmount -= 1;
+        }
     }
 
     inline
     void offsetUpward() {
-        vga::scrollDown(m_color);
+        if (m_scrollAmount < TERMINAL_HEIGHT - vga::HEIGHT) {
+            m_scrollAmount += 1;
+        }
+    }
 
-        // u8 buffer[vga::WIDTH + 1];
-        // lib::memset((i32*)buffer, 0, vga::WIDTH + 1);
-        // m_history.pop(buffer);
+    /* ---------------------------------------- */
 
-        m_cursor.setTo(0U, vga::HEIGHT - 1);
-        m_cursor.update();
+    void draw() const {
+        for (u32 i = 0; i < vga::HEIGHT * vga::WIDTH; i++) {
+            vga::BUFFER[2 * i] = m_data[i + (TERMINAL_HEIGHT - m_scrollAmount - vga::HEIGHT) * vga::WIDTH];
+            vga::BUFFER[2 * i + 1] = (u8)m_color;
+        }
+
+        if (m_scrollAmount == 0)
+            vga::setCursorPos(m_cursor, vga::HEIGHT - 1);
+        else
+            vga::setCursorPos(vga::WIDTH, vga::HEIGHT);
     }
 
 private:
@@ -143,15 +149,34 @@ private:
     /* ---------------------------------------- */
 
     static constexpr u32  KERNEL_NAME_LEN = sizeof(KERNEL_NAME);
+    static constexpr u8 TERMINAL_HEIGHT = 50U;
 
     /* ---------------------------------------- */
     /*                   DATA                   */
     /* ---------------------------------------- */
 
-    History         m_history;
+    vga::Char       m_data[vga::WIDTH * TERMINAL_HEIGHT];
     u32             m_id;
-    vga::Cursor     m_cursor;
+    u32             m_cursor;
     vga::Color      m_color;
+    u32             m_scrollAmount = 0U;
+
+    /* ---------------------------------------- */
+    /*                  METHODS                 */
+    /* ---------------------------------------- */
+
+    inline
+    void _putTitle() {
+        for (u32 i = 0; i < vga::WIDTH / 2 - KERNEL_NAME_LEN / 2; ++i)
+            putChar(' ');
+        putString(KERNEL_NAME);
+        putChar(' ');
+        putChar(vga::Char::Heart);
+        putChar(' ');
+        putNbr(m_id);
+        for (u32 i = 0; i < vga::HEIGHT / 2; ++i)
+            insertNewline();
+    }
 
 }; // class Terminal
 

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:14:28 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 21:20:21 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 17:06:12 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,13 @@ namespace ui {
 /**
  * @brief Maximum number of lines in the history.
 */
-static constexpr u8 HISTORY_SIZE = vga::HEIGHT * 2U;
+static constexpr u8 HISTORY_SIZE = vga::HEIGHT * 2;
 
+/**
+ * @brief Buffer containing the history of inputs.
+ * @note Instead of being written to the VGA buffer,
+ * inputs are written to this buffer, and then retrieved by the terminal.
+*/
 class HistoryInternal final {
 public:
     /* ---------------------------------------- */
@@ -39,34 +44,26 @@ public:
 
     /* ---------------------------------------- */
 
-    /**
-     * @brief Append a line to the data buffer.
-    */
-    void putChar(const u8 c) {
-        // _moveDataUp();
-        // if (m_offset < HISTORY_SIZE) {
-        //     lib::strcpy(m_data[HISTORY_SIZE - m_offset], line);
-        //     ++m_offset;
-        // } else {
-        // }
-    }
-
-    /**
-     * @brief Retrieve a line from the history.
-    */
-    inline
-    u8 copy(u8* buffer) {
-        if (m_offset != 0U) {
-            lib::strcpy(buffer, m_data[m_offset]);
-            --m_offset;
-            return (u8)lib::strlen(buffer);
+    void saveChar(const vga::Char c) {
+        m_data[m_cursor.m_y][m_cursor.m_x] = (u8)c;
+        if (m_cursor.moveX(1) == CursorPosResult::PastRight) {
+            if (m_cursor.moveY(1) == CursorPosResult::PastBottom) {
+                _moveDataUp();
+                m_cursor.m_y = vga::HEIGHT - 1;
+            }
         }
-        return 0U;
     }
 
+    // inline
+    // void retrieve(u8* buffer) const {
+    //     for (u8 i = 0; i < vga::HEIGHT; i++) {
+    //         lib::strcpy(buffer, m_data[i]);
+    //     }
+    // }
+
     inline
-    void clear() {
-        m_offset = 0U;
+    vga::Char getChar(const u8 x, const u8 y) const {
+        return (vga::Char)m_data[y][x];
     }
 
 private:
@@ -74,8 +71,9 @@ private:
     /*                   DATA                   */
     /* ---------------------------------------- */
 
-    u8  m_data[HISTORY_SIZE][vga::WIDTH + 1];
-    u8  m_offset = 0U;
+    u8      m_data[HISTORY_SIZE][vga::WIDTH + 1];
+    Cursor  m_cursor;
+    u8      m_offset = 0U;
 
     /* ---------------------------------------- */
     /*                  METHODS                 */
@@ -85,6 +83,7 @@ private:
         for (u16 i = 0; i < HISTORY_SIZE - 1; i++) {
             lib::strcpy(m_data[i], m_data[i + 1]);
         }
+        ++m_offset;
     }
 
 };
@@ -111,27 +110,20 @@ public:
     /* ---------------------------------------- */
 
     inline
-    void clear() {
-        m_internal.clear();
-        m_offset = 0U;
+    void save(const vga::Char c) {
+        m_internal.saveChar(c);
+    }
+
+    inline
+    vga::Char getChar(const u8 x, const u8 y) const {
+        return m_internal.getChar(x, y);
     }
 
     // inline
-    // void (u8* buffer) {
-    //     m_internal.pop(buffer);
+    // void putString(const i8* str) {
+    //     while (*str)
+    //         putChar(vga::Char(*str++));
     // }
-
-    inline
-    void appendLine(const u8* line) {
-        // m_internal.appendLine(line);
-    }
-
-    inline
-    void moveUp() {
-        if (m_offset <= HISTORY_SIZE) {
-            ++m_offset;
-        }
-    }
 
 private:
     /* ---------------------------------------- */
