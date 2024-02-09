@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/08 18:09:00 by etran            ###   ########.fr        #
+#    Updated: 2024/02/09 13:37:24 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -123,11 +123,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 	@$(ASM) $(ASFLAGS) $< -o $@
 
 .PHONY: run
-run: $(NAME)
+run: all
 	@$(QEMU) -kernel $(NAME) $(QEMU_FLAGS)
 
 .PHONY: run-grub
-run-grub: $(NAME)
+run-grub: all
 	@mkdir -p $(ISO_DIR)/boot/grub
 	@cp $(NAME) $(ISO_DIR)/boot/$(NAME)
 	@cp $(CONFIG_DIR)/$(GRUB_CFG) $(ISO_DIR)/boot/grub/$(GRUB_CFG)

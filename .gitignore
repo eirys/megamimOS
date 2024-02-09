@@ -1,5 +1,8 @@
 
 obj
 lib/obj
+lib/libmegamim.a
 megamimOS
+megamimOS.iso
 .vscode
+isodir
