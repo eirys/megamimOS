@@ -13,7 +13,7 @@ align 4
 ; Stack
 section .bss
 align 16 ; 16-byte alignment for the stack. Corresponds to the SSE alignment.
-    resb 16384
+    resb 1638
 stack_top:
 
 ; -----------------------

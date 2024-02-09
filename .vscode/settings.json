@@ -7,5 +7,31 @@
     "comment-divider.length": 50,
     "comment-divider.mainHeaderAlign": "center",
     "comment-divider.subheaderAlign": "center",
-    "comment-divider.mainHeaderFiller": "-"
+    "comment-divider.mainHeaderFiller": "-",
+    "files.associations": {
+        "*.glslh": "glsl",
+        "atomic": "cpp",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp",
+        "functional": "cpp",
+        "new": "cpp",
+        "ostream": "cpp",
+        "ranges": "cpp",
+        "span": "cpp",
+        "stdexcept": "cpp",
+        "streambuf": "cpp",
+        "system_error": "cpp",
+        "tuple": "cpp",
+        "array": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
+    },
+    "editor.useTabStops": false
 }

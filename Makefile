@@ -6,83 +6,150 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/04 22:43:26 by etran            ###   ########.fr        #
+#    Updated: 2024/02/08 18:09:00 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# ---------------------------------------------- #
+#                     TARGETS                    #
+# ---------------------------------------------- #
+
 # ------------------- KERNEL ------------------- #
-NAME		:=	megamimOS
+NAME			:=	megamimOS
+ISO				:=	$(NAME).iso
 
 # --------------- DIRECTORY NAMES -------------- #
-SRC_DIR		:=	src
-OBJ_DIR		:=	obj
-ISO_DIR		:=	isodir
+SRC_DIR			:=	src
+OBJ_DIR			:=	obj
+CONFIG_DIR		:=	config
+ISO_DIR			:=	isodir
+LIB_DIR			:=	lib
 
-SUBDIRS		:=
+CORE_DIR		:=	core
+DRIVER_DIR		:=	drivers
+UI_DIR			:=	ui
+LAYOUT_DIR		:=	$(UI_DIR)/layout
+
+# ---------------- SUB DIRECTORIES ------------- #
+SUBDIRS			:=	. \
+					$(CORE_DIR) \
+					$(DRIVER_DIR) \
+					$(UI_DIR) \
+					$(LAYOUT_DIR)
+
+OBJ_SUBDIRS		:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
+INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
 
 # ---------------- SOURCE FILES ---------------- #
+SRC_FILES_CPP	:=	main.cpp \
+					$(CORE_DIR)/runtime.cpp
 
-SRC_CPP		:=	$(shell find src/ -name '*.cpp')
-SRC_ASM		:=	$(shell find src/ -name '*.s')
+SRC_FILES_ASM	:=	boot.s
 
-OBJ_CPP		:=	$(SRC_CPP:.cpp=.o)
-OBJ_ASM		:=	$(SRC_ASM:.s=.o)
+SRC_ASM			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_ASM))
+SRC_CPP			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_CPP))
+
+OBJ_ASM			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES_ASM:.s=.o))
+OBJ_CPP			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES_CPP:.cpp=.o))
+DEP				:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES_CPP:.cpp=.d))
 
 # ----------------- COMPILATION ---------------- #
-ASM			:=	nasm
-ASFLAGS		:=	-felf32
+ASM				:=	nasm
+ASFLAGS			:=	-felf32
 
-CXX			:=	c++
-CFLAGS		:=	-fno-builtin \
-				-fno-exceptions \
-				-fno-stack-protector \
-				-fno-rtti \
-				-nostdlib \
-				-nodefaultlibs \
-				-m32
+CXX				:=	c++
+MACROS			:=	KERNEL_NAME=\"$(NAME)\"
 
-LD			:=	ld
-LD_SCRIPT	:=	megamimOS.ld
-LFLAGS		:=	-T$(LD_SCRIPT)
+CFLAGS			:=	-std=c++20 \
+					-MMD \
+					-MP \
+					-fno-builtin \
+					-fno-exceptions \
+					-fno-stack-protector \
+					-fno-rtti \
+					-nostdlib \
+					-nodefaultlibs \
+					-O3 \
+					-m32
 
-RM			:=	rm -rf
+INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS)) \
+					-I$(LIB_DIR)
+DEFINES			:=	$(addprefix -D,$(MACROS))
+
+LD				:=	ld
+LD_SCRIPT		:=	$(CONFIG_DIR)/megamimOS.ld
+LD_LIBS			:=	$(LIB_DIR)/libmegamim.a
+
+LFLAGS			:=	-T$(LD_SCRIPT)
+LLIBS			:=	 -L./$(LIB_DIR) --library=megamim
+
+GRUB_CFG		:=	grub.cfg
+GRUB			:=	grub-mkrescue
+
+QEMU			:=	qemu-system-i386
+QEMU_FLAGS		:=	-serial stdio -no-reboot
+
+# -------------------- MISC -------------------- #
+RM				:=	rm -rf
+
+# ---------------------------------------------- #
+#                      RULES                     #
+# ---------------------------------------------- #
 
 .PHONY: all
-all: $(NAME)
+all: $(LD_LIBS) $(NAME)
 
+-include $(DEP)
+
+$(LD_LIBS):
+	@$(MAKE) -s -C $(LIB_DIR)
+
+# Compile kernel
 $(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 	@echo "Linking file $(NAME)..."
-	@$(LD) $(LFLAGS) $(OBJ_CPP) $(OBJ_ASM) -o $(NAME)
+	@$(LD) $(LFLAGS) $(OBJ_CPP) $(OBJ_ASM) -o $(NAME) $(LLIBS)
+	@echo "\`$(NAME)\` successfully created."
 
-.cpp.o:
+# Compile obj files (cpp)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(OBJ_DIR) $(OBJ_SUBDIRS)
 	@echo "Compiling file $<..."
-	@$(CXX) $(CFLAGS) -c $< -o $@
+	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c $< -o $@
 
-.s.o:
+# Compile obj files (asm)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
+	@mkdir -p $(OBJ_DIR) $(OBJ_SUBDIRS)
 	@echo "Compiling file $<..."
 	@$(ASM) $(ASFLAGS) $< -o $@
 
 .PHONY: run
 run: $(NAME)
-	@qemu-system-i386 -kernel $(NAME)
+	@$(QEMU) -kernel $(NAME) $(QEMU_FLAGS)
 
-#TODO
 .PHONY: run-grub
 run-grub: $(NAME)
-	mkdir -p $(ISO_DIR)/boot/grub
-	cp $(NAME) $(ISO_DIR)/boot/$(NAME)
-	cp grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
-	grub-mkrescue -o $(NAME).iso $(ISO_DIR)
-	qemu-system-i386 -cdrom $(NAME).iso
+	@mkdir -p $(ISO_DIR)/boot/grub
+	@cp $(NAME) $(ISO_DIR)/boot/$(NAME)
+	@cp $(CONFIG_DIR)/$(GRUB_CFG) $(ISO_DIR)/boot/grub/$(GRUB_CFG)
+	@echo "Creating $(ISO)..."
+	@$(GRUB) -o $(ISO) $(ISO_DIR)
+	@echo "Running $(ISO)..."
+	@$(QEMU) -cdrom $(ISO) $(QEMU_FLAGS)
 
 .PHONY: clean
 clean:
-	@echo "Removing CPP objects."
-	@$(RM) $(OBJ_CPP)
-	@echo "Removing ASM objects."
-	@$(RM) $(OBJ_ASM)
-	@echo "Removing $(ISO_DIR)".
+	@echo "Removing objects."
+	@$(RM) $(OBJ_DIR)
+	@echo "Removing $(ISO)".
+	@$(RM) $(ISO)
+
+.PHONY: fclean
+fclean: clean
+	@$(MAKE) -s -C $(LIB_DIR) fclean
+	@echo "Removing $(NAME)."
+	@$(RM) $(NAME)
+	@echo "Removing $(ISO_DIR)."
 	@$(RM) $(ISO_DIR)
 
 .PHONY: re
-re: clean all
+re: fclean all
