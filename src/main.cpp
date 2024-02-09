@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 17:31:41 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 14:09:28 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static
 void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
     switch (event.m_key) {
         case ui::Key::Backspace:    return winManager.eraseChar();
+        case ui::Key::NumpadEnter:
         case ui::Key::Enter:        return winManager.newLine();
         case ui::Key::Tab:          return event.m_uppercase ? winManager.switchToPrevious() : winManager.switchToNext();
         case ui::Key::CursorUp:     return winManager.scrollUp();
