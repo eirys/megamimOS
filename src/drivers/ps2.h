@@ -6,13 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:40:56 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 15:40:59 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/08 17:03:51 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <stdint.h>
+#include "types.h"
+#include "core.h"
 
 namespace ps2 {
 
@@ -24,38 +25,23 @@ namespace ps2 {
  * @brief The data port of the PS/2 controller.
  * Used to interpret scancodes and commands.
 */
-static constexpr const uint8_t DATA_PORT = 0x60;
+static constexpr const u16 DATA_PORT = 0x60;
 
 /**
- * @brief The command port of the PS/2 controller.
+ * @brief The command register of the PS/2 controller.
  * Used to send commands to the PS/2 controller.
 */
-static constexpr const uint8_t COMMAND_PORT = 0x64;
+static constexpr const u16 COMMAND_REGISTER = 0x64;
+
+enum class Led: u8 {
+    ScrollLock  = 1 << 0,
+    NumLock     = 1 << 1,
+    CapsLock    = 1 << 2
+};
 
 /* -------------------------------------------- */
 /*                   FUNCTIONS                  */
 /* -------------------------------------------- */
-
-/**
- * @brief Write a byte to a port.
- * This is used to send commands to the PS/2 controller.
-*/
-static inline
-uint8_t in_b(uint16_t port) {
-    uint8_t ret;
-
-    asm volatile ("inb %1, %0" : "=a" (ret) : "dN" (port));
-    return ret;
-}
-
-/**
- * @brief Pause the CPU until the next interrupt.
- * This allows the CPU to save power and reduce heat.
-*/
-static inline
-void pause() {
-	asm volatile ("pause");
-}
 
 /**
  * @brief Read the status of the PS/2 controller.
@@ -63,8 +49,8 @@ void pause() {
  * aka if there is data to read.
 */
 static inline
-uint8_t readStatus() {
-    return in_b(COMMAND_PORT);
+u8 readStatus() {
+    return core::inB(COMMAND_REGISTER);
 }
 
 /**
@@ -77,8 +63,8 @@ uint8_t readStatus() {
  * @note Empty the output buffer.
  */
 static inline
-uint8_t readData() {
-    return in_b(DATA_PORT);
+u8 readData() {
+    return core::inB(DATA_PORT);
 }
 
 /**
@@ -87,7 +73,7 @@ uint8_t readData() {
 */
 static inline
 bool isOutputFull() {
-    uint8_t status = readStatus();
+    u8 status = readStatus();
     return status & 0x01;
 }
 
@@ -95,18 +81,21 @@ bool isOutputFull() {
  * @brief Pause the CPU until the user presses a key.
 */
 static inline
-bool poll() {
+u8 poll() {
     while (!isOutputFull()) {
-        pause();
+        core::pause();
     }
-    return true;
+    return readData();
 }
 
+/**
+ * @brief Tests if the keyboard LED is on.
+*/
 static inline
-void read() {
-    uint8_t data = ps2::readData();
-
-    // Interpret the scancode
+bool isLedOn(const u8 led_mask) {
+    core::outB(COMMAND_REGISTER, 0xED);
+    core::outB(DATA_PORT, led_mask);
+    return readData() == 0xFA;
 }
 
 } // namespace ps2

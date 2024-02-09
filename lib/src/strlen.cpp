@@ -1,19 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   history.h                                          :+:      :+:    :+:   */
+/*   strlen.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 16:14:28 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 16:15:21 by etran            ###   ########.fr       */
+/*   Created: 2024/02/08 14:38:57 by etran             #+#    #+#             */
+/*   Updated: 2024/02/08 15:44:42 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include "../types.h"
 
-#include <stdint.h>
+namespace lib {
 
-class History {
+u32 strlen(const i8* str) noexcept {
+    u32 len = 0;
+    while (str[len]) ++len;
+    return len;
+}
 
-}; // class History
+} // namespace lib

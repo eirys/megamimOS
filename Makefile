@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/05 16:21:01 by etran            ###   ########.fr        #
+#    Updated: 2024/02/08 18:09:00 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,21 +23,28 @@ SRC_DIR			:=	src
 OBJ_DIR			:=	obj
 CONFIG_DIR		:=	config
 ISO_DIR			:=	isodir
+LIB_DIR			:=	lib
 
+CORE_DIR		:=	core
 DRIVER_DIR		:=	drivers
-TERMINAL_DIR	:=	terminal
+UI_DIR			:=	ui
+LAYOUT_DIR		:=	$(UI_DIR)/layout
 
 # ---------------- SUB DIRECTORIES ------------- #
 SUBDIRS			:=	. \
+					$(CORE_DIR) \
 					$(DRIVER_DIR) \
-					$(TERMINAL_DIR)
+					$(UI_DIR) \
+					$(LAYOUT_DIR)
 
-# OBJ_SUBDIRS	:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
+OBJ_SUBDIRS		:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
 
 # ---------------- SOURCE FILES ---------------- #
-SRC_FILES_CPP	:=	main.cpp
-SRC_FILES_ASM	:=	entrypoint.s
+SRC_FILES_CPP	:=	main.cpp \
+					$(CORE_DIR)/runtime.cpp
+
+SRC_FILES_ASM	:=	boot.s
 
 SRC_ASM			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_ASM))
 SRC_CPP			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_CPP))
@@ -51,7 +58,8 @@ ASM				:=	nasm
 ASFLAGS			:=	-felf32
 
 CXX				:=	c++
-INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS))
+MACROS			:=	KERNEL_NAME=\"$(NAME)\"
+
 CFLAGS			:=	-std=c++20 \
 					-MMD \
 					-MP \
@@ -61,15 +69,25 @@ CFLAGS			:=	-std=c++20 \
 					-fno-rtti \
 					-nostdlib \
 					-nodefaultlibs \
-					-m32 \
-					$(INCLUDES)
+					-O3 \
+					-m32
+
+INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS)) \
+					-I$(LIB_DIR)
+DEFINES			:=	$(addprefix -D,$(MACROS))
 
 LD				:=	ld
 LD_SCRIPT		:=	$(CONFIG_DIR)/megamimOS.ld
+LD_LIBS			:=	$(LIB_DIR)/libmegamim.a
+
 LFLAGS			:=	-T$(LD_SCRIPT)
+LLIBS			:=	 -L./$(LIB_DIR) --library=megamim
 
 GRUB_CFG		:=	grub.cfg
 GRUB			:=	grub-mkrescue
+
+QEMU			:=	qemu-system-i386
+QEMU_FLAGS		:=	-serial stdio -no-reboot
 
 # -------------------- MISC -------------------- #
 RM				:=	rm -rf
@@ -79,38 +97,44 @@ RM				:=	rm -rf
 # ---------------------------------------------- #
 
 .PHONY: all
-all: $(NAME)
+all: $(LD_LIBS) $(NAME)
 
 -include $(DEP)
+
+$(LD_LIBS):
+	@$(MAKE) -s -C $(LIB_DIR)
 
 # Compile kernel
 $(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 	@echo "Linking file $(NAME)..."
-	@$(LD) $(LFLAGS) $(OBJ_CPP) $(OBJ_ASM) -o $(NAME)
+	@$(LD) $(LFLAGS) $(OBJ_CPP) $(OBJ_ASM) -o $(NAME) $(LLIBS)
+	@echo "\`$(NAME)\` successfully created."
 
 # Compile obj files (cpp)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR) $(OBJ_SUBDIRS)
 	@echo "Compiling file $<..."
-	@$(CXX) $(CFLAGS) -c $< -o $@
+	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c $< -o $@
 
 # Compile obj files (asm)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR) $(OBJ_SUBDIRS)
 	@echo "Compiling file $<..."
 	@$(ASM) $(ASFLAGS) $< -o $@
 
 .PHONY: run
 run: $(NAME)
-	@qemu-system-i386 -kernel $(NAME)
+	@$(QEMU) -kernel $(NAME) $(QEMU_FLAGS)
 
 .PHONY: run-grub
 run-grub: $(NAME)
-	mkdir -p $(ISO_DIR)/boot/grub
-	cp $(NAME) $(ISO_DIR)/boot/$(NAME)
-	cp $(GRUB_CFG)/$(GRUB_CFG) $(ISO_DIR)/boot/grub/$(GRUB_CFG)
-	$(GRUB) -o $(ISO) $(ISO_DIR)
-	qemu-system-i386 -cdrom $(ISO)
+	@mkdir -p $(ISO_DIR)/boot/grub
+	@cp $(NAME) $(ISO_DIR)/boot/$(NAME)
+	@cp $(CONFIG_DIR)/$(GRUB_CFG) $(ISO_DIR)/boot/grub/$(GRUB_CFG)
+	@echo "Creating $(ISO)..."
+	@$(GRUB) -o $(ISO) $(ISO_DIR)
+	@echo "Running $(ISO)..."
+	@$(QEMU) -cdrom $(ISO) $(QEMU_FLAGS)
 
 .PHONY: clean
 clean:
@@ -121,6 +145,7 @@ clean:
 
 .PHONY: fclean
 fclean: clean
+	@$(MAKE) -s -C $(LIB_DIR) fclean
 	@echo "Removing $(NAME)."
 	@$(RM) $(NAME)
 	@echo "Removing $(ISO_DIR)."

@@ -1,38 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   window.h                                           :+:      :+:    :+:   */
+/*   lib.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 16:11:22 by etran             #+#    #+#             */
-/*   Updated: 2024/02/05 16:22:52 by etran            ###   ########.fr       */
+/*   Created: 2024/02/08 14:40:29 by etran             #+#    #+#             */
+/*   Updated: 2024/02/08 15:23:13 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <stdint.h>
+#include "types.h"
 
-#include "utils.h"
+namespace lib {
 
-enum class TerminalID: uint8_t {
-    User0 = 0,
-    User1,
-    User2,
-    User3,
-    User4,
-    User5,
-    User6,
-    User7,
-    User8,
+u32 strlen(const i8* str) noexcept;
 
-    First = User0,
-    Last = User8
-};
-
-class Terminal {
-public:
-
-private:
-}; // class Terminal
+} // namespace lib
