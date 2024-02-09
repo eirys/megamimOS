@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:34:43 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 16:35:28 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 09:54:18 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void outB(u16 port, u8 data) {
 }
 
 /**
- * @brief Pause the CPU until the next interrupt.
+ * @brief Pause the CPU for a short period of time.
  * This allows the CPU to save power and reduce heat.
 */
 static inline
@@ -45,11 +45,17 @@ void pause() {
 	asm volatile ("pause");
 }
 
+/**
+ * @brief Halt the CPU and stop all interrupts.
+*/
 static inline
 void panic() {
     asm volatile ("cli");
 }
 
+/**
+ * @brief Pause the CPU until the next interrupt.
+*/
 static inline
 void hlt() {
     asm volatile ("hlt");

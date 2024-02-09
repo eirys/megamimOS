@@ -1,10 +1,8 @@
-/*
 
-!src
-!lib
-!config
-
-!.gitignore
-!Makefile
-!README.md
-!.vscode
+obj
+lib/obj
+lib/libmegamim.a
+megamimOS
+megamimOS.iso
+.vscode
+isodir
