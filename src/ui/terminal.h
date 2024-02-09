@@ -6,15 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/09 17:23:02 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/09 20:38:43 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "utils.h"
-#include "cursor.h"
-#include "history.h"
+#include "lib.h"
 
 #ifndef KERNEL_NAME
 # define KERNEL_NAME "No name :("
