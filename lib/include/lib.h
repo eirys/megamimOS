@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lib.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:40:29 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 15:23:13 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/11 00:42:07 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 #include "types.h"
 
-namespace lib {
-
-u32 strlen(const i8* str) noexcept;
-
+namespace lib
+{
+	extern "C" usize strLen(char const *s);
 } // namespace lib

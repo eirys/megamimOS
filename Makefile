@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
+#    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/09 13:37:24 by etran            ###   ########.fr        #
+#    Updated: 2024/02/10 20:03:30 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,7 @@ ASFLAGS			:=	-felf32
 CXX				:=	c++
 MACROS			:=	KERNEL_NAME=\"$(NAME)\"
 
-CFLAGS			:=	-std=c++20 \
+CXXFLAGS		:=	-std=c++20 \
 					-MMD \
 					-MP \
 					-fno-builtin \
@@ -114,7 +114,7 @@ $(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR) $(OBJ_SUBDIRS)
 	@echo "Compiling file $<..."
-	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) $(INCLUDES) $(DEFINES) -c $< -o $@
 
 # Compile obj files (asm)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s

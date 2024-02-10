@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
+#    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/08 15:45:29 by etran            ###   ########.fr        #
+#    Updated: 2024/02/11 00:31:20 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,65 +16,101 @@
 
 # ------------------ LIB NAME ------------------ #
 NAME		:=	libmegamim.a
+TEST		:=	test.out
 
 # --------------- DIRECTORY NAMES -------------- #
 SRC_DIR		:=	src
 OBJ_DIR		:=	obj
+INC_DIR		:=	include
+TEST_DIR	:=	test
 
-SRC_FILES	:=	strlen.cpp
-OBJ_FILES	:=	$(SRC_FILES:.cpp=.o)
+# ----------------- FILE NAMES ----------------- #
+SRC			:=	\
+	$(addsuffix .s, \
+		strlen \
+	)
+OBJ			:=	$(addprefix $(OBJ_DIR)/,$(SRC:.s=.o))
 
-SRC			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES))
-OBJ			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES:.cpp=.o))
-DEP			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES:.cpp=.d))
+TEST_SRC	:=	\
+	$(addsuffix .cpp, \
+		$(addprefix $(TEST_DIR)/, \
+			main \
+			strlen \
+		) \
+	)
+TEST_OBJ	:=	$(addprefix $(OBJ_DIR)/,$(TEST_SRC:.cpp=.o))
+TEST_DEP	:=	$(TEST_OBJ:.o=.d)
 
 # ----------------- COMPILATION ---------------- #
-CXX			:=	c++
-CFLAGS		:=	-Wall \
+AS			:=	$(shell which nasm)
+ASFLAGS		:=	-felf32
+
+CXX			:=	$(shell which c++)
+CXXFLAGS	:=	-c \
+				-Wall \
 				-Wextra \
-				-Werror \
+				-m32 \
+				-fno-builtin \
 				-MMD \
 				-MP \
-				-std=c++20 \
-				-O3 \
-				-m32
+				-I$(INC_DIR)
 
-ARCHIVER	:=	ar
-ARFLAGS		:=	rcs
+# ------------------ LINKING ------------------- #
+LINK		:=	$(shell which c++)
+LFLAGS		:=	-m32
 
 # -------------------- MISC -------------------- #
-RM			:=	rm -rf
+ARCHIVER	:=	$(shell which ar) rcs
+RM			:=	$(shell which rm) -rf
 
 # ---------------------------------------------- #
 #                      RULES                     #
 # ---------------------------------------------- #
 
 .PHONY: all
-all: $(NAME)
+all: $(NAME) $(TEST)
 
--include $(DEP)
+.PHONY: test
+test: $(TEST)
+# echo "Running unit tests..."
+	./$(TEST)
 
-# Compile library
+# Create test binary
+$(TEST): $(TEST_OBJ) $(NAME)
+# echo "Linking unit tests..."
+	$(LINK) $(LFLAGS) $^ $(OUTPUT_OPTION)
+# echo "\`$(TEST)\` successfully created."
+
+# Create library
 $(NAME): $(OBJ)
-	@echo "Compiling $(NAME)..."
-	@$(ARCHIVER) $(ARFLAGS) $(NAME) $(OBJ)
-	@echo "\`$(NAME)\` successfully created."
+# echo "Creating `$@`..."
+	$(ARCHIVER) $@ $^
+# echo "\`$@\` successfully created."
 
 # Compile obj files
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
+	mkdir -p $(@D)
+# echo "Compiling file $<..."
+	$(AS) $(ASFLAGS) $< $(OUTPUT_OPTION)
+
+-include $(TEST_DEP)
+
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(OBJ_DIR)
-	@echo "Compiling file $<..."
-	@$(CXX) $(CFLAGS) -c $< -o $@
+	mkdir -p $(@D)
+# echo "Compiling file $<..."
+	$(CXX) $(CXXFLAGS) $< $(OUTPUT_OPTION)
+
 
 .PHONY: clean
 clean:
-	@${RM} $(OBJ_DIR)
-	@echo "Cleaned object files."
+	${RM} $(OBJ_DIR) $(NAME) $(TEST)
+# echo "Removed object files and $(NAME)."
 
 .PHONY: fclean
 fclean: clean
-	@${RM} $(NAME)
-	@echo "Removed $(NAME)."
 
 .PHONY: re
-re: fclean all
+re: clean all
+
+.PHONY: fre
+fre: fclean all
