@@ -7,11 +7,11 @@ section .bss
 section .text
 ; Calculates the length of a null-terminated string.
 ;
-; Parameters:
-;  [esp + 4] - the string to calculate the length of.
+; Parameters
+; [esp + 4]: the address of the string to calculate the length of. (assumed to be a valid address)
 ;
-; Return:
-;  eax - length of the string
+; Return
+; eax: the length of string.
 strLen:
 	mov ecx, dword [esp + 4]
 	lea eax, [ecx - 1]

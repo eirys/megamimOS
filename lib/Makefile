@@ -6,7 +6,7 @@
 #    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/11 00:31:20 by jodufour         ###   ########.fr        #
+#    Updated: 2024/02/11 02:07:38 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ TEST_DIR	:=	test
 # ----------------- FILE NAMES ----------------- #
 SRC			:=	\
 	$(addsuffix .s, \
+		strcmp \
 		strlen \
 	)
 OBJ			:=	$(addprefix $(OBJ_DIR)/,$(SRC:.s=.o))
@@ -35,6 +36,7 @@ TEST_SRC	:=	\
 	$(addsuffix .cpp, \
 		$(addprefix $(TEST_DIR)/, \
 			main \
+			strcmp \
 			strlen \
 		) \
 	)

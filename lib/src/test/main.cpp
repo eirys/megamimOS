@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 04:12:54 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/11 00:41:49 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/11 02:07:18 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ struct Test
 };
 
 bool testStrLen(void);
+bool testStrCmp(void);
 
 static constexpr Test TESTS[] = {
 	{"strLen", testStrLen},
+	{"strCmp", testStrCmp},
 };
 static constexpr usize TESTS_LEN = sizeof(TESTS) / sizeof(*TESTS);
 

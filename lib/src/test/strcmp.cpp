@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strlen.cpp                                         :+:      :+:    :+:   */
+/*   strcmp.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 17:20:26 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/11 02:46:33 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/11 03:09:56 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 struct Parameters
 {
-	char const *const s;
+	char const *const s0;
+	char const *const s1;
 };
 
-typedef usize return_type;
+typedef i32 return_type;
 
 struct Test
 {
@@ -26,34 +27,50 @@ struct Test
 };
 
 static constexpr Test TESTS[] = {
-	{{""}, 0},
-	{{"etran & jodufour"}, 16},
-	{{"A"}, 1},
-	{{"42"}, 2},
-	{{"foo \x7F bar \x80 \xFF"}, 13},
-	{{"We are all being used\n"
-	  "Our lives have been abused\n"
-	  "Still no one resists\n"
-	  "I guess there 's nothing to lose\n"
-	  "I am no longer confused\n"
-	  "You' re killing my dreams\n"},
-	 153},
+	{{"", ""}, 0},
+	{{"", "A"}, -1},
+	{{"b", ""}, 1},
+	{{"+", "+"}, 0},
+	{{"4", "2"}, 1},
+	{{"foo", "foolish"}, -1},
+	{{"Google", "Go"}, 1},
+	{{"Kamehameha", "Kamehameha"}, 0},
+	{{"What is this character?", "What is this character!"}, 1},
+	{{"What those \x01 ?", "What those \x7F ?"}, -1},
+	{{"Those \x92 are not even ASCII", "Those are \x80 are not even ASCII"}, 1},
+	{{"Do you find the right \xDE\xAD diff?", "Do you find the right \xBE\xEF diff?"}, 1},
+	{{"And if the first is not", "the same?"}, -1},
 };
 static constexpr usize TESTS_LEN = sizeof(TESTS) / sizeof(*TESTS);
+
+#include <iostream>
 
 /**
  * @brief Test the lib::strlen function.
  *
  * @return true if the test was passed successfully, false otherwise.
  */
-bool testStrLen(void)
+bool testStrCmp(void)
 {
 	for (usize i = 0; i < TESTS_LEN; ++i)
 	{
-		return_type const ret = lib::strLen(TESTS[i].parameters.s);
+		return_type const ret = lib::strCmp(TESTS[i].parameters.s0, TESTS[i].parameters.s1);
 
-		if (ret != TESTS[i].expected)
-			return false;
+		switch (TESTS[i].expected)
+		{
+		case 0:
+			if (ret != 0)
+				return false;
+			break;
+		case 1:
+			if (ret <= 0)
+				return false;
+			break;
+		case -1:
+			if (ret >= 0)
+				return false;
+			break;
+		}
 	}
 	return true;
 }
