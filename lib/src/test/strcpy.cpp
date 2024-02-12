@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:52:31 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/12 02:40:36 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:13:32 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,21 @@ struct Test
 };
 
 static constexpr Test TESTS[] = {
-	{{(char[]){0x00}, (char const[]){0x00}}, 1, 1},
-	{{(char[]){0x42, 0x00}, (char const[]){0x00}}, 2, 1},
-	{{(char[]){0x2A, 0x00}, (char const[]){0x54, 0x00}}, 2, 2},
-	{{(char[]){0x21, 0x01, 0x00, 0x12, 0x4C}, (char const[]){0x71, 0x3D, 0x69, 0x00}}, 5, 4},
-	{{(char[]){0x01, 0x02, 0x03, 0x04, 0x05, 0x06}, (char const[]){0x00}}, 6, 1},
-	{{(char[]){0x7F, 0xD3, 0xF0, 0xC4, 0x20, 0x99, 0x34, 0x6B, 0x00, 0xA3, 0x37, 0x0A},
-	  (char const[]){0xDE, 0xAD, 0xBE, 0xEF, 0x00}},
+	{{(char[]){'\x00'}, ""}, 1, 1},
+	{{(char[]){'\x42', '\x00'}, ""}, 2, 1},
+	{{(char[]){'\x2A', '\x00'}, "\x54"}, 2, 2},
+	{{(char[]){'\x21', '\x01', '\x00', '\x0C', '\x4C'}, "q=i"}, 5, 4},
+	{{(char[]){'\xFD', '\x4E', '\xD4', '\x24', '\x0C', '\x6C'}, ""}, 6, 1},
+	{{(char[]){'\x7F', '\xD3', '\xF0', '\xC4', '\x20', '\x99', '\x34', '\x6B', '\x00', '\xA3', '\x37', '\x0A'},
+	  "\xDE\xAD\xBE\xEF"},
 	 12,
 	 5},
-	{{(char[]){0x0d, 0x1d, 0xb8, 0xec, 0xa2, 0xa2, 0x0f, 0x3e, 0x28, 0xd1, 0x41, 0xda, 0x69, 0x1a, 0x06, 0xe4, 0x22,
-			   0x49, 0x16, 0x54, 0xe2, 0xcc, 0x3e, 0x27, 0xfe, 0x40, 0x63, 0x5b, 0x0b, 0x58, 0xa6, 0x7f, 0x8a, 0x34,
-			   0x91, 0xe9, 0xaf, 0x5f, 0x2c, 0xfb, 0x6e, 0x9f},
-	  (char const[]){0xc1, 0x43, 0xf9, 0xbe, 0x8d, 0x73, 0x97, 0x04, 0xe4, 0x04, 0xe8, 0xc7, 0x6b, 0xb0, 0xd2, 0xb5,
-					 0x33, 0xa6, 0x31, 0x0f, 0x57, 0xbc, 0x83, 0x81, 0x0f, 0xad, 0x78, 0x1d, 0x1e, 0x1d, 0x00}},
+	{{(char[]){'\x0D', '\x1D', '\xB8', '\xEC', '\xA2', '\xA2', '\x0F', '\x3C', '\x28', '\xD1', '\x41', '\xDA', '\x69',
+			   '\x1A', '\x06', '\xE4', '\x22', '\x49', '\x16', '\x54', '\xE2', '\xCC', '\x3E', '\x27', '\xFE', '\x40',
+			   '\x63', '\x5B', '\x0B', '\x58', '\xA6', '\x7F', '\x8A', '\x34', '\x91', '\xE9', '\xAf', '\x5F', '\x2C',
+			   '\xFB', '\x6E', '\x9F'},
+	  "\xC1\x43\xF9\xBE\x8D\x73\x97\x04\xe4\x04\xe8\xc7\x6B\xb0\xd2\xb5\x33\xa6\x31\x0f\x57\xbc\x83\x81\x0f\xad\x78\x1d"
+	  "\x1e\x1d"},
 	 42,
 	 31},
 };

@@ -14,12 +14,12 @@ section .text
 ; Return
 ; eax:
 ; - zero if the strings are equal.
-; - a negative value if the first string is less than the second.
-; - a positive value if the first string is greater than the second.
+; - a positive value if the first string is greater than the second one.
+; - a negative value if the first string is less than the second one.
 strCmp:
 ; preserve the callee-saved registers
 	push ebx
-; load the parameters into registers
+; put the arguments into registers
 	mov ecx, [esp + 8]
 	mov edx, [esp + 12]
 ; clear the buffer registers

@@ -6,7 +6,7 @@
 #    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/12 02:17:18 by jodufour         ###   ########.fr        #
+#    Updated: 2024/02/12 17:25:30 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ TEST_DIR	:=	test
 # ----------------- FILE NAMES ----------------- #
 SRC			:=	\
 	$(addsuffix .s, \
+		memcmp \
 		strcmp \
 		strcpy \
 		strlen \
@@ -37,6 +38,7 @@ TEST_SRC	:=	\
 	$(addsuffix .cpp, \
 		$(addprefix $(TEST_DIR)/, \
 			main \
+			memcmp \
 			strcmp \
 			strcpy \
 			strlen \
@@ -53,7 +55,6 @@ CXX			:=	$(shell which c++)
 CXXFLAGS	:=	-c \
 				-Wall \
 				-Wextra \
-				-Wno-c++11-narrowing \
 				-m32 \
 				-fno-builtin \
 				-MMD \
