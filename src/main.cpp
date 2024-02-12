@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/09 22:44:42 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/12 01:36:06 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 #include "window_manager.h"
 #include "qwerty.h"
 #include "serial.h"
+
+#define LOG_NUM serial::write_nbr
+#define LOG serial::write_str
 
 /* -------------------------------------------- */
 
@@ -45,13 +48,15 @@ void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
     switch (event.m_key) {
         case ui::Key::Backspace:    return winManager.eraseChar();
         case ui::Key::NumpadEnter:
-        case ui::Key::Enter:        return winManager.newLine();
+        case ui::Key::Enter:        return winManager.prompt();
         case ui::Key::Tab:          return event.m_uppercase ? winManager.switchToPrevious() : winManager.switchToNext();
         case ui::Key::CursorUp:     return winManager.scrollUp();
         case ui::Key::CursorDown:   return winManager.scrollDown();
         case ui::Key::CursorLeft:   return winManager.moveCursorLeft();
         case ui::Key::CursorRight:  return winManager.moveCursorRight();
         case ui::Key::Delete:       return winManager.deleteChar();
+        case ui::Key::Home:         return winManager.moveCursorToBeginning();
+        case ui::Key::End:          return winManager.moveCursorToEnd();
         default:
             break;
     }
@@ -81,7 +86,9 @@ void megamimOS_cpp(const MultibootInfo& info) {
 
         switch (result) {
             case ui::TranslateResult::Print:    winManager << event.m_character; break;
-            case ui::TranslateResult::Invalid:  /* return */ /* _panic(winManager); */ break;
+            case ui::TranslateResult::Invalid:
+            LOG_NUM((u32)event.m_key);
+            /* return */ /* _panic(winManager); */ break;
             case ui::TranslateResult::Exit:     return _exit(winManager);
             case ui::TranslateResult::Ignore:   break;
             case ui::TranslateResult::Command:  _handleCommand(winManager, event); break;

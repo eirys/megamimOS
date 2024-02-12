@@ -6,15 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/09 22:44:21 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/12 01:40:30 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "utils.h"
-#include "cursor.h"
-#include "history.h"
+#include "vga.h"
+#include "lib.h"
 
 #ifndef KERNEL_NAME
 # define KERNEL_NAME "No name :("
@@ -100,9 +99,16 @@ public:
     */
     inline
     void putChar(const vga::Char character) {
-        m_scrollAmount = 0U;
+        _focusOnCommandLine();
+
+        if (m_cursor != m_lineLength) {
+            if (m_lineLength == vga::WIDTH - 1)
+                return;
+            _offsetLineByOneToRight();
+        }
 
         m_data[m_cursor + (TERMINAL_HEIGHT - 1) * vga::WIDTH] = character;
+
         m_cursor += 1;
         m_lineLength += 1;
 
@@ -113,54 +119,40 @@ public:
 
     /* ---------------------------------------- */
 
-    /**
-     * @brief Moves the screen up by one line.
-    */
-    void scrollUp() {
-        lib::memmove(m_data, m_data + vga::WIDTH, vga::WIDTH * (TERMINAL_HEIGHT - 1));
-
-        for (u32 i = 0; i < vga::WIDTH; i++) {
-            m_data[vga::WIDTH * (TERMINAL_HEIGHT - 1) + i] = (u8)vga::Char::Empty;
-        }
-    }
-
     inline
     void insertNewline() {
         m_isPrompt = false;
-        scrollUp();
+        _scrollUp();
+
+        _focusOnCommandLine();
 
         m_cursor = 0U;
-        m_scrollAmount = 0U;
         m_lineLength = 0U;
     }
 
     void eraseChar() {
-        if (m_cursor == LINE_BEGIN)
+        _focusOnCommandLine();
+
+        if (m_cursor == (m_isPrompt ? LINE_BEGIN : 0))
             return;
 
         m_data[m_cursor + (TERMINAL_HEIGHT - 1) * vga::WIDTH - 1] = (u8)vga::Char::Empty;
         m_cursor -= 1;
+
+        _offsetLineByOneToLeft();
         m_lineLength -= 1;
     }
 
     void deleteChar() {
-        if (m_cursor == m_lineLength)
-            return;
+        _focusOnCommandLine();
 
-        for (u32 i = m_cursor; i < m_lineLength; i++) {
-            m_data[i + (TERMINAL_HEIGHT - 1) * vga::WIDTH] = m_data[i + 1 + (TERMINAL_HEIGHT - 1) * vga::WIDTH];
+        if (m_cursor == m_lineLength) {
+            return;
         }
+
+        _offsetLineByOneToLeft();
         m_lineLength -= 1;
     }
-
-    // void insertCharAtCursor(const vga::Char character) {
-    //     for (u32 i = m_cursor; i > m_lineLength - m_cursor; i--) {
-    //         m_data[i + (TERMINAL_HEIGHT - 1) * vga::WIDTH] = m_data[i + 1 + (TERMINAL_HEIGHT - 1) * vga::WIDTH];
-    //     }
-    //     m_data[m_cursor + (TERMINAL_HEIGHT - 1) * vga::WIDTH] = character;
-    //     m_cursor += 1;
-    //     m_lineLength += 1;
-    // }
 
     /* ---------------------------------------- */
 
@@ -180,6 +172,7 @@ public:
 
     inline
     void moveCursorLeftward() {
+        _focusOnCommandLine();
         if (m_cursor > (m_isPrompt ? LINE_BEGIN : 0)) {
             m_cursor -= 1;
         }
@@ -187,9 +180,22 @@ public:
 
     inline
     void moveCursorRightward() {
+        _focusOnCommandLine();
         if (m_cursor < m_lineLength) {
             m_cursor += 1;
         }
+    }
+
+    inline
+    void moveCursorToStart() {
+        _focusOnCommandLine();
+        m_cursor = m_isPrompt ? LINE_BEGIN : 0;
+    }
+
+    inline
+    void moveCursorToEnd() {
+        _focusOnCommandLine();
+        m_cursor = m_lineLength;
     }
 
     /* ---------------------------------------- */
@@ -222,16 +228,52 @@ private:
     /*                   DATA                   */
     /* ---------------------------------------- */
 
-    vga::Char       m_data[vga::WIDTH * TERMINAL_HEIGHT];
+    vga::Char       m_data[vga::WIDTH * TERMINAL_HEIGHT] = { vga::Char::Empty };
     vga::Color      m_color = vga::Color::Immaculate;
     u8              m_cursor = 0U;
     u8              m_scrollAmount = 0U;
     u8              m_lineLength = LINE_BEGIN;
     bool            m_isPrompt = true;
+    // bool            m_replaceMode = false;
 
     /* ---------------------------------------- */
     /*                  METHODS                 */
     /* ---------------------------------------- */
+
+    /**
+     * @brief Moves the screen up by one line.
+    */
+    void _scrollUp() {
+        lib::memmove(m_data, m_data + vga::WIDTH, vga::WIDTH * (TERMINAL_HEIGHT - 1));
+
+        for (u32 i = 0; i < vga::WIDTH; i++) {
+            m_data[vga::WIDTH * (TERMINAL_HEIGHT - 1) + i] = (u8)vga::Char::Empty;
+        }
+    }
+
+    /**
+     * @brief From m_cursor, moves the line one character to the right.
+    */
+    void _offsetLineByOneToRight() {
+        for (u32 i = vga::WIDTH - 1; i > m_cursor; --i) {
+            const u32 currIndex = i + (TERMINAL_HEIGHT - 1) * vga::WIDTH;
+            const u32 prevIndex = i - 1 + (TERMINAL_HEIGHT - 1) * vga::WIDTH;
+
+            m_data[currIndex] = m_data[prevIndex];
+        }
+    }
+
+    /**
+     * @brief From m_cursor, moves the line one character to the left.
+    */
+    void _offsetLineByOneToLeft() {
+        for (u32 i = m_cursor; i < m_lineLength; i++) {
+            const u32 currIndex = i + (TERMINAL_HEIGHT - 1) * vga::WIDTH;
+            const u32 nextIndex = i + 1 + (TERMINAL_HEIGHT - 1) * vga::WIDTH;
+
+            m_data[currIndex] = m_data[nextIndex];
+        }
+    }
 
     inline
     void _putTitle(const u32 id) {
@@ -243,8 +285,13 @@ private:
         putChar(' ');
         putNbr(id);
         for (u32 i = 0; i < vga::HEIGHT / 2; ++i)
-            scrollUp();
+            _scrollUp();
         m_cursor = 0U;
+    }
+
+    inline
+    void _focusOnCommandLine() {
+        m_scrollAmount = 0U;
     }
 
 }; // class Terminal

@@ -33,8 +33,9 @@
         "type_traits": "cpp",
         "utility": "cpp"
     },
-    "editor.useTabStops": false,
+    "editor.useTabStops": true,
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.codeAnalysis.runAutomatically": true,
-
+    "editor.stickyTabStops": false,
+    "editor.insertSpaces": true,
 }

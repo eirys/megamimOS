@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:40:56 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 17:03:51 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/11 02:54:16 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ bool isOutputFull() {
 }
 
 /**
- * @brief Pause the CPU until the user presses a key.
+ * @brief Pause the CPU until the user presses a key, and
+ * returns the scancode from the PS/2 controller.
 */
 static inline
 u8 poll() {

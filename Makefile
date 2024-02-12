@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/09 13:37:24 by etran            ###   ########.fr        #
+#    Updated: 2024/02/11 02:48:19 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,7 +81,6 @@ LD_SCRIPT		:=	$(CONFIG_DIR)/megamimOS.ld
 LD_LIBS			:=	$(LIB_DIR)/libmegamim.a
 
 LFLAGS			:=	-T$(LD_SCRIPT)
-LLIBS			:=	 -L./$(LIB_DIR) --library=megamim
 
 GRUB_CFG		:=	grub.cfg
 GRUB			:=	grub-mkrescue
@@ -107,7 +106,7 @@ $(LD_LIBS):
 # Compile kernel
 $(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 	@echo "Linking file $(NAME)..."
-	@$(LD) $(LFLAGS) $(OBJ_CPP) $(OBJ_ASM) -o $(NAME) $(LLIBS)
+	@$(LD) $(LFLAGS) $(OBJ_CPP) $(OBJ_ASM) -o $(NAME) $(LD_LIBS)
 	@echo "\`$(NAME)\` successfully created."
 
 # Compile obj files (cpp)

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/09 22:45:05 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/12 01:35:43 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,11 @@ public:
 
     inline
     void newLine() {
+        currentTerminal().insertNewline();
+    }
+
+    inline
+    void prompt() {
         currentTerminal().prompt();
     }
 
@@ -117,6 +122,16 @@ public:
     inline
     void moveCursorRight() {
         currentTerminal().moveCursorRightward();
+    }
+
+    inline
+    void moveCursorToBeginning() {
+        currentTerminal().moveCursorToStart();
+    }
+
+    inline
+    void moveCursorToEnd() {
+        currentTerminal().moveCursorToEnd();
     }
 
 private:

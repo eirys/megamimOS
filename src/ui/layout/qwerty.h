@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:44:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/09 22:45:26 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/12 00:27:06 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,10 @@ public:
             case Key::CursorDown:
             case Key::CursorLeft:
             case Key::CursorRight:
+            case Key::Home:
+            case Key::End:
+            case Key::PageUp:
+            case Key::PageDown:
                 return TranslateResult::Command;
 
             case Key::Escape:
