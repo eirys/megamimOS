@@ -6,7 +6,7 @@
 #    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/11 02:07:38 by jodufour         ###   ########.fr        #
+#    Updated: 2024/02/12 02:17:18 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ TEST_DIR	:=	test
 SRC			:=	\
 	$(addsuffix .s, \
 		strcmp \
+		strcpy \
 		strlen \
 	)
 OBJ			:=	$(addprefix $(OBJ_DIR)/,$(SRC:.s=.o))
@@ -37,6 +38,7 @@ TEST_SRC	:=	\
 		$(addprefix $(TEST_DIR)/, \
 			main \
 			strcmp \
+			strcpy \
 			strlen \
 		) \
 	)
@@ -51,6 +53,7 @@ CXX			:=	$(shell which c++)
 CXXFLAGS	:=	-c \
 				-Wall \
 				-Wextra \
+				-Wno-c++11-narrowing \
 				-m32 \
 				-fno-builtin \
 				-MMD \

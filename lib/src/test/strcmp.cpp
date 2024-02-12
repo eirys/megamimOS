@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 17:20:26 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/11 03:09:56 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/12 01:50:56 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,8 @@ static constexpr Test TESTS[] = {
 };
 static constexpr usize TESTS_LEN = sizeof(TESTS) / sizeof(*TESTS);
 
-#include <iostream>
-
 /**
- * @brief Test the lib::strlen function.
+ * @brief Test the lib::strCmp function.
  *
  * @return true if the test was passed successfully, false otherwise.
  */
@@ -54,7 +52,8 @@ bool testStrCmp(void)
 {
 	for (usize i = 0; i < TESTS_LEN; ++i)
 	{
-		return_type const ret = lib::strCmp(TESTS[i].parameters.s0, TESTS[i].parameters.s1);
+		Parameters const p = TESTS[i].parameters;
+		return_type const ret = lib::strCmp(p.s0, p.s1);
 
 		switch (TESTS[i].expected)
 		{

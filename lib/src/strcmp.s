@@ -17,9 +17,12 @@ section .text
 ; - a negative value if the first string is less than the second.
 ; - a positive value if the first string is greater than the second.
 strCmp:
-	mov ecx, [esp + 4]
-	mov edx, [esp + 8]
+; preserve the callee-saved registers
 	push ebx
+; load the parameters into registers
+	mov ecx, [esp + 8]
+	mov edx, [esp + 12]
+; clear the buffer registers
 	xor eax, eax
 	xor ebx, ebx
 .loop:
@@ -37,5 +40,6 @@ strCmp:
 ; repeat until either the current characters differ or the end of one of the strings is reached
 	jmp .loop
 .end_of_loop:
+; restore the callee-saved registers
 	pop ebx
 	ret

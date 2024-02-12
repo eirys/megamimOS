@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 17:20:26 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/11 02:46:33 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/12 02:28:23 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ struct Test
 
 static constexpr Test TESTS[] = {
 	{{""}, 0},
-	{{"etran & jodufour"}, 16},
 	{{"A"}, 1},
 	{{"42"}, 2},
+	{{"etran & jodufour"}, 16},
 	{{"foo \x7F bar \x80 \xFF"}, 13},
 	{{"We are all being used\n"
 	  "Our lives have been abused\n"
@@ -42,7 +42,7 @@ static constexpr Test TESTS[] = {
 static constexpr usize TESTS_LEN = sizeof(TESTS) / sizeof(*TESTS);
 
 /**
- * @brief Test the lib::strlen function.
+ * @brief Test the lib::strLen function.
  *
  * @return true if the test was passed successfully, false otherwise.
  */
@@ -50,7 +50,8 @@ bool testStrLen(void)
 {
 	for (usize i = 0; i < TESTS_LEN; ++i)
 	{
-		return_type const ret = lib::strLen(TESTS[i].parameters.s);
+		Parameters const p = TESTS[i].parameters;
+		return_type const ret = lib::strLen(p.s);
 
 		if (ret != TESTS[i].expected)
 			return false;
