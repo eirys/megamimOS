@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/12 01:40:30 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/12 15:35:46 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,8 @@ public:
     }
 
     inline
-    void init(const u32 id) {
+    void init() {
         vga::clearBuffer(m_color);
-        _putTitle(id);
         prompt();
     }
 
@@ -165,7 +164,7 @@ public:
 
     inline
     void offsetUpward() {
-        if (m_scrollAmount < TERMINAL_HEIGHT - vga::HEIGHT) {
+        if (m_scrollAmount < TERMINAL_HEIGHT - SCREEN_HEIGHT) {
             m_scrollAmount += 1;
         }
     }
@@ -204,7 +203,7 @@ public:
      * @brief Scrapes the current vga buffer and redraws the terminal.
     */
     void draw() const {
-        for (u32 i = 0; i < vga::HEIGHT * vga::WIDTH; i++) {
+        for (u32 i = vga::WIDTH; i < vga::HEIGHT * vga::WIDTH; i++) {
             vga::BUFFER[2 * i] = m_data[i + (TERMINAL_HEIGHT - m_scrollAmount - vga::HEIGHT) * vga::WIDTH];
             vga::BUFFER[2 * i + 1] = (u8)m_color;
         }
@@ -221,7 +220,8 @@ private:
     /* ---------------------------------------- */
 
     static constexpr u32    KERNEL_NAME_LEN = sizeof(KERNEL_NAME);
-    static constexpr u8     TERMINAL_HEIGHT = vga::HEIGHT * 2U;
+    static constexpr u8     SCREEN_HEIGHT = vga::HEIGHT - 1;
+    static constexpr u8     TERMINAL_HEIGHT = SCREEN_HEIGHT * 2U;
     static constexpr u8     LINE_BEGIN = 2U;
 
     /* ---------------------------------------- */
@@ -273,20 +273,6 @@ private:
 
             m_data[currIndex] = m_data[nextIndex];
         }
-    }
-
-    inline
-    void _putTitle(const u32 id) {
-        for (u32 i = 0; i < vga::WIDTH / 2U - KERNEL_NAME_LEN / 2U; ++i)
-            putChar(' ');
-        putString(KERNEL_NAME);
-        putChar(' ');
-        putChar(vga::Char::Heart);
-        putChar(' ');
-        putNbr(id);
-        for (u32 i = 0; i < vga::HEIGHT / 2; ++i)
-            _scrollUp();
-        m_cursor = 0U;
     }
 
     inline
