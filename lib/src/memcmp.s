@@ -18,17 +18,16 @@ section .text
 ; - a positive value if the first memory area is greater than the second one.
 ; - a negative value if the first memory area is less than the second one.
 memCmp:
-; put the number of bytes to compare into a register
-	mov ecx, [esp + 12]
+	mov ecx, [esp + 12] ; the number of bytes to compare
 ; check if the number of bytes to compare is 0
 	test ecx, ecx
 	jz .return_zero
 ; preserve the callee-saved registers
 	push edi
 	push esi
-; put the addresses of the memory areas to compare into registers
-	mov edi, [esp + 12]
-	mov esi, [esp + 16]
+; put the arguments into registers
+	mov edi, [esp + 12] ; the address of the first memory area to compare
+	mov esi, [esp + 16] ; the address of the second memory area to compare
 .compare_4_bytes:
 ; check if the remaining number of bytes to compare is less than 4
 	cmp ecx, 4

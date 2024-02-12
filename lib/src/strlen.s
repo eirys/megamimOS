@@ -13,6 +13,7 @@ section .text
 ; Return
 ; eax: the length of string.
 strLen:
+; put the arguments into registers
 	mov ecx, dword [esp + 4]
 	lea eax, [ecx - 1]
 .loop:

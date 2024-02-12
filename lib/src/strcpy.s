@@ -18,7 +18,7 @@ section .text
 strCpy:
 ; preserve the callee-saved registers
 	push ebx
-; load the parameters into registers
+; put the arguments into registers
 	mov eax, [esp + 8]
 	mov ebx, [esp + 12]
 	mov ecx, eax

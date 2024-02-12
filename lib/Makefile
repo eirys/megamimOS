@@ -6,7 +6,7 @@
 #    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/12 17:25:30 by jodufour         ###   ########.fr        #
+#    Updated: 2024/02/12 22:11:47 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ TEST_DIR	:=	test
 SRC			:=	\
 	$(addsuffix .s, \
 		memcmp \
+		memcpy \
 		strcmp \
 		strcpy \
 		strlen \
@@ -39,6 +40,7 @@ TEST_SRC	:=	\
 		$(addprefix $(TEST_DIR)/, \
 			main \
 			memcmp \
+			memcpy \
 			strcmp \
 			strcpy \
 			strlen \

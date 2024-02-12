@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:00:02 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/12 21:00:32 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:05:26 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ bool testMemCmp(void)
 {
 	for (usize i = 0; i < TESTS_LEN; ++i)
 	{
-		Parameters const p = TESTS[i].parameters;
+		Parameters const &p = TESTS[i].parameters;
 		return_type const ret = lib::memCmp(p.s0, p.s1, p.n);
 
 		switch (TESTS[i].expected)

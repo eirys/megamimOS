@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 17:20:26 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/12 02:28:23 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:05:33 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ bool testStrLen(void)
 {
 	for (usize i = 0; i < TESTS_LEN; ++i)
 	{
-		Parameters const p = TESTS[i].parameters;
+		Parameters const &p = TESTS[i].parameters;
 		return_type const ret = lib::strLen(p.s);
 
 		if (ret != TESTS[i].expected)

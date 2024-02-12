@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 17:20:26 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/12 01:50:56 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:05:18 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ bool testStrCmp(void)
 {
 	for (usize i = 0; i < TESTS_LEN; ++i)
 	{
-		Parameters const p = TESTS[i].parameters;
+		Parameters const &p = TESTS[i].parameters;
 		return_type const ret = lib::strCmp(p.s0, p.s1);
 
 		switch (TESTS[i].expected)
