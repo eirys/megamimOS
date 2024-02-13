@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lib.h                                              :+:      :+:    :+:   */
+/*   strcmp.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/08 14:40:29 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 20:33:58 by etran            ###   ########.fr       */
+/*   Created: 2024/02/13 20:33:06 by etran             #+#    #+#             */
+/*   Updated: 2024/02/13 20:35:08 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
-
-# include "types.h"
+#include "../types.h"
 
 namespace lib {
 
-u32     strlen(const i8* str) noexcept;
-u8*     strcpy(u8* dest, const u8* src) noexcept;
-i32     strcmp(const i8* s1, const i8* s2) noexcept;
+i32 strcmp(const i8* s1, const i8* s2) noexcept {
+    while (*s1 && *s1 == *s2) {
+        s1++;
+        s2++;
+    }
+    return *(u8*)s1 - *(u8*)s2;
+}
 
-void*   memcpy(void* dest, const void* src, u32 n) noexcept;
-void*   memset(void* dest, i32 value, u32 n) noexcept;
-void*   memmove(void *dest, void const *src, u32 n) noexcept;
-
-} // namespace lib
+}  // namespace lib

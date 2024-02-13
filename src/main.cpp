@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 19:37:43 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 20:39:21 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void _init() {
     serial::init();
 #endif
     cpu::gdt::init();
-    vga::clearBuffer();
+    vga::init();
     ps2::init();
     ui::WindowManager::init();
 }
@@ -74,6 +74,7 @@ void _handleCommand(const ui::KeyEvent& event) {
 
 extern "C"
 void megamimOS_cpp(const MultibootInfo& info) {
+    (void)info;
     _init();
 
     ui::QwertyLayout    layout;

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 19:35:41 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 20:38:58 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,6 +225,24 @@ public:
         return m_inner != other.m_inner;
     }
 
+    /* ---------------------------------------- */
+
+    inline
+    bool isAlpha() const {
+        return  (m_inner >= (u8)'A' && m_inner <= (u8)'Z') ||
+                (m_inner >= (u8)'a' && m_inner <= (u8)'z');
+    }
+
+    inline
+    bool isNum() const {
+        return m_inner >= (u8)'0' && m_inner <= (u8)'9';
+    }
+
+    inline
+    bool isAlphanum() const {
+        return isAlpha() || isNum();
+    }
+
 private:
     /* ---------------------------------------- */
     /*                ATTRIBUTES                */
@@ -255,7 +273,7 @@ void setBgColor(
     const u8 y,
     const Color bgColor
 ) {
-    BUFFER[2 * (y * WIDTH + x) + 1] = (u8)BUFFER[2 * (y * WIDTH + x) + 1] & 0x0F | (u8)bgColor << 4;
+    BUFFER[2 * (y * WIDTH + x) + 1] = ((u8)BUFFER[2 * (y * WIDTH + x) + 1] & 0x0F) | (u8)bgColor << 4;
 }
 
 static inline

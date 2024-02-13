@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/13 18:59:34 by etran            ###   ########.fr        #
+#    Updated: 2024/02/13 20:38:11 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,6 +71,9 @@ MACROS			:=	KERNEL_NAME=\"$(NAME)\" \
 CFLAGS			:=	-std=c++20 \
 					-MMD \
 					-MP \
+					-Wall \
+					-Wextra \
+					-Werror \
 					-fno-builtin \
 					-fno-exceptions \
 					-fno-stack-protector \

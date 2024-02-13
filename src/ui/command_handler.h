@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 00:17:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 19:03:15 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 22:24:23 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 # include "core.h"
 # include "vga.h"
+# include "lib.h"
+
+#include "debug.h"
 
 namespace ui {
 
@@ -41,7 +44,19 @@ public:
     };
 
     /* ---------------------------------------- */
+    /*                  METHODS                 */
+    /* ---------------------------------------- */
 
+    CommandHandler() = default;
+    CommandHandler(CommandHandler&& other) = default;
+    CommandHandler(const CommandHandler& other) = default;
+    CommandHandler& operator=(CommandHandler&& other) = default;
+    CommandHandler& operator=(const CommandHandler& other) = default;
+    ~CommandHandler() = default;
+
+    /* ---------------------------------------- */
+
+    static
     void execute(Command cmd) {
         switch (cmd) {
             case Command::Clear:
@@ -55,25 +70,30 @@ public:
         }
     }
 
+    /* ---------------------------------------- */
+
+    void parse(const vga::Char* buf, const u32 len) {
+        char buff[vga::WIDTH + 1];
+
+        lib::memcpy(buff, buf, len);
+
+        LOG(buff);
+        LOG_C('\n');
+    }
+
 private:
-    /* ---------------------------------------- */
-    /*                ATTRIBUTES                */
-    /* ---------------------------------------- */
-
-    u8              m_cmdLine[vga::WIDTH] = { vga::Char::Empty };
-    u8              m_lineLength = 0U;
-
     /* ---------------------------------------- */
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    void _halt() const {
+    static
+    void _halt() {
         while (true)
             core::hlt();
     }
 
-    inline
-    void _panic() const {
+    inline static
+    void _panic() {
         _halt();
     }
 

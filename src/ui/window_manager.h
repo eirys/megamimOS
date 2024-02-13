@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 19:38:47 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 22:22:20 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ public:
         m_currentTerminal = 0U;
         for (u8 id = 0; id < TERMINAL_COUNT; id++) {
             const u8 colorRaw = (u8)id + (u8)vga::Color::Indigo;
-            m_terminals[id].setColor((vga::Color)colorRaw);
-            m_terminals[id].init();
+            m_terminals[id].init((vga::Color)colorRaw);
         }
         currentTerminal().draw();
         _putTitle();
@@ -87,7 +86,7 @@ public:
 
     static
     void handleInput() {
-        // CommandHandler command;
+        currentTerminal().getCommandLine();
     }
 
     /* ---------------------------------------- */

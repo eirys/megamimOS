@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/13 19:00:07 by etran            ###   ########.fr        #
+#    Updated: 2024/02/13 20:38:02 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ OBJ_DIR		:=	obj
 
 SRC_FILES	:=	strlen.cpp \
 				strcpy.cpp \
+				strcmp.cpp \
 				memset.cpp \
 				memcpy.cpp \
 				memmove.cpp
@@ -38,6 +39,12 @@ CXX			:=	c++
 CFLAGS		:=	-Wall \
 				-Wextra \
 				-Werror \
+				-fno-builtin \
+				-fno-exceptions \
+				-fno-stack-protector \
+				-fno-rtti \
+				-nostdlib \
+				-nodefaultlibs \
 				-MMD \
 				-MP \
 				-std=c++20 \

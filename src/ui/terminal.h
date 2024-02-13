@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 19:36:06 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 22:21:52 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 # include "lib.h"
 # include "vga.h"
+# include "command_handler.h"
 
 namespace ui {
 
@@ -37,12 +38,8 @@ public:
     /* ---------------------------------------- */
 
     inline
-    void setColor(const vga::Color color) {
+    void init(const vga::Color color) {
         m_color = color;
-    }
-
-    inline
-    void init() {
         vga::clearBuffer(m_color);
         prompt();
     }
@@ -57,7 +54,8 @@ public:
         m_isPrompt = true;
     }
 
-    /* ---------------------------------------- */
+    /* ----------------- INPUT ---------------- */
+
 
     inline
     void putString(const i8* str) {
@@ -114,7 +112,7 @@ public:
         }
     }
 
-    /* ---------------------------------------- */
+    /* ------------ ADVANCED INPUT ------------ */
 
     void insertNewline() {
         m_isPrompt = false;
@@ -156,7 +154,7 @@ public:
         }
     }
 
-    /* ---------------------------------------- */
+    /* ---------------- SCROLL ---------------- */
 
     inline
     void focusOnCommandLine() {
@@ -181,6 +179,8 @@ public:
             m_scrollAmount += 1;
         }
     }
+
+    /* ---------------- CURSOR ---------------- */
 
     inline
     void moveCursorLeftward() {
@@ -262,8 +262,9 @@ public:
 
     /* ---------------------------------------- */
 
-    void getCommandLine(i8* const buffer) {
-
+    void getCommandLine() {
+        const vga::Char* cmdLine = m_data + (vga::WIDTH * (TERMINAL_HEIGHT - 1)) + LINE_BEGIN;
+        m_cmdHandler.parse(cmdLine, m_lineLength - LINE_BEGIN);
 
         prompt();
     }
@@ -295,6 +296,8 @@ private:
     u8              m_cursor = 0U;
     u8              m_lineLength = LINE_BEGIN;
     bool            m_isPrompt = true;
+
+    CommandHandler  m_cmdHandler;
 
     /* ---------------------------------------- */
     /*                  METHODS                 */
