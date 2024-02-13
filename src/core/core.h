@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:34:43 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 00:07:31 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 14:49:45 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ void panic() {
 static inline
 void hlt() {
     asm volatile ("hlt");
+}
+
+static inline
+void callException(const u8 e) {
+    // call int with e as parameter
+    asm volatile ("int %0" : : "i" (e));
 }
 
 } // namespace core

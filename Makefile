@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/13 10:58:49 by etran            ###   ########.fr        #
+#    Updated: 2024/02/13 14:38:13 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,12 +30,18 @@ DRIVER_DIR		:=	drivers
 UI_DIR			:=	ui
 LAYOUT_DIR		:=	$(UI_DIR)/layout
 
+CPU_DIR			:=	cpu
+IDT_DIR			:=	$(CPU_DIR)/idt
+GDT_DIR			:=	$(CPU_DIR)/gdt
+
 # ---------------- SUB DIRECTORIES ------------- #
 SUBDIRS			:=	. \
 					$(CORE_DIR) \
 					$(DRIVER_DIR) \
 					$(UI_DIR) \
-					$(LAYOUT_DIR)
+					$(LAYOUT_DIR) \
+					$(GDT_DIR) \
+					$(IDT_DIR)
 
 OBJ_SUBDIRS		:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
@@ -45,7 +51,8 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(CORE_DIR)/runtime.cpp
 
 SRC_FILES_ASM	:=	boot.s \
-					load_gdt.s
+					$(GDT_DIR)/load_gdt.s \
+					$(IDT_DIR)/load_idt.s
 
 SRC_ASM			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_ASM))
 SRC_CPP			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_CPP))
@@ -59,7 +66,8 @@ ASM				:=	nasm
 ASFLAGS			:=	-felf32
 
 CXX				:=	c++
-MACROS			:=	KERNEL_NAME=\"$(NAME)\"
+MACROS			:=	KERNEL_NAME=\"$(NAME)\" \
+					_DEBUG
 
 CFLAGS			:=	-std=c++20 \
 					-MMD \
@@ -71,6 +79,8 @@ CFLAGS			:=	-std=c++20 \
 					-nostdlib \
 					-nodefaultlibs \
 					-O3 \
+					-mno-red-zone \
+					-mgeneral-regs-only \
 					-m32
 
 INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS)) \
@@ -87,7 +97,7 @@ GRUB_CFG		:=	grub.cfg
 GRUB			:=	grub-mkrescue
 
 QEMU			:=	qemu-system-i386
-QEMU_FLAGS		:=	-serial stdio -no-reboot
+QEMU_FLAGS		:=	-serial stdio
 
 # -------------------- MISC -------------------- #
 RM				:=	rm -rf
