@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/12 01:36:06 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 00:35:19 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,23 @@ void _exit(ui::WindowManager& winManager) {
 static
 void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
     switch (event.m_key) {
-        case ui::Key::Backspace:    return winManager.eraseChar();
-        case ui::Key::NumpadEnter:
-        case ui::Key::Enter:        return winManager.prompt();
-        case ui::Key::Tab:          return event.m_uppercase ? winManager.switchToPrevious() : winManager.switchToNext();
+        case ui::Key::Enter:
+        case ui::Key::NumpadEnter:  return winManager.handleInput();
+        case ui::Key::Backspace:    return event.m_control ? winManager.eraseLine() : winManager.eraseChar();
+        case ui::Key::CursorLeft:   return event.m_control ? winManager.moveCursorToBeginningOfWord() : winManager.moveCursorLeft();
+        case ui::Key::CursorRight:  return event.m_control ? winManager.moveCursorToEndOfWord() : winManager.moveCursorRight();
         case ui::Key::CursorUp:     return winManager.scrollUp();
         case ui::Key::CursorDown:   return winManager.scrollDown();
-        case ui::Key::CursorLeft:   return winManager.moveCursorLeft();
-        case ui::Key::CursorRight:  return winManager.moveCursorRight();
         case ui::Key::Delete:       return winManager.deleteChar();
         case ui::Key::Home:         return winManager.moveCursorToBeginning();
         case ui::Key::End:          return winManager.moveCursorToEnd();
+        case ui::Key::PageUp:       return winManager.scrollPageUp();
+        case ui::Key::PageDown:     return winManager.scrollPageDown();
+        case ui::Key::Tab:
+            return
+            event.m_control ? (event.m_uppercase ? winManager.switchToPrevious() : winManager.switchToNext()) :
+            void() /* winManager.completeCommand() */;
+
         default:
             break;
     }
@@ -78,7 +84,7 @@ void megamimOS_cpp(const MultibootInfo& info) {
     ui::WindowManager   winManager;
     ui::QwertyLayout    layout;
 
-   vga::enableCursor(0xe, 0xf);
+   vga::enableCursor(0xe, 0xe);
 
     for (;;) {
         ui::KeyEvent event;

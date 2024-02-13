@@ -6,13 +6,13 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 01:28:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/07 01:28:53 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 00:07:31 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "core.h"
+# include "core.h"
 
 namespace serial {
 

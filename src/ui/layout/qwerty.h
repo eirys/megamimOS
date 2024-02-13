@@ -6,15 +6,15 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:44:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/12 00:27:06 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 00:07:31 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "key_event.h"
-#include "ilayout.h"
-#include "vga.h"
+# include "key_event.h"
+# include "ilayout.h"
+# include "vga.h"
 
 namespace ui {
 
@@ -68,6 +68,8 @@ public:
         }
 
         out.m_uppercase = isUppercase(m_modifiers);
+        out.m_control = isControl(m_modifiers);
+        out.m_alt = isAlt(m_modifiers);
 
         switch (out.m_key) {
             /* -------------------------------- */
@@ -172,7 +174,7 @@ public:
 
 private:
     /* ---------------------------------------- */
-    /*                   DATA                   */
+    /*                ATTRIBUTES                */
     /* ---------------------------------------- */
 
     Modifier    m_modifiers = Modifier::None;

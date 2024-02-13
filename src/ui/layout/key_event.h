@@ -6,15 +6,15 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 13:13:09 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 17:11:42 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 00:07:31 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "types.h"
-#include "keys.h"
-#include "utils.h"
+# include "types.h"
+# include "keys.h"
+# include "utils.h"
 
 namespace ui {
 
@@ -37,6 +37,8 @@ struct KeyEvent {
     vga::Char   m_character;
 
     bool        m_uppercase;
+    bool        m_control;
+    bool        m_alt;
 };
 
 /**
@@ -132,6 +134,16 @@ Action isPressed(const u8 input) {
 static inline
 bool isNumlock(const Modifier mods) {
     return (bool)(mods & Modifier::Num);
+}
+
+static inline
+bool isControl(const Modifier mods) {
+    return (bool)(mods & (Modifier::LCtrl | Modifier::RCtrl));
+}
+
+static inline
+bool isAlt(const Modifier mods) {
+    return (bool)(mods & (Modifier::LAlt | Modifier::RAlt));
 }
 
 } // namespace ui

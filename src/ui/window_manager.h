@@ -6,14 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/12 15:35:23 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 10:17:55 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "terminal.h"
-#include "key_event.h"
+# include "terminal.h"
+# include "key_event.h"
 
 namespace ui {
 
@@ -73,6 +73,12 @@ public:
 
     /* ---------------------------------------- */
 
+    void handleInput() {
+        // CommandHandler command;
+    }
+
+    /* ---------------------------------------- */
+
     /**
      * @brief Writes a str to terminal internal buffer.
      */
@@ -94,6 +100,11 @@ public:
     inline
     void eraseChar() {
         currentTerminal().eraseChar();
+    }
+
+    inline
+    void eraseLine() {
+        currentTerminal().eraseLine();
     }
 
     inline
@@ -143,6 +154,26 @@ public:
         currentTerminal().moveCursorToEnd();
     }
 
+    inline
+    void scrollPageDown() {
+        currentTerminal().focusOnCommandLine();
+    }
+
+    inline
+    void scrollPageUp() {
+        currentTerminal().focusOnTopOfBuffer();
+    }
+
+    inline
+    void moveCursorToBeginningOfWord() {
+        currentTerminal().moveCursorToBeginningOfWord();
+    }
+
+    inline
+    void moveCursorToEndOfWord() {
+        currentTerminal().moveCursorToEndOfWord();
+    }
+
 private:
     /* ---------------------------------------- */
     /*              STATIC MEMBERS              */
@@ -151,7 +182,7 @@ private:
     static constexpr u8 TERMINAL_COUNT = 5U;
 
     /* ---------------------------------------- */
-    /*                   DATA                   */
+    /*                ATTRIBUTES                */
     /* ---------------------------------------- */
 
     Terminal    m_terminals[TERMINAL_COUNT];

@@ -6,13 +6,13 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/12 15:28:00 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 00:07:31 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "core.h"
+# include "core.h"
 
 namespace vga {
 
@@ -56,6 +56,10 @@ public:
     /*                   ENUMS                  */
     /* ---------------------------------------- */
 
+    /**
+     * @brief Every vga characters.
+     * @note https://en.wikipedia.org/wiki/Code_page_437
+     */
     enum: u8 {
         Empty           = 0x00,
 
@@ -223,7 +227,7 @@ public:
 
 private:
     /* ---------------------------------------- */
-    /*                   DATA                   */
+    /*                ATTRIBUTES                */
     /* ---------------------------------------- */
 
     u8 m_inner = Empty;
