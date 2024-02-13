@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/13 18:47:09 by etran            ###   ########.fr        #
+#    Updated: 2024/02/13 18:59:34 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,7 +94,7 @@ GRUB_CFG		:=	grub.cfg
 GRUB			:=	grub-mkrescue
 
 QEMU			:=	qemu-system-i386
-QEMU_FLAGS		:=	-serial stdio -no-reboot
+QEMU_FLAGS		:=	-serial stdio
 
 # -------------------- MISC -------------------- #
 RM				:=	rm -rf
@@ -145,7 +145,7 @@ run-grub: all
 
 .PHONY: clean
 clean:
-	@echo "Removing objects."
+	@echo "Removing $(NAME) objects."
 	@$(RM) $(OBJ_DIR)
 	@echo "Removing $(ISO)".
 	@$(RM) $(ISO)

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 18:54:40 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 19:37:43 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,52 +29,45 @@ struct MultibootInfo {
 
 static inline
 void _init() {
-    cpu::gdt::init();
-    vga::clearBuffer();
-    ps2::init();
 #ifdef _DEBUG
     serial::init();
 #endif
+    cpu::gdt::init();
+    vga::clearBuffer();
+    ps2::init();
+    ui::WindowManager::init();
 }
 
 static inline
-void _exit(ui::WindowManager& winManager) {
-    winManager.newLine();
-    winManager << (i8*)"Good bye!";
+void _exit() {
+    ui::WindowManager::newLine();
+    *ui::WindowManager::get() << (i8*)"Good bye!";
     vga::disableCursor();
 }
 
 static
-void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
+void _handleCommand(const ui::KeyEvent& event) {
     switch (event.m_key) {
         case ui::Key::Enter:
-        case ui::Key::NumpadEnter:  return winManager.handleInput();
-        case ui::Key::Backspace:    return event.m_control ? winManager.eraseLine() : winManager.eraseChar();
-        case ui::Key::CursorLeft:   return event.m_control ? winManager.moveCursorToBeginningOfWord() : winManager.moveCursorLeft();
-        case ui::Key::CursorRight:  return event.m_control ? winManager.moveCursorToEndOfWord() : winManager.moveCursorRight();
-        case ui::Key::CursorUp:     return winManager.scrollUp();
-        case ui::Key::CursorDown:   return winManager.scrollDown();
-        case ui::Key::Delete:       return winManager.deleteChar();
-        case ui::Key::Home:         return winManager.moveCursorToBeginning();
-        case ui::Key::End:          return winManager.moveCursorToEnd();
-        case ui::Key::PageUp:       return winManager.scrollPageUp();
-        case ui::Key::PageDown:     return winManager.scrollPageDown();
+        case ui::Key::NumpadEnter:  return ui::WindowManager::handleInput();
+        case ui::Key::Backspace:    return event.m_control ? ui::WindowManager::eraseLine() : ui::WindowManager::eraseChar();
+        case ui::Key::CursorLeft:   return event.m_control ? ui::WindowManager::moveCursorToBeginningOfWord() : ui::WindowManager::moveCursorLeft();
+        case ui::Key::CursorRight:  return event.m_control ? ui::WindowManager::moveCursorToEndOfWord() : ui::WindowManager::moveCursorRight();
+        case ui::Key::CursorUp:     return ui::WindowManager::scrollUp();
+        case ui::Key::CursorDown:   return ui::WindowManager::scrollDown();
+        case ui::Key::Delete:       return ui::WindowManager::deleteChar();
+        case ui::Key::Home:         return ui::WindowManager::moveCursorToBeginning();
+        case ui::Key::End:          return ui::WindowManager::moveCursorToEnd();
+        case ui::Key::PageUp:       return ui::WindowManager::scrollPageUp();
+        case ui::Key::PageDown:     return ui::WindowManager::scrollPageDown();
         case ui::Key::Tab:
             return
-            event.m_control ? (event.m_uppercase ? winManager.switchToPrevious() : winManager.switchToNext()) :
+            event.m_control ? (event.m_uppercase ? ui::WindowManager::switchToPrevious() : ui::WindowManager::switchToNext()) :
             void() /* winManager.completeCommand() */;
 
         default:
             break;
     }
-}
-
-static inline
-void _panic(ui::WindowManager& winManager) {
-    core::panic();
-    winManager.newLine();
-    winManager << (i8*)"PANIC KERNEL PANIC! ABORTING!";
-    // vga::disableCursor();
 }
 
 /* -------------------------------------------- */
@@ -83,7 +76,6 @@ extern "C"
 void megamimOS_cpp(const MultibootInfo& info) {
     _init();
 
-    ui::WindowManager   winManager;
     ui::QwertyLayout    layout;
 
     for (;;) {
@@ -91,13 +83,13 @@ void megamimOS_cpp(const MultibootInfo& info) {
         ui::TranslateResult result = layout.translate(ps2::poll(), event);
 
         switch (result) {
-            case ui::TranslateResult::Print:    winManager << event.m_character; break;
-            case ui::TranslateResult::Exit:     return _exit(winManager);
-            case ui::TranslateResult::Command:  _handleCommand(winManager, event); break;
+            case ui::TranslateResult::Print:    *ui::WindowManager::get() << event.m_character; break;
+            case ui::TranslateResult::Exit:     return _exit();
+            case ui::TranslateResult::Command:  _handleCommand(event); break;
             case ui::TranslateResult::Invalid:
             case ui::TranslateResult::Ignore:   break;
         }
 
-        winManager.draw();
+        ui::WindowManager::draw();
     }
 }

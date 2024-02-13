@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 18:45:33 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 19:38:47 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # define KERNEL_NAME "No name :("
 #endif
 
+#include "debug.h"
+
 namespace ui {
 
 class WindowManager final {
@@ -26,16 +28,6 @@ public:
     /* ---------------------------------------- */
     /*                  METHODS                 */
     /* ---------------------------------------- */
-
-    WindowManager() {
-        for (u8 id = 0; id < TERMINAL_COUNT; id++) {
-            const u8 colorRaw = (u8)id + (u8)vga::Color::Indigo;
-            m_terminals[id].setColor((vga::Color)colorRaw);
-            m_terminals[id].init();
-        }
-        currentTerminal().draw();
-        _putTitle();
-    }
 
     ~WindowManager() = default;
 
@@ -46,37 +38,54 @@ public:
 
     /* ---------------------------------------- */
 
-    inline
-    void draw() const {
+    static
+    void init() {
+        m_currentTerminal = 0U;
+        for (u8 id = 0; id < TERMINAL_COUNT; id++) {
+            const u8 colorRaw = (u8)id + (u8)vga::Color::Indigo;
+            m_terminals[id].setColor((vga::Color)colorRaw);
+            m_terminals[id].init();
+        }
+        currentTerminal().draw();
+        _putTitle();
+    }
+
+
+    static
+    WindowManager* get() {
+        static WindowManager wm;
+        return &wm;
+    }
+
+    /* ---------------------------------------- */
+
+    static inline
+    void draw() {
         currentTerminal().draw();
     }
 
     /* ---------------------------------------- */
 
-    inline
+    static inline
     void switchToNext() {
         m_currentTerminal = (m_currentTerminal + 1) % TERMINAL_COUNT;
         _putTitle();
     }
 
-    inline
+    static inline
     void switchToPrevious() {
         m_currentTerminal = (m_currentTerminal + TERMINAL_COUNT - 1) % TERMINAL_COUNT;
         _putTitle();
     }
 
-    inline
+    static inline
     Terminal& currentTerminal() {
-        return m_terminals[m_currentTerminal];
-    }
-
-    inline
-    const Terminal& currentTerminal() const {
         return m_terminals[m_currentTerminal];
     }
 
     /* ---------------------------------------- */
 
+    static
     void handleInput() {
         // CommandHandler command;
     }
@@ -86,7 +95,7 @@ public:
     /**
      * @brief Writes a str to terminal internal buffer.
      */
-    inline
+    static inline
     void write(const i8* str) {
         currentTerminal() << str;
     }
@@ -94,86 +103,86 @@ public:
     /**
      * @brief Writes a char to terminal internal buffer.
      */
-    inline
+    static inline
     void write(const vga::Char character) {
         currentTerminal() << character;
     }
 
     /* ---------------------------------------- */
 
-    inline
+    static inline
     void eraseChar() {
         currentTerminal().eraseChar();
     }
 
-    inline
+    static inline
     void eraseLine() {
         currentTerminal().eraseLine();
     }
 
-    inline
+    static inline
     void deleteChar() {
         currentTerminal().deleteChar();
     }
 
-    inline
+    static inline
     void newLine() {
         currentTerminal().insertNewline();
     }
 
-    inline
+    static inline
     void prompt() {
         currentTerminal().prompt();
     }
 
     /* ---------------------------------------- */
 
-    inline
+    static inline
     void scrollUp() {
         currentTerminal().offsetUpward();
     }
 
-    inline
+    static inline
     void scrollDown() {
         currentTerminal().offsetDownward();
     }
 
-    inline
+    static inline
     void moveCursorLeft() {
         currentTerminal().moveCursorLeftward();
     }
 
-    inline
+    static inline
     void moveCursorRight() {
         currentTerminal().moveCursorRightward();
     }
 
-    inline
+    static inline
     void moveCursorToBeginning() {
         currentTerminal().moveCursorToStart();
     }
 
-    inline
+    static inline
     void moveCursorToEnd() {
         currentTerminal().moveCursorToEnd();
     }
 
-    inline
+    static inline
     void scrollPageDown() {
         currentTerminal().focusOnCommandLine();
     }
 
-    inline
+    static inline
     void scrollPageUp() {
         currentTerminal().focusOnTopOfBuffer();
     }
 
-    inline
+    static inline
     void moveCursorToBeginningOfWord() {
         currentTerminal().moveCursorToBeginningOfWord();
     }
 
-    inline
+    static inline
     void moveCursorToEndOfWord() {
         currentTerminal().moveCursorToEndOfWord();
     }
@@ -185,25 +194,24 @@ private:
 
     static constexpr u8 TERMINAL_COUNT = 5U;
 
-    /* ---------------------------------------- */
-    /*                ATTRIBUTES                */
-    /* ---------------------------------------- */
-
-    Terminal    m_terminals[TERMINAL_COUNT];
-    u8          m_currentTerminal = 0U;
+    static Terminal    m_terminals[TERMINAL_COUNT];
+    static u8          m_currentTerminal;
 
     /* ---------------------------------------- */
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    void _putStr(const u8 begin, const i8* str) const {
+    WindowManager() = default;
+
+    static
+    void _putStr(const u8 begin, const i8* str) {
         for (u8 i = begin; str[i] != 0; ++i) {
             vga::putChar(vga::Char(str[i]), i, 0, vga::Color::Carbon);
         }
     }
 
-    inline
-    void _putNbr(const u8 begin, u32 nbr) const {
+    static inline
+    void _putNbr(const u8 begin, u32 nbr) {
         i8  buf[32];
         u32 cur = 32;
 
@@ -222,18 +230,23 @@ private:
         }
     }
 
-    void _putTitle() const {
+    static
+    void _putTitle() {
         _putStr(0, KERNEL_NAME);
         vga::putChar(vga::Char::Heart, 11, 0, vga::Color::Crimson);
         vga::putChar(vga::Char::Hash, 13, 0, vga::Color::Carbon);
         _putNbr(14, (u32)m_currentTerminal);
 
+        const vga::Color  terminalColor = currentTerminal().getColor();
         for (u8 i = 0; i < vga::WIDTH; ++i) {
-            vga::setBgColor(i, 0, vga::Color::Cloud);
+            vga::setBgColor(i, 0, terminalColor);
         }
     }
 
 }; // class WindowManager
+
+Terminal    WindowManager::m_terminals[TERMINAL_COUNT];
+u8          WindowManager::m_currentTerminal;
 
 inline
 WindowManager& operator<<(WindowManager& wm, const i8* str) {

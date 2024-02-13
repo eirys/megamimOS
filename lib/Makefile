@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/11 02:43:21 by etran            ###   ########.fr        #
+#    Updated: 2024/02/13 19:00:07 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,13 +73,13 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 .PHONY: clean
 clean:
+	@echo "Removing $(NAME) objects."
 	@${RM} $(OBJ_DIR)
-	@echo "Cleaned object files."
 
 .PHONY: fclean
 fclean: clean
+	@echo "Removing $(NAME)."
 	@${RM} $(NAME)
-	@echo "Removed $(NAME)."
 
 .PHONY: re
 re: fclean all

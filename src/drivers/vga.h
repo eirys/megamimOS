@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 18:56:14 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 19:35:41 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ void setBgColor(
     const u8 y,
     const Color bgColor
 ) {
-    BUFFER[2 * (y * WIDTH + x) + 1] = (u8)BUFFER[2 * (y * WIDTH + x) + 1] | (u8)bgColor << 4;
+    BUFFER[2 * (y * WIDTH + x) + 1] = (u8)BUFFER[2 * (y * WIDTH + x) + 1] & 0x0F | (u8)bgColor << 4;
 }
 
 static inline

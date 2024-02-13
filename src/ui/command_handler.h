@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 00:17:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 00:37:38 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 19:03:15 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ public:
         switch (cmd) {
             case Command::Clear:
             case Command::Help:
-            case Command::Panic:
+            case Command::Panic:    return _panic();
             case Command::Reboot:
             case Command::Halt:     return _halt();
 
@@ -64,10 +64,17 @@ private:
     u8              m_lineLength = 0U;
 
     /* ---------------------------------------- */
+    /*                  METHODS                 */
+    /* ---------------------------------------- */
 
     void _halt() const {
         while (true)
             core::hlt();
+    }
+
+    inline
+    void _panic() const {
+        _halt();
     }
 
 }; // class CommandHandler

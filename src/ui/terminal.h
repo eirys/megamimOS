@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 18:56:39 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 19:36:06 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,6 +246,7 @@ public:
 
     /**
      * @brief Scrapes the current vga buffer and redraws the terminal.
+     * Leaves the first line of the VGA buffer untouched.
     */
     void draw() const {
         for (u32 i = vga::WIDTH; i < vga::HEIGHT * vga::WIDTH; i++) {
@@ -265,6 +266,13 @@ public:
 
 
         prompt();
+    }
+
+    /* ---------------- GETTER ---------------- */
+
+    inline
+    vga::Color getColor() const {
+        return m_color;
     }
 
 private:
