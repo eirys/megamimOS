@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 01:28:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 00:07:31 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 11:12:04 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,10 @@ void write_nbr(u32 value) {
     i8 buf[32];
     u32 cur = 32;
 
+    if (value == 0) {
+        write_byte('0');
+        return;
+    }
     while (value) {
         --cur;
         buf[cur] = '0' + (value % 10);

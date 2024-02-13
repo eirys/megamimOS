@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 11:06:40 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 11:14:14 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,19 @@ void _loadGDT() {
     lib::memcpy((void*)0x00000800, tablo, sizeof(tablo));
 
     load_gdt(&gdtr);
+
+    // read stack pointer
+    u64 sp;
+    asm volatile ("mov %%esp, %0" : "=m" (sp));
+    LOG_NUM(sp);
+    serial::write_byte('\n');
+
+    // display stack content (16 first bytes)
+    u8* stack = (u8*)sp;
+    for (u32 i = 0; i < 16; ++i) {
+        LOG_NUM(stack[i]);
+        serial::write_byte('\n');
+    }
 }
 
 /* -------------------------------------------- */
