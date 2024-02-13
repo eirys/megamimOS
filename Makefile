@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/11 02:48:19 by etran            ###   ########.fr        #
+#    Updated: 2024/02/13 10:58:49 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,8 @@ INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
 SRC_FILES_CPP	:=	main.cpp \
 					$(CORE_DIR)/runtime.cpp
 
-SRC_FILES_ASM	:=	boot.s
+SRC_FILES_ASM	:=	boot.s \
+					load_gdt.s
 
 SRC_ASM			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_ASM))
 SRC_CPP			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_CPP))

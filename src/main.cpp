@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 00:35:19 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 11:06:40 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,50 @@ void _panic(ui::WindowManager& winManager) {
     winManager << (i8*)"PANIC KERNEL PANIC! ABORTING!";
     // vga::disableCursor();
 }
+
+struct GDTR {
+    u16 limit;
+    u64 base;
+} __attribute__((packed));
+
+extern "C"
+void load_gdt(const GDTR* reg);
+
+static
+void _loadGDT() {
+    u64 tablo[] = {
+        // Null Segment. Don't ask.
+        0x0,
+
+        // Kernel Code Segment
+        0x00cf9a000000ffff,
+        // Kernel Data Segment
+        0x00cf92000000ffff,
+        // Kernel Stack Segment
+        0x00cf92000000ffff,
+
+        // User Code Segment
+        0x00cffa000000ffff,
+        // User Data Segment
+        0x00cff2000000ffff,
+        // User Stack Segment
+        0x00cff2000000ffff
+    };
+
+    GDTR gdtr = {
+        .limit = sizeof(tablo) - 1,
+        .base = 0x00000800
+    };
+    lib::memcpy((void*)0x00000800, tablo, sizeof(tablo));
+
+    load_gdt(&gdtr);
+}
+
 /* -------------------------------------------- */
 
 extern "C"
 void megamimOS_cpp(const MultibootInfo& info) {
+    _loadGDT();
     _init();
 
     ui::WindowManager   winManager;
