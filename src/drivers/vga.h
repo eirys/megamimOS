@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 00:07:31 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 18:56:14 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,7 +284,7 @@ void disableCursor() {
 	core::outB(DATA_PORT, 0x20);
 }
 
-static inline
+static
 void setCursorPos(u8 x, u8 y) {
     const u16 pos = y * WIDTH + x;
 
@@ -295,6 +295,14 @@ void setCursorPos(u8 x, u8 y) {
     // Set high cursor byte
     core::outB(CONTROL_PORT, 0x0E);
     core::outB(DATA_PORT, (u8)((pos >> 8) & 0xFF));
+}
+
+/* -------------------------------------------- */
+
+static
+void init() {
+    clearBuffer();
+    enableCursor(0xe, 0xe);
 }
 
 } // namespace vga

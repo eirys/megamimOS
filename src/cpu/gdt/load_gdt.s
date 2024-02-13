@@ -17,3 +17,5 @@ load_gdt:
     ; Necessary to reload the code segment register.
     jmp     0x08:.reload_CS
 .reload_CS:
+
+    ret

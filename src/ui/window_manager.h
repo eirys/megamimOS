@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 10:17:55 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 18:45:33 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 # include "terminal.h"
 # include "key_event.h"
+
+#ifndef KERNEL_NAME
+# define KERNEL_NAME "No name :("
+#endif
 
 namespace ui {
 
@@ -219,7 +223,7 @@ private:
     }
 
     void _putTitle() const {
-        _putStr(0, "megamimsOS");
+        _putStr(0, KERNEL_NAME);
         vga::putChar(vga::Char::Heart, 11, 0, vga::Color::Crimson);
         vga::putChar(vga::Char::Hash, 13, 0, vga::Color::Carbon);
         _putNbr(14, (u32)m_currentTerminal);

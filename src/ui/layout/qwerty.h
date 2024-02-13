@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:44:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 00:07:31 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 18:57:08 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,7 +297,6 @@ private:
         if (pressed) { m_modifiers ^= mod; }
     }
 
-    inline
     bool _setModifiers(const KeyEvent& out, const bool isExtended) {
         const bool pressed = out.m_action == Action::Pressed;
         switch (out.m_key) {

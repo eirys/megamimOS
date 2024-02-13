@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 10:22:10 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 18:56:39 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 
 # include "lib.h"
 # include "vga.h"
-
-#ifndef KERNEL_NAME
-# define KERNEL_NAME "No name :("
-#endif
 
 namespace ui {
 
@@ -120,7 +116,6 @@ public:
 
     /* ---------------------------------------- */
 
-    inline
     void insertNewline() {
         m_isPrompt = false;
         _scrollUp();
@@ -277,7 +272,6 @@ private:
     /*              STATIC MEMBERS              */
     /* ---------------------------------------- */
 
-    static constexpr u32    KERNEL_NAME_LEN = sizeof(KERNEL_NAME);
     static constexpr u8     SCREEN_HEIGHT = vga::HEIGHT - 1;
     static constexpr u8     TERMINAL_HEIGHT = vga::HEIGHT * 2U;
     static constexpr u8     LINE_BEGIN = 2U;
@@ -293,8 +287,6 @@ private:
     u8              m_cursor = 0U;
     u8              m_lineLength = LINE_BEGIN;
     bool            m_isPrompt = true;
-
-    // Prompt          m_prompt;
 
     /* ---------------------------------------- */
     /*                  METHODS                 */
