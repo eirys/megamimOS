@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 04:12:54 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/12 21:14:22 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/13 20:37:59 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ bool testStrCmp(void);
 bool testStrCpy(void);
 bool testMemCmp(void);
 bool testMemCpy(void);
+bool testMemSet(void);
 
 static constexpr Test TESTS[] = {
 	{"strLen", testStrLen},
@@ -31,6 +32,7 @@ static constexpr Test TESTS[] = {
 	{"strCpy", testStrCpy},
 	{"memCmp", testMemCmp},
 	{"memCpy", testMemCpy},
+	{"memSet", testMemSet},
 };
 static constexpr usize TESTS_LEN = sizeof(TESTS) / sizeof(*TESTS);
 

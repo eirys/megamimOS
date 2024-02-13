@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:00:02 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/12 22:05:26 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/13 07:48:11 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 struct Parameters
 {
-	void const *const s0;
-	void const *const s1;
+	u8 const *const s0;
+	u8 const *const s1;
 	usize const n;
 };
 

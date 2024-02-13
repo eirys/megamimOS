@@ -52,7 +52,7 @@ memCpy:
 	add esi, 2
 	sub ecx, 2
 .copy_1_byte:
-; check if the remaining number of bytes to copy is zero
+; check if the remaining number of bytes to copy is 0
 	test ecx, ecx
 	jz .restore_callee_saved_registers
 ; copy 1 byte from the source memory area to the destination memory area

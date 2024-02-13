@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 21:14:39 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/12 22:54:24 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/13 08:44:16 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef void *return_type;
 struct Test
 {
 	Parameters const parameters;
-	usize const dst_size;
+	usize const dst_len;
 };
 
 static constexpr Test TESTS[] = {
@@ -172,11 +172,11 @@ bool testMemCpy(void)
 	for (usize i = 0; i < TESTS_LEN; ++i)
 	{
 		Parameters const &p = TESTS[i].parameters;
-		usize const end_size = TESTS[i].dst_size - p.n;
-		u8 const *const end = p.dst + end_size;
-		u8 const *const end_dup = reinterpret_cast<u8 const *>(memcpy(new u8[end_size], end, end_size));
+		usize const end_len = TESTS[i].dst_len - p.n;
+		u8 const *const end = p.dst + p.n;
+		u8 const *const end_dup = reinterpret_cast<u8 const *>(memcpy(new u8[end_len], end, end_len));
 		return_type const ret = lib::memCpy(p.dst, p.src, p.n);
-		bool const failed = ret != p.dst || memcmp(ret, p.src, p.n) || memcmp(end, end_dup, end_size);
+		bool const failed = ret != p.dst || memcmp(ret, p.src, p.n) || memcmp(end, end_dup, end_len);
 
 		delete[] end_dup;
 		if (failed)

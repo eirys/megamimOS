@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:52:31 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/12 22:49:30 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/13 08:40:09 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ typedef char *return_type;
 struct Test
 {
 	Parameters const parameters;
-	usize const dst_size;
-	usize const src_size;
+	usize const dst_len;
+	usize const src_len;
 };
 
 static constexpr Test TESTS[] = {
@@ -89,12 +89,12 @@ bool testStrCpy(void)
 	for (usize i = 0; i < TESTS_LEN; ++i)
 	{
 		Parameters const p = TESTS[i].parameters;
-		usize const src_size = TESTS[i].src_size;
-		usize const end_size = TESTS[i].dst_size - src_size;
-		char const *const end = p.dst + src_size;
-		char const *const end_dup = reinterpret_cast<char const *>(memcpy(new char[end_size], end, end_size));
+		usize const src_len = TESTS[i].src_len;
+		usize const end_len = TESTS[i].dst_len - src_len;
+		char const *const end = p.dst + src_len;
+		char const *const end_dup = reinterpret_cast<char const *>(memcpy(new char[end_len], end, end_len));
 		return_type const ret = lib::strCpy(p.dst, p.src);
-		bool const failed = ret != p.dst || memcmp(ret, p.src, src_size) || memcmp(end, end_dup, end_size);
+		bool const failed = ret != p.dst || memcmp(ret, p.src, src_len) || memcmp(end, end_dup, end_len);
 
 		delete[] end_dup;
 		if (failed)
