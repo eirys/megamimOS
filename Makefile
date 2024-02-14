@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/14 20:59:41 by etran            ###   ########.fr        #
+#    Updated: 2024/02/14 21:24:06 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,8 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(UI_DIR)/terminal.cpp \
 					$(UI_DIR)/window_manager.cpp \
 					$(DRIVER_DIR)/vga.cpp \
+					$(DRIVER_DIR)/pic.cpp \
+					$(DRIVER_DIR)/serial.cpp \
 					$(GDT_DIR)/gdt.cpp \
 					$(IDT_DIR)/idt.cpp \
 					$(IDT_DIR)/exception.cpp
@@ -86,7 +88,7 @@ CFLAGS			:=	-std=c++20 \
 					-nostdlib \
 					-nodefaultlibs \
 					-mno-red-zone \
-					-mgeneral-regs-only \
+					-O3 \
 					-m32
 
 INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS)) \

@@ -6,13 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:57:21 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 21:00:33 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 21:15:06 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gdt.h"
 #include "debug.h"
 #include "lib.h"
+#include "utils.h"
 
 namespace cpu::gdt {
 

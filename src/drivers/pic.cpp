@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 21:01:33 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 21:04:22 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 21:15:37 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ namespace pic {
 /* -------------------------------------------- */
 /*                   PIC PORTS                  */
 /* -------------------------------------------- */
-
-static constexpr const u8 OFFSET = 0x20;
 
 static constexpr const u16 MASTER_COMMAND = 0x20;
 static constexpr const u16 MASTER_DATA = 0x21;

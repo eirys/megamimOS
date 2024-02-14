@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 19:02:33 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 21:24:14 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 #include "qwerty.h"
 #include "idt.h"
 #include "gdt.h"
+#include "pic.h"
+
+#ifdef _DEBUG
+# include "serial.h"
+#endif
 
 /* -------------------------------------------- */
 
@@ -106,6 +111,7 @@ void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
 //         hlt();
 // }
 
+#include "debug.h"
 extern "C"
 void megamimOS_cpp(const MultibootInfo& info) {
     _init();

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:55:52 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 21:04:14 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 21:15:42 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
  * to send them to the CPU.
 */
 namespace pic {
+
+static constexpr const u8 OFFSET = 0x20;
 
 // https://en.wikibooks.org/wiki/X86_Assembly/Programmable_Interrupt_Controller#IRQs
 enum class IRQ: u8 {

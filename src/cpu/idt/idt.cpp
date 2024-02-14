@@ -6,15 +6,28 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:48:02 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 20:55:50 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 21:21:35 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "idt.h"
 #include "exception.h"
+#include "pic.h"
 #include "pic_handler.h"
 
 namespace cpu::idt {
+
+static constexpr u32 GATE_COUNT = 256;
+
+/**
+ * @brief The Interrupt Descriptor Table.
+ * @note The IDT is an array of 256 interrupt handlers, each of which is a GateDescriptor.
+ */
+GateDescriptor  IDT[GATE_COUNT] = { 0 };
+
+/* -------------------------------------------- */
+/*                   FUNCTIONS                  */
+/* -------------------------------------------- */
 
 /**
  * @brief ASM function to load the IDT.
