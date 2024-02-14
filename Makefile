@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/14 18:06:52 by etran            ###   ########.fr        #
+#    Updated: 2024/02/14 19:38:27 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,11 @@ INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
 
 # ---------------- SOURCE FILES ---------------- #
 SRC_FILES_CPP	:=	main.cpp \
-					$(CORE_DIR)/runtime.cpp
+					$(CORE_DIR)/runtime.cpp \
+					$(LAYOUT_DIR)/qwerty.cpp \
+					$(UI_DIR)/terminal.cpp \
+					$(UI_DIR)/window_manager.cpp \
+					$(DRIVER_DIR)/vga.cpp
 
 SRC_FILES_ASM	:=	boot.s \
 					$(GDT_DIR)/load_gdt.s \
