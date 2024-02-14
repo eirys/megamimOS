@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/14 21:24:06 by etran            ###   ########.fr        #
+#    Updated: 2024/02/14 21:26:25 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,8 +75,7 @@ ASM				:=	nasm
 ASFLAGS			:=	-felf32
 
 CXX				:=	c++
-MACROS			:=	KERNEL_NAME=\"$(NAME)\" \
-					_DEBUG
+MACROS			:=	KERNEL_NAME=\"$(NAME)\"
 
 CFLAGS			:=	-std=c++20 \
 					-MMD \

@@ -6,13 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:52:05 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 20:56:42 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 21:27:00 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exception.h"
+#include "idt_decl.h"
 #include "debug.h"
-# include "idt_decl.h"
+#include "core.h"
 
 namespace cpu::idt {
 
