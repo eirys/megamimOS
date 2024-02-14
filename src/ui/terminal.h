@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 22:21:52 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 14:39:13 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,16 @@ public:
         m_isPrompt = true;
     }
 
-    /* ----------------- INPUT ---------------- */
+    /* ---------------------------------------- */
 
+    void resetInner() {
+        m_cursor = 0U;
+        lib::memset(m_data, (u8)vga::Char::Empty, vga::WIDTH * TERMINAL_HEIGHT);
+        vga::clearBuffer(m_color);
+        prompt();
+    }
+
+    /* ----------------- INPUT ---------------- */
 
     inline
     void putString(const i8* str) {
@@ -262,11 +270,9 @@ public:
 
     /* ---------------------------------------- */
 
-    void getCommandLine() {
-        const vga::Char* cmdLine = m_data + (vga::WIDTH * (TERMINAL_HEIGHT - 1)) + LINE_BEGIN;
-        m_cmdHandler.parse(cmdLine, m_lineLength - LINE_BEGIN);
-
-        prompt();
+    Command getCommand() const {
+        const vga::Char*    cmdLine = m_data + (vga::WIDTH * (TERMINAL_HEIGHT - 1)) + LINE_BEGIN;
+        return CommandHandler::parse(cmdLine, m_lineLength - LINE_BEGIN);
     }
 
     /* ---------------- GETTER ---------------- */
@@ -296,8 +302,6 @@ private:
     u8              m_cursor = 0U;
     u8              m_lineLength = LINE_BEGIN;
     bool            m_isPrompt = true;
-
-    CommandHandler  m_cmdHandler;
 
     /* ---------------------------------------- */
     /*                  METHODS                 */

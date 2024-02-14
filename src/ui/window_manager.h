@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 22:22:20 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 14:43:14 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,10 @@ public:
 
     static
     void handleInput() {
-        currentTerminal().getCommandLine();
+        Command res = currentTerminal().getCommand();
+        switch (res) {
+            case Command::Clear:    currentTerminal().resetInner(); break;
+        }
     }
 
     /* ---------------------------------------- */
@@ -184,6 +187,12 @@ public:
     static inline
     void moveCursorToEndOfWord() {
         currentTerminal().moveCursorToEndOfWord();
+    }
+
+    static inline
+    void clearScreen() {
+        currentTerminal().resetInner();
+        _putTitle();
     }
 
 private:
