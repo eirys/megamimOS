@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 11:43:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 15:52:52 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 18:36:09 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 # include "types.h"
 # include "exception.h"
+# include "pic_handler.h"
 
 namespace cpu::idt {
 
@@ -105,6 +106,10 @@ void _load() {
 
     IDT[(u8)Exception::DivisionError] = _createGateDescriptor((void*)divisionError, enableInt, Ring::Kernel);
     IDT[(u8)Exception::Breakpoint] = _createGateDescriptor((void*)breakpoint, enableInt, Ring::Kernel);
+
+    IDT[pic::OFFSET + (u8)pic::IRQ::Timer] = _createGateDescriptor((void*)timerInterrupt, disableInt, Ring::Kernel);
+    IDT[pic::OFFSET + (u8)pic::IRQ::Keyboard] = _createGateDescriptor((void*)keyboardInterrupt, disableInt, Ring::Kernel);
+
 }
 
 static

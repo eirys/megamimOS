@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:34:43 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 14:49:45 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 18:45:17 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,19 @@ void pause() {
 }
 
 /**
- * @brief Halt the CPU and stop all interrupts.
+ * @brief Clears the interrupt-enable flag, effectively disabling all interrupts.
 */
 static inline
-void panic() {
+void cli() {
     asm volatile ("cli");
+}
+
+/**
+ * @brief Sets the interrupt-enable flag, effectively enabling all interrupts.
+*/
+static inline
+void sti() {
+    asm volatile ("sti");
 }
 
 /**

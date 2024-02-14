@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:44:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 00:07:31 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 18:20:25 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,16 +209,16 @@ private:
             case 0x0A: out = Key::Key9; break;
             case 0x0B: out = Key::Key0; break;
 
-            case 0x52: out = numlock ? Key::Numpad0 : Key::Insert; break;
-            case 0x4F: out = numlock ? Key::Numpad1 : Key::End; break;
-            case 0x50: out = isExtended ? Key::CursorDown : (numlock ? Key::Numpad2 : Key::CursorDown); break;
-            case 0x51: out = numlock ? Key::Numpad3 : Key::PageDown ; break;
-            case 0x4B: out = isExtended ? Key::CursorLeft : (numlock? Key::Numpad4 : Key::CursorLeft); break;
+            case 0x52: out = numlock ?      Key::Numpad0 : Key::Insert; break;
+            case 0x4F: out = numlock ?      Key::Numpad1 : Key::End; break;
+            case 0x50: out = isExtended ?   Key::CursorDown : (numlock ? Key::Numpad2 : Key::CursorDown); break;
+            case 0x51: out = numlock ?      Key::Numpad3 : Key::PageDown ; break;
+            case 0x4B: out = isExtended ?   Key::CursorLeft : (numlock? Key::Numpad4 : Key::CursorLeft); break;
             case 0x4C: out = Key::Numpad5; break;
-            case 0x4D: out = isExtended ? Key::CursorRight : (numlock ? Key::Numpad6 : Key::CursorRight); break;
-            case 0x47: out = numlock ? Key::Numpad7 : Key::Home; break;
-            case 0x48: out = isExtended ? Key::CursorUp : (numlock ? Key::Numpad8 : Key::CursorUp); break;
-            case 0x49: out = numlock ? Key::Numpad9 : Key::PageUp; break;
+            case 0x4D: out = isExtended ?   Key::CursorRight : (numlock ? Key::Numpad6 : Key::CursorRight); break;
+            case 0x47: out = numlock ?      Key::Numpad7 : Key::Home; break;
+            case 0x48: out = isExtended ?   Key::CursorUp : (numlock ? Key::Numpad8 : Key::CursorUp); break;
+            case 0x49: out = numlock ?      Key::Numpad9 : Key::PageUp; break;
 
             case 0x10: out = Key::Q; break;
             case 0x11: out = Key::W; break;

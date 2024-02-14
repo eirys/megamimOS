@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 16:00:10 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 19:02:33 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "qwerty.h"
 #include "idt.h"
 #include "gdt.h"
-#include "pic.h"
 
 /* -------------------------------------------- */
 
@@ -28,27 +27,31 @@ struct MultibootInfo {
 
 /* -------------------------------------------- */
 
-static inline
+static
 void _init() {
     cpu::gdt::init();
     cpu::idt::init();
+    pic::init();
+    pic::setMask((pic::IRQMask)~((u8)pic::IRQMask::Keyboard | (u8)pic::IRQMask::Timer));
     vga::clearBuffer();
     ps2::readData();
 #ifdef _DEBUG
     serial::init();
 #endif
+
+    core::sti();
 }
 
-static inline
+static
 void _exit(ui::WindowManager& winManager) {
     winManager.newLine();
     winManager << (i8*)"Good bye!";
     vga::disableCursor();
 }
 
-static inline
+static
 void _panic(ui::WindowManager& winManager) {
-    core::panic();
+    core::cli();
     winManager.newLine();
     winManager << (i8*)"PANIC KERNEL PANIC! ABORTING!";
     // vga::disableCursor();
@@ -80,6 +83,28 @@ void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
 }
 
 /* -------------------------------------------- */
+
+// using signalFn = void (*)(void);
+
+// static signalFn signals[10] = {}
+
+// bool hasScabcide;
+// u8 scancode;
+
+// static
+// void handleInput() {
+//         // Check if new signals have been registered.
+//         // Calls signals
+
+//         // Check
+//         if (hasKeyEvent)
+//         {
+//             kasKeyEvent = false;
+
+//         }
+
+//         hlt();
+// }
 
 extern "C"
 void megamimOS_cpp(const MultibootInfo& info) {

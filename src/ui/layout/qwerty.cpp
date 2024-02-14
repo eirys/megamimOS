@@ -1,23 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   runtime.cpp                                        :+:      :+:    :+:   */
+/*   qwerty.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 21:06:45 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 18:05:38 by etran            ###   ########.fr       */
+/*   Created: 2024/02/14 19:01:49 by etran             #+#    #+#             */
+/*   Updated: 2024/02/14 19:01:52 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * This file is necessary for inheritance, for some reason...
-*/
-#include "lib.h"
-extern "C"
-void __cxa_pure_virtual() {
-    asm volatile("hlt");
-}
-
-void operator delete(void *) {}
-void operator delete(void *, unsigned int) {}
+#include "qwerty.h"

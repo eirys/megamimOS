@@ -6,16 +6,17 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 14:54:18 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 15:59:54 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 18:38:23 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
+# include "idt_decl.h"
 # include "types.h"
 # include "debug.h"
 
-namespace cpu {
+namespace cpu::idt {
 
 # define _DECL_INTERNAL     __attribute__ ((no_caller_saved_registers)) static
 # define _DECL_INTERRUPT    __attribute__ ((interrupt)) static
@@ -67,19 +68,6 @@ enum class Exception: u8 {
     Last = Reserved7
 };
 
-/**
- * @brief The Interrupt Frame: the state of the CPU when an interrupt occurs.
- * @note It is pushed onto the stack when an interrupt occurs, so that
- * the CPU can resume execution after the interrupt handler returns (with an IRET instruction).
- */
-struct InterruptFrame {
-    u32 m_ip; // Instruction Pointer
-    u32 m_cs; // Code Segment
-    u32 m_flags;
-    u32 m_sp; // Stack Pointer
-    u32 m_ss; // Stack Segment
-};
-
 /* -------------------------------------------- */
 /*                   FUNCTIONS                  */
 /* -------------------------------------------- */
@@ -114,4 +102,4 @@ void breakpoint(InterruptFrame* frame) {
 # undef _DECL_INTERNAL
 # undef _DECL_INTERRUPT
 
-} // namespace cpu
+} // namespace cpu::idt

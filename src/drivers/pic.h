@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:55:52 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 15:50:51 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 18:40:50 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,21 @@ enum class IRQMask: u16 {
     SecondaryATA    = 1 << (u8)IRQ::SecondaryATA
 };
 
+/* -------------------------------------------- */
+/*                   FUNCTIONS                  */
+/* -------------------------------------------- */
+
+/**
+ * @brief The PIC should await a short period of time before sending a command.
+ * This is because the PIC is slow and needs time to process the command.
+*/
 static inline
 void wait(void) {
     core::outB(0x80, 0);
 }
 
-static
-void sendEnd(IRQ irq) {
+static inline
+void sendEOI(IRQ irq) {
     if((u8)irq >= 8)
         core::outB(SLAVE_COMMAND, 0x20);
 
@@ -92,10 +100,12 @@ void setMask(IRQMask irqMask) {
     core::outB(SLAVE_DATA, (u8)((u16)irqMask >> 8));
 }
 
-void clear() {
+void disable() {
     core::outB(MASTER_DATA, 0xFF);
     core::outB(SLAVE_DATA, 0xFF);
 }
+
+/* -------------------------------------------- */
 
 static constexpr u8 OFFSET = 0x20;
 
@@ -105,6 +115,8 @@ static constexpr u8 OFFSET = 0x20;
 */
 static
 void init() {
+    disable();
+
     // Tell the PIC to start the initialization sequence
     core::outB(MASTER_COMMAND, 0x10 | 0x01);
     wait();
@@ -130,8 +142,6 @@ void init() {
     wait();
     core::outB(SLAVE_DATA, 0x01);
     wait();
-
-    clear();
 }
 
 
