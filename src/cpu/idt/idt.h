@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 11:43:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 17:28:54 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 15:52:52 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,8 @@ void _load() {
     constexpr const bool enableInt = true;
     constexpr const bool disableInt = false;
 
-    IDT[(u8)Exception::DivisionError] = _createGateDescriptor((void*)divisionError, disableInt, Ring::Kernel);
-    IDT[(u8)Exception::Breakpoint] = _createGateDescriptor((void*)breakpoint, disableInt, Ring::Kernel);
+    IDT[(u8)Exception::DivisionError] = _createGateDescriptor((void*)divisionError, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::Breakpoint] = _createGateDescriptor((void*)breakpoint, enableInt, Ring::Kernel);
 }
 
 static

@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/13 14:38:13 by etran            ###   ########.fr        #
+#    Updated: 2024/02/14 16:00:21 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,9 +78,9 @@ CFLAGS			:=	-std=c++20 \
 					-fno-rtti \
 					-nostdlib \
 					-nodefaultlibs \
-					-O3 \
 					-mno-red-zone \
 					-mgeneral-regs-only \
+					-O3 \
 					-m32
 
 INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS)) \

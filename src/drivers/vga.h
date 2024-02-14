@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 00:07:31 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 15:02:35 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 
 namespace vga {
 
+/* -------------------------------------------- */
+/*                   VGA PORTS                  */
+/* -------------------------------------------- */
+
 static constexpr const u16 CONTROL_PORT = 0x3D4;
 static constexpr const u16 DATA_PORT = 0x3D5;
 
@@ -24,6 +28,9 @@ static constexpr const u8 HEIGHT = 25;
 
 class Char;
 
+/**
+ * @brief The VGA buffer, located at the RAM address 0xB8000.
+*/
 Char* const  BUFFER = (Char*)0xB8000;
 
 /* -------------------------------------------- */

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 14:54:18 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 17:18:58 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 15:59:54 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 namespace cpu {
 
 # define _DECL_INTERNAL     __attribute__ ((no_caller_saved_registers)) static
-# define _DECL_INTERRUPT    __attribute__ ((interrupt))
+# define _DECL_INTERRUPT    __attribute__ ((interrupt)) static
 
 /**
  * @brief Exception codes: Interrupts triggered by the CPU when an error occurs.
@@ -89,6 +89,7 @@ struct InterruptFrame {
 _DECL_INTERNAL
 void divisionErrorInternal() {
     LOG("division error");
+    core::hlt();
 }
 
 _DECL_INTERRUPT

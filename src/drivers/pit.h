@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   memset.cpp                                         :+:      :+:    :+:   */
+/*   pit.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/08 20:57:23 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 15:55:22 by etran            ###   ########.fr       */
+/*   Created: 2024/02/14 14:47:09 by etran             #+#    #+#             */
+/*   Updated: 2024/02/14 15:01:39 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../types.h"
+#pragma once
 
-namespace lib {
+# include "types.h"
 
-void* memset(void* dest, i32 value, u32 n) noexcept {
-    i32* d = (i32*)dest;
-    for (u32 i = 0; i < n; i++) {
-        d[i] = value;
-    }
-    return dest;
-}
+namespace pit {
 
-} // namespace lib
+/* -------------------------------------------- */
+/*                   PIT PORTS                  */
+/* -------------------------------------------- */
 
-extern "C" void* memset(void *dst, i32 value, u32 n)  {
-    return lib::memset(dst, value, n);
-}
+static constexpr const u16 CHANNEL_0 = 0x40;
+static constexpr const u16 CHANNEL_1 = 0x41;
+static constexpr const u16 CHANNEL_2 = 0x42;
+static constexpr const u16 COMMAND = 0x43;
+
+}  // namespace pit
