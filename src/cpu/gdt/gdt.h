@@ -6,19 +6,15 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 12:25:02 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 17:04:09 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/14 21:00:36 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 # include "types.h"
-# include "debug.h"
-# include "lib.h"
 
 namespace cpu::gdt {
-
-static constexpr const u32 ADDRESS = 0x00000800;
 
 /**
  * @brief The Global Descriptor Table Register.
@@ -46,8 +42,6 @@ enum class Segment: u8 {
     Last = UserStack
 };
 
-static constexpr const u32 SEGMENT_COUNT = enumSize<Segment>();
-
 /**
  * @brief The Segment Descriptor: a packed structure for the GDT.
  * @note The detailed structure is described here: https://wiki.osdev.org/Global_Descriptor_Table#Segment_Descriptor
@@ -68,53 +62,9 @@ enum class SegmentDescriptor: u64 {
 };
 
 /* -------------------------------------------- */
+/*                   FUNCTION                   */
+/* -------------------------------------------- */
 
-/**
- * @brief ASM function to load the GDT.
- */
-extern "C"
-void load_gdt(const GDTR* reg);
-
-/**
- * @brief Loads the Global Descriptor Table.
- */
-static
-void init() {
-    constexpr const SegmentDescriptor gdt[] = {
-        SegmentDescriptor::Null,
-        SegmentDescriptor::KernelCode,
-        SegmentDescriptor::KernelData,
-        SegmentDescriptor::KernelStack,
-        SegmentDescriptor::UserCode,
-        SegmentDescriptor::UserData,
-        SegmentDescriptor::UserStack
-    };
-
-    constexpr u16 GDT_SIZE = SEGMENT_COUNT * sizeof(SegmentDescriptor);
-
-    GDTR gdtr = {
-        .m_limit = GDT_SIZE - 1,
-        .m_base = ADDRESS };
-
-    // Set GDT to ADDRESS
-    lib::memcpy((void*)ADDRESS, gdt, GDT_SIZE);
-
-    load_gdt(&gdtr);
-
-#ifdef _DEBUG
-    // read stack pointer
-    u64 sp;
-    asm volatile ("mov %%esp, %0" : "=m" (sp));
-    LOG_NUM((u32)sp);
-    LOG_C('\n');
-
-    // display stack content (16 first bytes)
-    u8* stack = (u8*)sp;
-    for (u32 i = 0; i < 16; ++i) {
-        LOG_NUM((u32)stack[i]);
-        LOG_C('\n');
-    }
-#endif
-}
+void init();
 
 }  // namespace cpu::gdt

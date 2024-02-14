@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/14 19:38:27 by etran            ###   ########.fr        #
+#    Updated: 2024/02/14 20:59:41 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,10 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(LAYOUT_DIR)/qwerty.cpp \
 					$(UI_DIR)/terminal.cpp \
 					$(UI_DIR)/window_manager.cpp \
-					$(DRIVER_DIR)/vga.cpp
+					$(DRIVER_DIR)/vga.cpp \
+					$(GDT_DIR)/gdt.cpp \
+					$(IDT_DIR)/idt.cpp \
+					$(IDT_DIR)/exception.cpp
 
 SRC_FILES_ASM	:=	boot.s \
 					$(GDT_DIR)/load_gdt.s \
