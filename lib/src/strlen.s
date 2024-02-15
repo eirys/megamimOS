@@ -14,7 +14,7 @@ section .text
 ; eax: the length of string.
 strLen:
 ; put the arguments into registers
-	mov ecx, dword [esp + 4]
+	mov ecx, dword [esp + 4]; the address of the string
 	lea eax, [ecx - 1]
 .loop:
 ; step to the next character

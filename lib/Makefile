@@ -6,7 +6,7 @@
 #    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/14 00:06:32 by jodufour         ###   ########.fr        #
+#    Updated: 2024/02/15 02:22:44 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRC			:=	\
 		memcmp \
 		memcpy \
 		memset \
+		memmov \
 		strcmp \
 		strcpy \
 		strlen \
@@ -42,6 +43,7 @@ TEST_SRC	:=	\
 			main \
 			memcmp \
 			memcpy \
+			memmov \
 			memset \
 			strcmp \
 			strcpy \
@@ -54,6 +56,9 @@ TEST_DEP	:=	$(TEST_OBJ:.o=.d)
 # ----------------- COMPILATION ---------------- #
 AS			:=	$(shell which nasm)
 ASFLAGS		:=	-felf32
+ifeq ($(DEBUG),1)
+ASFLAGS		+=	-g
+endif
 
 CXX			:=	$(shell which c++)
 CXXFLAGS	:=	-c \
@@ -64,13 +69,21 @@ CXXFLAGS	:=	-c \
 				-MMD \
 				-MP \
 				-I$(INC_DIR)
+ifeq ($(DEBUG),1)
+CXXFLAGS	+=	-g \
+				-fsanitize=address
+endif
 
 # ------------------ LINKING ------------------- #
 LINK		:=	$(shell which c++)
 LFLAGS		:=	-m32
+ifeq ($(DEBUG),1)
+LFLAGS		+=	-lasan
+endif
 
 # -------------------- MISC -------------------- #
 ARCHIVER	:=	$(shell which ar) rcs
+MKDIR		:=	$(shell which mkdir) -p
 RM			:=	$(shell which rm) -rf
 
 # ---------------------------------------------- #
@@ -82,39 +95,39 @@ all: $(NAME) $(TEST)
 
 .PHONY: test
 test: $(TEST)
-# echo "Running unit tests..."
-	./$(TEST)
+	@echo 'Running unit tests...'
+	@./$(TEST)
 
 # Create test binary
 $(TEST): $(TEST_OBJ) $(NAME)
-# echo "Linking unit tests..."
-	$(LINK) $(LFLAGS) $^ $(OUTPUT_OPTION)
-# echo "\`$(TEST)\` successfully created."
+	@echo 'Linking unit tests into $(TEST)...'
+	@$(LINK) $(LFLAGS) $^ $(OUTPUT_OPTION)
+	@echo '$(TEST) successfully created.'
 
 # Create library
 $(NAME): $(OBJ)
-# echo "Creating `$@`..."
-	$(ARCHIVER) $@ $^
-# echo "\`$@\` successfully created."
+	@echo 'Creating $@...'
+	@$(ARCHIVER) $@ $^
+	@echo '$@ successfully created.'
 
 # Compile obj files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
-	mkdir -p $(@D)
-# echo "Compiling file $<..."
-	$(AS) $(ASFLAGS) $< $(OUTPUT_OPTION)
+	@$(MKDIR) $(@D)
+	@echo 'Compiling file $<...'
+	@$(AS) $(ASFLAGS) $< $(OUTPUT_OPTION)
 
 -include $(TEST_DEP)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	mkdir -p $(@D)
-# echo "Compiling file $<..."
-	$(CXX) $(CXXFLAGS) $< $(OUTPUT_OPTION)
+	@$(MKDIR) $(@D)
+	@echo "Compiling file $<..."
+	@$(CXX) $(CXXFLAGS) $< $(OUTPUT_OPTION)
 
 
 .PHONY: clean
 clean:
-	${RM} $(OBJ_DIR) $(NAME) $(TEST)
-# echo "Removed object files and $(NAME)."
+	@${RM} $(OBJ_DIR) $(NAME) $(TEST)
+	@echo "Removed object files, $(NAME), and $(TEST)."
 
 .PHONY: fclean
 fclean: clean

@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 17:20:26 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/12 22:05:33 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/14 09:29:54 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static constexpr usize TESTS_LEN = sizeof(TESTS) / sizeof(*TESTS);
 /**
  * @brief Test the lib::strLen function.
  *
- * @return true if the test was passed successfully, false otherwise.
+ * @return `true` if the test was passed successfully, `false` otherwise.
  */
 bool testStrLen(void)
 {

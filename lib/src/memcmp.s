@@ -18,16 +18,21 @@ section .text
 ; - a positive value if the first memory area is greater than the second one.
 ; - a negative value if the first memory area is less than the second one.
 memCmp:
-	mov ecx, [esp + 12] ; the number of bytes to compare
+; put the arguments into registers
+	mov ecx, [esp + 12]; the number of bytes to compare
 ; check if the number of bytes to compare is 0
 	test ecx, ecx
-	jz .return_zero
+	cmovz eax, ecx
+	jz .return
 ; preserve the callee-saved registers
 	push edi
 	push esi
 ; put the arguments into registers
-	mov edi, [esp + 12] ; the address of the first memory area to compare
-	mov esi, [esp + 16] ; the address of the second memory area to compare
+	mov edi, [esp + 12]; the address of the first memory area
+	mov esi, [esp + 16]; the address of the second memory area
+; check if we need to compute the comparison
+	cmp edi, esi
+	je .restore_callee_saved_registers
 .compare_4_bytes:
 ; check if the remaining number of bytes to compare is less than 4
 	cmp ecx, 4
@@ -60,21 +65,22 @@ memCmp:
 .compare_1_byte:
 ; check if the remaining number of bytes to compare is 0
 	test ecx, ecx
-	jz .return
+	jz .calculate_diff
 ; compare the next byte of the two memory areas
 	movzx eax, byte [edi]
 	movzx edx, byte [esi]
 	cmp eax, edx
-	jne .return
+	jne .calculate_diff
+; check if the remaining number of bytes to compare is 1
+	dec ecx
+	jz .calculate_diff
 ; get the next byte of each memory area
 	movzx eax, byte [edi + 1]
 	movzx edx, byte [esi + 1]
-.return:
+.calculate_diff:
 	sub eax, edx
-; restore the callee-saved registers
+.restore_callee_saved_registers:
 	pop esi
 	pop edi
-	ret
-.return_zero:
-	xor eax, eax
+.return:
 	ret

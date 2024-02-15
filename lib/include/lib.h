@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 14:40:29 by etran             #+#    #+#             */
-/*   Updated: 2024/02/11 03:07:34 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/14 20:39:04 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ namespace lib
 
 	extern "C" void *memCpy(void *dst, void const *src, usize n) __attribute__((nonnull));
 	extern "C" void *memSet(void *dst, u8 c, usize n) __attribute__((nonnull));
+	extern "C" void *memMov(void *dst, void const *src, usize n) __attribute__((nonnull));
 
 	extern "C" char *strCpy(char *dst, char const *src) __attribute__((nonnull));
 } // namespace lib

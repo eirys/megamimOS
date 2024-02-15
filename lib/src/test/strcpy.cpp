@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 00:52:31 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/13 08:40:09 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/14 09:29:43 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static constexpr usize TESTS_LEN = sizeof(TESTS) / sizeof(*TESTS);
 /**
  * @brief Test the lib::strCpy function.
  *
- * @return true if the test was passed successfully, false otherwise.
+ * @return `true` if the test was passed successfully, `false` otherwise.
  */
 bool testStrCpy(void)
 {

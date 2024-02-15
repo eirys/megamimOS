@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 07:46:03 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/13 20:53:04 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/14 09:29:24 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ static constexpr usize TESTS_LEN = sizeof(TESTS) / sizeof(Test);
 /**
  * @brief Tests the lib::memSet function.
  *
- * @return true if the test was passed successfully, false otherwise.
+ * @return `true` if the test was passed successfully, `false` otherwise.
  */
 bool testMemSet(void)
 {

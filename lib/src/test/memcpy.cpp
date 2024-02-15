@@ -6,7 +6,7 @@
 /*   By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 21:14:39 by jodufour          #+#    #+#             */
-/*   Updated: 2024/02/13 08:44:16 by jodufour         ###   ########.fr       */
+/*   Updated: 2024/02/14 09:28:27 by jodufour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ static constexpr usize TESTS_LEN = sizeof(TESTS) / sizeof(*TESTS);
 /**
  * @brief Tests the lib::memCpy function.
  *
- * @return true if the test was passed successfully, false otherwise.
+ * @return `true` if the test was passed successfully, `false` otherwise.
  */
 bool testMemCpy(void)
 {
