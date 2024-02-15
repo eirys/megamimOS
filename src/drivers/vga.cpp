@@ -89,7 +89,7 @@ void setBgColor(
 void clearBuffer(Color foreground, Color background) {
     for (u8 i = 0; i < WIDTH; i++) {
         for (u8 j = 0; j < HEIGHT; j++) {
-            putChar(Char::Empty, i, j, fg, bg);
+            putChar(Char::Empty, i, j, foreground, background);
         }
     }
 }
