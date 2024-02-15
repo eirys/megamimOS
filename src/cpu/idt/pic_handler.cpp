@@ -6,7 +6,7 @@
 /*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:17:12 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 14:52:02 by nmathieu         ###   ########.fr       */
+/*   Updated: 2024/02/15 14:05:16 by nmathieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ namespace cpu::idt {
 _DECL_INTERNAL
 void timerInternal() {
     // do stuff
-    LOG(".");
     pic::sendEOI(pic::IRQ::Timer);
 }
 
@@ -40,7 +39,6 @@ void timerInterrupt(InterruptFrame* frame) {
 _DECL_INTERNAL
 void keyboardInternal() {
     // do stuff
-    LOG("Keyborad interrupt\n");
     pic::sendEOI(pic::IRQ::Keyboard);
 }
 
