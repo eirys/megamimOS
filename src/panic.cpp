@@ -16,8 +16,13 @@
 #include "vga.h"
 
 
+/// @brief The current position of the cursor within the VGA buffer used
+/// when the panic function needs to print stuff to the screen.
 static u8 x = 0;
+/// @brief Same shit but this controls the height of the cursor rather than
+/// its horizontal position.
 static u8 y = 0;
+/// @brief The current foreground color. The background is always red.
 static vga::Color fg = vga::Color::Immaculate;
 
 /// @brief Prinst the provided string to the VGA buffer *without using the
@@ -31,7 +36,7 @@ void vgaPanicPrint(char const *msg) noexcept
     {
         if (*msg == '\n')
             x = vga::WIDTH;
-        
+
         if (x == vga::WIDTH)
         {
             x = 0;

@@ -257,7 +257,7 @@ void setBgColor(
     const u8 y,
     const Color bgColor
 );
-void clearBuffer(Color fg = Color::Immaculate, Color bg = Color::Carbon);
+void clearBuffer(Color foreground = Color::Immaculate, Color background = Color::Carbon);
 
 /* ------------------ CURSOR ------------------ */
 
