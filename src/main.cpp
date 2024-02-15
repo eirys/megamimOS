@@ -6,21 +6,24 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 21:24:14 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 01:36:32 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Drivers
 #include "ps2.h"
 #include "vga.h"
-#include "window_manager.h"
-#include "qwerty.h"
-#include "idt.h"
-#include "gdt.h"
 #include "pic.h"
 
-#ifdef _DEBUG
-# include "serial.h"
-#endif
+// UI
+#include "window_manager.h"
+#include "qwerty.h"
+
+// CPU
+#include "idt.h"
+#include "gdt.h"
+
+#include "debug.h"
 
 /* -------------------------------------------- */
 
@@ -37,49 +40,42 @@ void _init() {
     cpu::gdt::init();
     cpu::idt::init();
     pic::init();
-    pic::setMask((pic::IRQMask)~((u8)pic::IRQMask::Keyboard | (u8)pic::IRQMask::Timer));
-    vga::clearBuffer();
-    ps2::readData();
+    vga::init();
+    ps2::init();
 #ifdef _DEBUG
     serial::init();
 #endif
 
     core::sti();
+
+    ui::WindowManager::init();
 }
 
 static
-void _exit(ui::WindowManager& winManager) {
-    winManager.newLine();
-    winManager << (i8*)"Good bye!";
+void _exit() {
+    ui::WindowManager::newLine();
+    *ui::WindowManager::get() << (i8*)"Good bye!";
     vga::disableCursor();
 }
 
 static
-void _panic(ui::WindowManager& winManager) {
-    core::cli();
-    winManager.newLine();
-    winManager << (i8*)"PANIC KERNEL PANIC! ABORTING!";
-    // vga::disableCursor();
-}
-
-static
-void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
+void _handleCommand(const ui::KeyEvent& event) {
     switch (event.m_key) {
         case ui::Key::Enter:
-        case ui::Key::NumpadEnter:  return winManager.prompt();
-        case ui::Key::Backspace:    return event.m_control ? winManager.eraseLine() : winManager.eraseChar();
-        case ui::Key::CursorLeft:   return event.m_control ? winManager.moveCursorToBeginningOfWord() : winManager.moveCursorLeft();
-        case ui::Key::CursorRight:  return event.m_control ? winManager.moveCursorToEndOfWord() : winManager.moveCursorRight();
-        case ui::Key::CursorUp:     return winManager.scrollUp();
-        case ui::Key::CursorDown:   return winManager.scrollDown();
-        case ui::Key::Delete:       return winManager.deleteChar();
-        case ui::Key::Home:         return winManager.moveCursorToBeginning();
-        case ui::Key::End:          return winManager.moveCursorToEnd();
-        case ui::Key::PageUp:       return winManager.scrollPageUp();
-        case ui::Key::PageDown:     return winManager.scrollPageDown();
+        case ui::Key::NumpadEnter:  return ui::WindowManager::handleInput();
+        case ui::Key::Backspace:    return event.m_control ? ui::WindowManager::eraseLine() : ui::WindowManager::eraseChar();
+        case ui::Key::CursorLeft:   return event.m_control ? ui::WindowManager::moveCursorToBeginningOfWord() : ui::WindowManager::moveCursorLeft();
+        case ui::Key::CursorRight:  return event.m_control ? ui::WindowManager::moveCursorToEndOfWord() : ui::WindowManager::moveCursorRight();
+        case ui::Key::CursorUp:     return ui::WindowManager::scrollUp();
+        case ui::Key::CursorDown:   return ui::WindowManager::scrollDown();
+        case ui::Key::Delete:       return ui::WindowManager::deleteChar();
+        case ui::Key::Home:         return ui::WindowManager::moveCursorToBeginning();
+        case ui::Key::End:          return ui::WindowManager::moveCursorToEnd();
+        case ui::Key::PageUp:       return ui::WindowManager::scrollPageUp();
+        case ui::Key::PageDown:     return ui::WindowManager::scrollPageDown();
         case ui::Key::Tab:
             return
-            event.m_control ? (event.m_uppercase ? winManager.switchToPrevious() : winManager.switchToNext()) :
+            event.m_control ? (event.m_uppercase ? ui::WindowManager::switchToPrevious() : ui::WindowManager::switchToNext()) :
             void() /* winManager.completeCommand() */;
 
         default:
@@ -111,27 +107,26 @@ void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
 //         hlt();
 // }
 
-#include "debug.h"
 extern "C"
 void megamimOS_cpp(const MultibootInfo& info) {
+    (void)info;
     _init();
 
-    ui::WindowManager   winManager;
     ui::QwertyLayout    layout;
-
-   vga::enableCursor(0xe, 0xe);
 
     for (;;) {
         ui::KeyEvent event;
         ui::TranslateResult result = layout.translate(ps2::poll(), event);
 
         switch (result) {
-            case ui::TranslateResult::Print:    winManager << event.m_character; break;
-            case ui::TranslateResult::Exit:     return _exit(winManager);
-            case ui::TranslateResult::Command:  _handleCommand(winManager, event); break;
+            case ui::TranslateResult::Print:    *ui::WindowManager::get() << event.m_character; break;
+            case ui::TranslateResult::Exit:     return _exit();
+            case ui::TranslateResult::Command:  _handleCommand(event); break;
+
             case ui::TranslateResult::Invalid:
             case ui::TranslateResult::Ignore:   break;
         }
-        winManager.draw();
+
+        ui::WindowManager::draw();
     }
 }

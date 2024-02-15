@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lib.h                                              :+:      :+:    :+:   */
+/*   memcmp.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/08 14:40:29 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 11:08:54 by etran            ###   ########.fr       */
+/*   Created: 2024/02/14 11:06:57 by etran             #+#    #+#             */
+/*   Updated: 2024/02/14 11:08:38 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
-
-# include "types.h"
+#include "../types.h"
 
 namespace lib {
 
-u32     strlen(const i8* str) noexcept;
-u8*     strcpy(u8* dest, const u8* src) noexcept;
-i32     strcmp(const i8* s1, const i8* s2) noexcept;
+i32 memcmp(const void* s1, const void* s2, u32 n) noexcept {
+    const u8* p1 = (const u8*)s1;
+    const u8* p2 = (const u8*)s2;
 
-void*   memcpy(void* dest, const void* src, u32 n) noexcept;
-void*   memset(void* dest, i32 value, u32 n) noexcept;
-void*   memmove(void *dest, void const *src, u32 n) noexcept;
-i32     memcmp(const void* s1, const void* s2, u32 n) noexcept;
+    for (u32 i = 0; i < n; i++) {
+        if (p1[i] != p2[i]) {
+            return p1[i] - p2[i];
+        }
+    }
+    return 0;
+}
 
 } // namespace lib

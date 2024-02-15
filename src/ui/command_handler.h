@@ -6,69 +6,92 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 00:17:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 00:37:38 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 01:34:47 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-# include "core.h"
-# include "vga.h"
+# include "types.h"
+# include "utils.h"
+
+namespace vga {
+class Char;
+}
 
 namespace ui {
+
+/* -------------------------------------------- */
+/*                     ENUMS                    */
+/* -------------------------------------------- */
+
+enum class CommandResult: u8 {
+    Success = 0,
+    Failure = 1,
+    Exit = 2
+};
+
+enum class Command: u8 {
+    Clear   = 0,
+    Help    = 1,
+    Panic   = 2,
+    Reboot  = 3,
+    Halt    = 4,
+
+    Version = 5,
+    Echo    = 6,
+
+    Empty   = 7,
+    Unknown = 8,
+
+    First = Clear,
+    Last = Echo
+};
 
 class CommandHandler final {
 public:
     /* ---------------------------------------- */
-    /*                   ENUMS                  */
+    /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    enum class Command: u8 {
-        Unknown,
-
-        Clear,
-        Help,
-        Panic,
-        Reboot,
-        Halt,
-
-        Version,
-        Echo,
-        Env,
-
-        First = Unknown,
-        Last = Env
-    };
+    CommandHandler() = default;
+    CommandHandler(CommandHandler&& other) = default;
+    CommandHandler(const CommandHandler& other) = default;
+    CommandHandler& operator=(CommandHandler&& other) = default;
+    CommandHandler& operator=(const CommandHandler& other) = default;
+    ~CommandHandler() = default;
 
     /* ---------------------------------------- */
 
-    void execute(Command cmd) {
-        switch (cmd) {
-            case Command::Clear:
-            case Command::Help:
-            case Command::Panic:
-            case Command::Reboot:
-            case Command::Halt:     return _halt();
-
-            case Command::Unknown:
-            default:                break;
-        }
-    }
+    static Command          parse(const vga::Char* buf, const u32 len);
+    static CommandResult    execute(Command cmd);
 
 private:
     /* ---------------------------------------- */
-    /*                ATTRIBUTES                */
+    /*              STATIC MEMBERS              */
     /* ---------------------------------------- */
 
-    u8              m_cmdLine[vga::WIDTH] = { vga::Char::Empty };
-    u8              m_lineLength = 0U;
+    static constexpr u32    MAX_CMD_LEN = 32;
+    static constexpr u32    COMMAND_COUNT = enumSize<Command>();
+    static constexpr i8     COMMANDS[COMMAND_COUNT][MAX_CMD_LEN] = {
+        "clear",
+        "help",
+        "panic",
+        "reboot",
+        "halt",
+
+        "version",
+        "echo",
+    };
 
     /* ---------------------------------------- */
+    /*                  METHODS                 */
+    /* ---------------------------------------- */
 
-    void _halt() const {
-        while (true)
-            core::hlt();
-    }
+    static u32              _getWordLen(const vga::Char* buf, const u32 len);
+
+    static void             _halt();
+    static void             _panic();
 
 }; // class CommandHandler
 

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 19:37:46 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 01:41:50 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,22 +215,18 @@ public:
     Char& operator=(const Char& other) = default;
     ~Char() = default;
 
-    inline
-    explicit operator u8() const {
-        return m_inner;
-    }
+    explicit operator u8() const;
 
     /* ---------------------------------------- */
 
-    inline
-    bool operator==(const Char& other) const {
-        return m_inner == other.m_inner;
-    }
+    bool    operator==(const Char& other) const;
+    bool    operator!=(const Char& other) const;
 
-    inline
-    bool operator!=(const Char& other) const {
-        return m_inner != other.m_inner;
-    }
+    /* ---------------------------------------- */
+
+    bool    isAlpha() const;
+    bool    isNum() const;
+    bool    isAlphanum() const;
 
 private:
     /* ---------------------------------------- */
@@ -243,6 +239,10 @@ private:
 
 /* -------------------------------------------- */
 /*                   FUNCTIONS                  */
+/* -------------------------------------------- */
+
+void init();
+
 /* -------------------------------------------- */
 
 void putChar(
@@ -260,7 +260,6 @@ void clearBuffer(Color color = Color::Immaculate);
 
 /* ------------------ CURSOR ------------------ */
 
-void enableCursor(u8 cursorStart, u8 cursorEnd);
 void disableCursor();
 void setCursorPos(u8 x, u8 y);
 

@@ -6,13 +6,64 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:36:28 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 19:38:46 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 01:42:03 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vga.h"
 
 namespace vga {
+
+/* -------------------------------------------- */
+/*                     CHAR                     */
+/* -------------------------------------------- */
+
+Char::operator u8() const {
+    return m_inner;
+}
+
+/* -------------------------------------------- */
+
+bool Char::operator==(const Char& other) const {
+    return m_inner == other.m_inner;
+}
+
+bool Char::operator!=(const Char& other) const {
+    return m_inner != other.m_inner;
+}
+
+bool Char::isAlpha() const {
+    return  (m_inner >= (u8)'A' && m_inner <= (u8)'Z') ||
+            (m_inner >= (u8)'a' && m_inner <= (u8)'z');
+}
+
+bool Char::isNum() const {
+    return m_inner >= (u8)'0' && m_inner <= (u8)'9';
+}
+
+bool Char::isAlphanum() const {
+    return isAlpha() || isNum();
+}
+
+/* -------------------------------------------- */
+/*                   FUNCTIONS                  */
+/* -------------------------------------------- */
+
+static
+void _enableCursor(u8 cursorStart, u8 cursorEnd) {
+	core::outB(CONTROL_PORT, 0x0A);
+	core::outB(DATA_PORT, (core::inB(DATA_PORT) & 0xC0) | cursorStart);
+
+	core::outB(CONTROL_PORT, 0x0B);
+	core::outB(DATA_PORT, (core::inB(DATA_PORT) & 0xE0) | cursorEnd);
+}
+
+void init() {
+    clearBuffer();
+    _enableCursor(0xe, 0xe);
+}
+
+/* -------------------------------------------- */
 
 void putChar(
     const Char character,
@@ -41,14 +92,6 @@ void clearBuffer(Color color) {
 }
 
 /* ------------------ CURSOR ------------------ */
-
-void enableCursor(u8 cursorStart, u8 cursorEnd) {
-	core::outB(CONTROL_PORT, 0x0A);
-	core::outB(DATA_PORT, (core::inB(DATA_PORT) & 0xC0) | cursorStart);
-
-	core::outB(CONTROL_PORT, 0x0B);
-	core::outB(DATA_PORT, (core::inB(DATA_PORT) & 0xE0) | cursorEnd);
-}
 
 void disableCursor() {
 	core::outB(CONTROL_PORT, 0x0A);

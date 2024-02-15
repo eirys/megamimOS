@@ -6,13 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 19:25:27 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 00:36:14 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 # include "vga.h"
+# include "command_handler.h"
 
 namespace ui {
 
@@ -35,39 +36,41 @@ public:
 
     /* ---------------------------------------- */
 
-    void    setColor(const vga::Color color);
-    void    init();
-    void    prompt();
+    void        init(const vga::Color color);
+    void        prompt();
+    void        draw() const;
+    Command     getCommand() const;
 
     /* ---------------------------------------- */
 
-    void    putString(const i8* str);
-    void    putNbr(u32 nbr);
-    void    putChar(const vga::Char character);
+    void        putString(const i8* str);
+    void        putNbr(u32 nbr);
+    void        putChar(const vga::Char character);
 
-    /* ---------------------------------------- */
+    /* ------------ ADVANCED INPUT ------------ */
 
-    void    insertNewline();
-    void    eraseChar();
-    void    deleteChar();
-    void    eraseLine();
+    void        insertNewline();
+    void        resetInner();
+    void        deleteChar();
+    void        eraseChar();
+    void        eraseLine();
 
-    /* ---------------------------------------- */
+    /* ---------------- SCROLL ---------------- */
 
-    void    focusOnCommandLine();
-    void    focusOnTopOfBuffer();
-    void    offsetDownward();
-    void    offsetUpward();
-    void    moveCursorLeftward();
-    void    moveCursorRightward();
-    void    moveCursorToStart();
-    void    moveCursorToEnd();
-    void    moveCursorToBeginningOfWord();
-    void    moveCursorToEndOfWord();
+    void        focusOnCommandLine();
+    void        focusOnTopOfBuffer();
+    void        offsetDownward();
+    void        offsetUpward();
+    void        moveCursorLeftward();
+    void        moveCursorRightward();
+    void        moveCursorToStart();
+    void        moveCursorToEnd();
+    void        moveCursorToBeginningOfWord();
+    void        moveCursorToEndOfWord();
 
-    /* ---------------------------------------- */
+    /* ---------------- GETTER ---------------- */
 
-    void    draw() const;
+    vga::Color getColor() const;
 
 private:
     /* ---------------------------------------- */

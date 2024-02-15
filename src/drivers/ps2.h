@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:40:56 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 00:07:31 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/13 18:43:39 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,15 @@ u8 readStatus() {
 static inline
 u8 readData() {
     return core::inB(DATA_PORT);
+}
+
+
+/**
+ * @brief Empty ps2 output buffer.
+ */
+static inline
+void init() {
+    readData();
 }
 
 /**

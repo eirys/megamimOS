@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 21:01:33 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 21:15:37 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 00:55:28 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,12 @@ void setMask(IRQMask irqMask) {
 
 /* -------------------------------------------- */
 
+static
+void _enableIRQs() {
+    constexpr const u8 maskInv = ~((u8)IRQMask::Keyboard | (u8)IRQMask::Timer);
+    setMask((pic::IRQMask)maskInv);
+}
+
 /**
  * @brief TODO
  * @note https://pdos.csail.mit.edu/6.828/2005/readings/hardware/8259A.pdf
@@ -92,6 +98,8 @@ void init() {
     _wait();
     core::outB(SLAVE_DATA, 0x01);
     _wait();
+
+    _enableIRQs();
 }
 
 } // namespace pic

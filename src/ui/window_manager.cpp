@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:24:57 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 19:34:55 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 01:09:03 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,43 @@
 namespace ui {
 
 /* -------------------------------------------- */
+/*                STATIC MEMBERS                */
+/* -------------------------------------------- */
+
+Terminal    WindowManager::m_terminals[TERMINAL_COUNT];
+u8          WindowManager::m_currentTerminal;
+
+/* -------------------------------------------- */
 /*                    PUBLIC                    */
 /* -------------------------------------------- */
 
-WindowManager::WindowManager() {
+WindowManager* WindowManager::get() {
+    static WindowManager wm;
+    return &wm;
+}
+
+void WindowManager::init() {
     for (u8 id = 0; id < TERMINAL_COUNT; id++) {
         const u8 colorRaw = (u8)id + (u8)vga::Color::Indigo;
-        m_terminals[id].setColor((vga::Color)colorRaw);
-        m_terminals[id].init();
+        m_terminals[id].init((vga::Color)colorRaw);
     }
     currentTerminal().draw();
     _putTitle();
 }
 
-/* -------------------------------------------- */
-
-void WindowManager::draw() const {
+void WindowManager::draw() {
     currentTerminal().draw();
+}
+
+void    WindowManager::handleInput() {
+    draw();
+    return;
+
+    Command res = currentTerminal().getCommand();
+    switch (res) {
+        case Command::Clear:    currentTerminal().resetInner(); break;
+        default:                break;
+    }
 }
 
 /* -------------------------------------------- */
@@ -51,10 +71,6 @@ void WindowManager::switchToPrevious() {
 }
 
 Terminal& WindowManager::currentTerminal() {
-    return m_terminals[m_currentTerminal];
-}
-
-const Terminal& WindowManager::currentTerminal() const {
     return m_terminals[m_currentTerminal];
 }
 
@@ -138,17 +154,22 @@ void WindowManager::moveCursorToEndOfWord() {
     currentTerminal().moveCursorToEndOfWord();
 }
 
+void WindowManager::clearScreen() {
+    currentTerminal().resetInner();
+    _putTitle();
+}
+
 /* -------------------------------------------- */
 /*                    PRIVATE                   */
 /* -------------------------------------------- */
 
-void WindowManager::_putStr(const u8 begin, const i8* str) const {
+void WindowManager::_putStr(const u8 begin, const i8* str) {
     for (u8 i = begin; str[i] != 0; ++i) {
         vga::putChar(vga::Char(str[i]), i, 0, vga::Color::Carbon);
     }
 }
 
-void WindowManager::_putNbr(const u8 begin, u32 nbr) const {
+void WindowManager::_putNbr(const u8 begin, u32 nbr) {
     i8  buf[32];
     u32 cur = 32;
 
@@ -167,7 +188,7 @@ void WindowManager::_putNbr(const u8 begin, u32 nbr) const {
     }
 }
 
-void WindowManager::_putTitle() const {
+void WindowManager::_putTitle() {
     _putStr(0, KERNEL_NAME);
     vga::putChar(vga::Char::Heart, 11, 0, vga::Color::Crimson);
     vga::putChar(vga::Char::Hash, 13, 0, vga::Color::Carbon);

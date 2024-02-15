@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:17:38 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 19:25:32 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 00:34:45 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,8 @@ namespace ui {
 /*                    PUBLIC                    */
 /* -------------------------------------------- */
 
-void Terminal::setColor(const vga::Color color) {
+void Terminal::init(const vga::Color color) {
     m_color = color;
-}
-
-void Terminal::init() {
     vga::clearBuffer(m_color);
     prompt();
 }
@@ -50,6 +47,11 @@ void Terminal::draw() const {
         vga::setCursorPos(m_cursor, SCREEN_HEIGHT);
     else
         vga::setCursorPos(vga::WIDTH, vga::HEIGHT);
+}
+
+Command Terminal::getCommand() const {
+    const vga::Char*    cmdLine = m_data + (vga::WIDTH * (TERMINAL_HEIGHT - 1)) + LINE_BEGIN;
+    return CommandHandler::parse(cmdLine, m_lineLength - LINE_BEGIN);
 }
 
 /* -------------------------------------------- */
@@ -108,7 +110,7 @@ void Terminal::putChar(const vga::Char character) {
     }
 }
 
-/* -------------------------------------------- */
+/* -------------- ADVANCED INPUT -------------- */
 
 void Terminal::insertNewline() {
     m_isPrompt = false;
@@ -118,6 +120,24 @@ void Terminal::insertNewline() {
 
     m_cursor = 0U;
     m_lineLength = 0U;
+}
+
+void Terminal::resetInner() {
+    m_cursor = 0U;
+    lib::memset(m_data, (u8)vga::Char::Empty, vga::WIDTH * TERMINAL_HEIGHT);
+    vga::clearBuffer(m_color);
+    prompt();
+}
+
+void Terminal::deleteChar() {
+    focusOnCommandLine();
+
+    if (m_cursor == m_lineLength) {
+        return;
+    }
+
+    _offsetLineByOneToLeft();
+    m_lineLength -= 1;
 }
 
 void Terminal::eraseChar() {
@@ -133,24 +153,13 @@ void Terminal::eraseChar() {
     m_lineLength -= 1;
 }
 
-void Terminal::deleteChar() {
-    focusOnCommandLine();
-
-    if (m_cursor == m_lineLength) {
-        return;
-    }
-
-    _offsetLineByOneToLeft();
-    m_lineLength -= 1;
-}
-
 void Terminal::eraseLine() {
     while (m_cursor != (m_isPrompt ? LINE_BEGIN : 0)) {
         eraseChar();
     }
 }
 
-/* -------------------------------------------- */
+/* ------------------ SCROLL ------------------ */
 
 void Terminal::focusOnCommandLine() {
     m_scrollAmount = 0U;
@@ -226,6 +235,12 @@ void Terminal::moveCursorToEndOfWord() {
             && m_cursor < end) {
         m_cursor += 1;
     }
+}
+
+/* ------------------ GETTER ------------------ */
+
+vga::Color Terminal::getColor() const {
+    return m_color;
 }
 
 /* -------------------------------------------- */

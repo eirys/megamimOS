@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/15 00:14:06 by etran            ###   ########.fr        #
+#    Updated: 2024/02/15 01:47:21 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ LIB_DIR			:=	lib
 
 CORE_DIR		:=	core
 DRIVER_DIR		:=	drivers
+
 UI_DIR			:=	ui
 LAYOUT_DIR		:=	$(UI_DIR)/layout
 
@@ -41,7 +42,8 @@ SUBDIRS			:=	. \
 					$(UI_DIR) \
 					$(LAYOUT_DIR) \
 					$(GDT_DIR) \
-					$(IDT_DIR)
+					$(IDT_DIR) \
+					$(CPU_DIR)
 
 OBJ_SUBDIRS		:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
@@ -52,10 +54,12 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(LAYOUT_DIR)/qwerty.cpp \
 					$(UI_DIR)/terminal.cpp \
 					$(UI_DIR)/window_manager.cpp \
+					$(UI_DIR)/command_handler.cpp \
 					$(DRIVER_DIR)/vga.cpp \
 					$(DRIVER_DIR)/pic.cpp \
 					$(DRIVER_DIR)/serial.cpp \
 					$(GDT_DIR)/gdt.cpp \
+					$(IDT_DIR)/pic_handler.cpp \
 					$(IDT_DIR)/idt.cpp \
 					$(IDT_DIR)/exception.cpp
 
@@ -75,11 +79,15 @@ ASM				:=	nasm
 ASFLAGS			:=	-felf32
 
 CXX				:=	c++
-MACROS			:=	KERNEL_NAME=\"$(NAME)\"
+MACROS			:=	KERNEL_NAME=\"$(NAME)\" \
+					_DEBUG
 
 CFLAGS			:=	-std=c++20 \
 					-MMD \
 					-MP \
+					-Wall \
+					-Wextra \
+					-Werror \
 					-fno-builtin \
 					-fno-exceptions \
 					-fno-stack-protector \
@@ -156,7 +164,7 @@ run-grub: all
 
 .PHONY: clean
 clean:
-	@echo "Removing objects."
+	@echo "Removing $(NAME) objects."
 	@$(RM) $(OBJ_DIR)
 	@echo "Removing $(ISO)".
 	@$(RM) $(ISO)

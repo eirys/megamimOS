@@ -6,14 +6,13 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 19:34:37 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 01:37:27 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 # include "terminal.h"
-# include "vga.h"
 
 namespace ui {
 
@@ -22,8 +21,6 @@ public:
     /* ---------------------------------------- */
     /*                  METHODS                 */
     /* ---------------------------------------- */
-
-    WindowManager();
 
     ~WindowManager() = default;
 
@@ -34,47 +31,45 @@ public:
 
     /* ---------------------------------------- */
 
-    void            draw() const;
+    static WindowManager*   get();
+
+    static void         init();
+    static void         draw();
+    static void         handleInput();
 
     /* ---------------------------------------- */
 
-    void            switchToNext();
-    void            switchToPrevious();
+    static void         switchToNext();
+    static void         switchToPrevious();
 
-    Terminal&       currentTerminal();
-    const Terminal& currentTerminal() const;
-
-    /* ---------------------------------------- */
-
-    void handleInput() {
-        // CommandHandler command;
-    }
+    static Terminal&    currentTerminal();
 
     /* ---------------------------------------- */
 
-    void            write(const i8* str);
-    void            write(const vga::Char character);
+    static void         write(const i8* str);
+    static void         write(const vga::Char character);
 
     /* ---------------------------------------- */
 
-    void            eraseChar();
-    void            eraseLine();
-    void            deleteChar();
-    void            newLine();
-    void            prompt();
+    static void         eraseChar();
+    static void         eraseLine();
+    static void         deleteChar();
+    static void         newLine();
+    static void         prompt();
 
     /* ---------------------------------------- */
 
-    void            scrollUp();
-    void            scrollDown();
-    void            moveCursorLeft();
-    void            moveCursorRight();
-    void            moveCursorToBeginning();
-    void            moveCursorToEnd();
-    void            scrollPageDown();
-    void            scrollPageUp();
-    void            moveCursorToBeginningOfWord();
-    void            moveCursorToEndOfWord();
+    static void         scrollUp();
+    static void         scrollDown();
+    static void         moveCursorLeft();
+    static void         moveCursorRight();
+    static void         moveCursorToBeginning();
+    static void         moveCursorToEnd();
+    static void         scrollPageDown();
+    static void         scrollPageUp();
+    static void         moveCursorToBeginningOfWord();
+    static void         moveCursorToEndOfWord();
+    static void         clearScreen();
 
 private:
     /* ---------------------------------------- */
@@ -83,20 +78,20 @@ private:
 
     static constexpr u8 TERMINAL_COUNT = 5U;
 
-    /* ---------------------------------------- */
-    /*                ATTRIBUTES                */
-    /* ---------------------------------------- */
-
-    Terminal    m_terminals[TERMINAL_COUNT];
-    u8          m_currentTerminal = 0U;
+    static Terminal    m_terminals[TERMINAL_COUNT];
+    static u8          m_currentTerminal;
 
     /* ---------------------------------------- */
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    void            _putStr(const u8 begin, const i8* str) const;
-    void            _putNbr(const u8 begin, u32 nbr) const;
-    void            _putTitle() const;
+    WindowManager() = default;
+
+    /* ---------------------------------------- */
+
+    static void         _putStr(const u8 begin, const i8* str);
+    static void         _putNbr(const u8 begin, u32 nbr);
+    static void         _putTitle();
 
 }; // class WindowManager
 

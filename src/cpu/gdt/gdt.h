@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 12:25:02 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 21:00:36 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 01:02:41 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ struct GDTR {
  * For now, we only have kernel and user segments.
  */
 enum class Segment: u8 {
-    Null                = 0,
-    KernelCode          = 1,
-    KernelData          = 2,
-    KernelStack         = 3,
-    UserCode            = 4,
-    UserData            = 5,
-    UserStack           = 6,
+    Null        = 0,
+    KernelCode  = 1,
+    KernelData  = 2,
+    KernelStack = 3,
+    UserCode    = 4,
+    UserData    = 5,
+    UserStack   = 6,
 
     First = Null,
     Last = UserStack

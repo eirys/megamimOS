@@ -31,7 +31,9 @@
         "tuple": "cpp",
         "array": "cpp",
         "type_traits": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "memory": "cpp",
+        "random": "cpp"
     },
     "editor.useTabStops": true,
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
