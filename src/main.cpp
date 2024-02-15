@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 17:52:44 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 19:14:01 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,10 @@ static
 void _handleCommand() {
     const ui::Command cmd = ui::WindowManager::getCommand();
 
-    ui::WindowManager::newLine();
-    ui::CommandHandler::execute(cmd);
-
+    if (cmd != ui::Command::Empty) {
+        ui::WindowManager::newLine();
+        ui::CommandHandler::execute(cmd);
+    }
     ui::WindowManager::prompt();
 }
 
@@ -87,7 +88,7 @@ void _handleInput(const ui::KeyEvent& event) {
             event.m_control ? (event.m_uppercase ? ui::WindowManager::switchToPrevious() : ui::WindowManager::switchToNext()) :
             void() /* winManager.completeCommand() */;
 
-        case ui::Key::Escape:
+        case ui::Key::Escape:       break;
         default:                    *ui::WindowManager::get() << event.m_character; break;
     }
 }

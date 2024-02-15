@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+         #
+#    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/15 14:52:47 by nmathieu         ###   ########.fr        #
+#    Updated: 2024/02/15 19:27:52 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -115,7 +115,6 @@ DEFINES			:=	$(addprefix -D,$(MACROS))
 
 LD				?=  ld
 LD_SCRIPT		:=	$(CONFIG_DIR)/megamimOS.ld
-LD_LIBS			:=	$(LIB_DIR)/libmegamim.a
 
 LFLAGS			:=	-T$(LD_SCRIPT)
 
@@ -143,7 +142,7 @@ $(LD_LIBS):
 # Compile kernel
 $(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 	@echo "Linking file $(NAME)..."
-	@$(LD) $(LFLAGS) $(OBJ_CPP) $(OBJ_ASM) -o $(NAME) $(LD_LIBS)
+	@$(LD) $(LFLAGS) $(OBJ_CPP) $(OBJ_ASM) -o $(NAME)
 	@echo "\`$(NAME)\` successfully created."
 
 # Compile obj files (cpp)

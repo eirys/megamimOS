@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 00:36:14 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 18:43:55 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ private:
 
     u8              m_cursor = 0U;
     u8              m_lineLength = LINE_BEGIN;
-    bool            m_isPrompt = true;
+    bool            m_isPrompt = false;
 
     /* ---------------------------------------- */
     /*                  METHODS                 */

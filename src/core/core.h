@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:34:43 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 17:35:29 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 19:28:41 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,6 @@ void sti() {
 static inline
 void hlt() {
     asm volatile ("hlt");
-}
-
-// TODO Check
-static inline
-void callException(const u8 e) {
-    // call int with e as parameter
-    asm volatile ("int %0" : : "i" (e));
 }
 
 } // namespace core

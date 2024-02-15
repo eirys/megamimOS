@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 00:17:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 17:43:41 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 19:10:46 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,17 @@ namespace ui {
 
 enum class Command: u8 {
     Clear   = 0,
-    Help    = 1,
-    Panic   = 2,
-    Reboot  = 3,
-    Halt    = 4,
+    Help,
+    Panic,
+    Reboot,
+    Halt,
+    Version,
 
-    Version = 5,
-    Echo    = 6,
-
-    Empty   = 7,
-    Unknown = 8,
+    Empty,
+    Unknown,
 
     First = Clear,
-    Last = Echo
+    Last = Version
 };
 
 class CommandHandler final {
@@ -67,15 +65,13 @@ private:
 
     static constexpr u32    MAX_CMD_LEN = 32;
     static constexpr u32    COMMAND_COUNT = enumSize<Command>();
-    static constexpr i8     COMMANDS[COMMAND_COUNT][MAX_CMD_LEN] = {
+    static constexpr i8     COMMANDS_NAME[COMMAND_COUNT][MAX_CMD_LEN] = {
         "clear",
         "help",
         "panic",
         "reboot",
         "halt",
-
         "version",
-        "echo",
     };
 
     /* ---------------------------------------- */
@@ -89,8 +85,9 @@ private:
     static void             _reboot();
     static void             _panic();
     static void             _halt();
+    static void             _version();
 
-    // static void             _echo(const vga::Char* buf, const u32 len);
+    static void            _unknown();
 
 }; // class CommandHandler
 

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 01:41:50 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 18:06:37 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,7 +257,9 @@ void setBgColor(
     const u8 y,
     const Color bgColor
 );
-void clearBuffer(Color foreground = Color::Immaculate, Color background = Color::Carbon);
+void clearBuffer(
+    const Color fontColor = Color::Immaculate,
+    const Color bgColor = Color::Carbon);
 
 /* ------------------ CURSOR ------------------ */
 

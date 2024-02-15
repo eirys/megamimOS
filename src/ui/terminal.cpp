@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:17:38 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 00:34:45 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 18:55:24 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,19 @@ void Terminal::insertNewline() {
 }
 
 void Terminal::resetInner() {
+
+    m_scrollAmount = 0U;
     m_cursor = 0U;
-    lib::memset(m_data, (u8)vga::Char::Empty, vga::WIDTH * TERMINAL_HEIGHT);
-    vga::clearBuffer(m_color);
-    prompt();
+    m_lineLength = 0U;
+    m_isPrompt = false;
+
+    // for (u32 i = 0; i < vga::WIDTH * TERMINAL_HEIGHT; i++) {
+    //     m_data[i] = (u8)vga::Char::Empty;
+    // }
+    lib::memset(m_data, (u8)vga::Char::Empty, vga::WIDTH * TERMINAL_HEIGHT - 1);
+
+    vga::clearBuffer(vga::Color::Barbie);
+    // focusOnCommandLine();
 }
 
 void Terminal::deleteChar() {

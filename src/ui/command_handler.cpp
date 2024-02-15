@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:24:31 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 17:45:54 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 19:23:36 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,11 @@ namespace ui {
 /* -------------------------------------------- */
 
 Command  CommandHandler::parse(const vga::Char* buf, const u32 len) {
-    if (len == 0)
+    if (_getWordLen(buf, len) == 0)
         return Command::Empty;
 
-    const u32 wordLen = _getWordLen(buf, len);
-
     for (u8 cmdIndex = 0; cmdIndex < COMMAND_COUNT; cmdIndex++) {
-        if (lib::memcmp(buf, COMMANDS[cmdIndex], wordLen) == 0)
+        if (lib::memcmp(buf, COMMANDS_NAME[cmdIndex], lib::strlen(COMMANDS_NAME[cmdIndex])) == 0)
             return (Command)cmdIndex;
     }
 
@@ -41,17 +39,12 @@ Command  CommandHandler::parse(const vga::Char* buf, const u32 len) {
 void CommandHandler::execute(Command cmd) {
     switch (cmd) {
         case Command::Clear:    _clear(); break;
+        case Command::Help:     _help(); break;
+        case Command::Reboot:   _reboot(); break;
         case Command::Panic:    _panic(); break;
         case Command::Halt:     _halt(); break;
-        case Command::Reboot:   _reboot(); break;
-
-        case Command::Unknown:
-        // TODO: indication
-        case Command::Help:     _help(); break;
-
-        // TODO
-        case Command::Version:
-        case Command::Echo:
+        case Command::Version:  _version(); break;
+        case Command::Unknown:  _unknown(); break;
         case Command::Empty:
         default:
             break;
@@ -61,7 +54,6 @@ void CommandHandler::execute(Command cmd) {
 /* -------------------------------------------- */
 /*                    PRIVATE                   */
 /* -------------------------------------------- */
-
 
 u32 CommandHandler::_getWordLen(const vga::Char* buf, const u32 len) {
     u32 wordLen = 0;
@@ -77,12 +69,19 @@ void CommandHandler::_clear() {
 }
 
 void CommandHandler::_help() {
-    WindowManager::currentTerminal() << (i8*)"Available commands:";
+    WindowManager::write("Available commands:");
     WindowManager::newLine();
-    for (u8 cmdIndex = (u8)Command::First; cmdIndex <= (u8)Command::Last; cmdIndex++) {
-        WindowManager::currentTerminal() << COMMANDS[cmdIndex];
-        WindowManager::newLine();
+    for (u8 cmdIndex = (u8)Command::First; cmdIndex < COMMAND_COUNT; cmdIndex++) {
+        WindowManager::write(' ');
+        WindowManager::write(COMMANDS_NAME[cmdIndex]);
+        if (cmdIndex != (u8)Command::Last)
+            WindowManager::newLine();
     }
+}
+
+void CommandHandler::_panic() {
+    ui::WindowManager::newLine();
+    beginKernelPanic("Explicit panic.");
 }
 
 void CommandHandler::_halt() {
@@ -90,13 +89,19 @@ void CommandHandler::_halt() {
         core::hlt();
 }
 
-void CommandHandler::_panic() {
-    beginKernelPanic("Explicit panic.");
-}
-
 void CommandHandler::_reboot() {
     constexpr const u8 RESTART = 0x0E;
     core::outB(0xCF9, RESTART);
+}
+
+void CommandHandler::_version() {
+    WindowManager::write("KFS pre-alpha 0.0.1 (jk just a school project lol)");
+}
+
+/* -------------------------------------------- */
+
+void CommandHandler::_unknown() {
+    WindowManager::write("Unknown command. Type 'help' for a list of available commands.");
 }
 
 } // namespace ui

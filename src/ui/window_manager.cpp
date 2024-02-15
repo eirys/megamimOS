@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:24:57 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 17:23:05 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 19:27:14 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,7 @@ void WindowManager::draw() {
 }
 
 Command WindowManager::getCommand() {
-    // draw();
-    // return;
-
     return currentTerminal().getCommand();
-    // switch (res) {
-    //     case Command::Clear:    currentTerminal().resetInner(); break;
-    //     default:                break;
-    // }
 }
 
 /* -------------------------------------------- */
@@ -191,10 +184,11 @@ void WindowManager::_putNbr(u8 x, u8 y, u32 nbr) {
 }
 
 void WindowManager::_putTitle() {
+    static constexpr u32 KERNEL_NAME_LEN = sizeof(KERNEL_NAME) - 1;
     _putStr(0, 0, KERNEL_NAME);
-    vga::putChar(vga::Char::Heart, 11, 0, vga::Color::Crimson);
-    vga::putChar(vga::Char::Hash, 13, 0, vga::Color::Carbon);
-    _putNbr(14, 0, (u32)m_currentTerminal);
+    vga::putChar(vga::Char::Heart, KERNEL_NAME_LEN + 1, 0, vga::Color::Crimson);
+    vga::putChar(vga::Char::Hash, KERNEL_NAME_LEN + 3, 0, vga::Color::Carbon);
+    _putNbr(KERNEL_NAME_LEN + 4, 0, (u32)m_currentTerminal);
 
     for (u8 i = 0; i < vga::WIDTH; ++i) {
         vga::setBgColor(i, 0, vga::Color::Cloud);
