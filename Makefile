@@ -34,6 +34,7 @@ CPU_DIR			:=	cpu
 IDT_DIR			:=	$(CPU_DIR)/idt
 GDT_DIR			:=	$(CPU_DIR)/gdt
 LIB_DIR			:=	lib
+STATE_DIR		:=	state
 
 # ---------------- SUB DIRECTORIES ------------- #
 SUBDIRS			:=	. \
@@ -44,7 +45,8 @@ SUBDIRS			:=	. \
 					$(GDT_DIR) \
 					$(IDT_DIR) \
 					$(CPU_DIR) \
-					$(LIB_DIR)
+					$(LIB_DIR) \
+					$(STATE_DIR)
 
 OBJ_SUBDIRS		:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
@@ -71,7 +73,8 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(LIB_DIR)/memmove.cpp \
 					$(LIB_DIR)/strlen.cpp \
 					$(LIB_DIR)/strcpy.cpp \
-					$(LIB_DIR)/strcmp.cpp
+					$(LIB_DIR)/strcmp.cpp \
+					$(STATE_DIR)/signal.cpp
 
 SRC_FILES_ASM	:=	boot.s \
 					$(GDT_DIR)/load_gdt.s \

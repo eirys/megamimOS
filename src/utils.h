@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include "types.h"
+
 #define STR(X) #X
 
 template <class Enum>

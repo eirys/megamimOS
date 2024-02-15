@@ -32,12 +32,13 @@ enum class Command: u8 {
     Reboot,
     Halt,
     Version,
+    SendSignal,
 
     Empty,
     Unknown,
 
     First = Clear,
-    Last = Version
+    Last = SendSignal
 };
 
 class CommandHandler final {
@@ -72,6 +73,7 @@ private:
         "reboot",
         "halt",
         "version",
+        "sendSignal",
     };
 
     /* ---------------------------------------- */
@@ -86,8 +88,9 @@ private:
     static void             _panic();
     static void             _halt();
     static void             _version();
+    static void             _sendSignal();
 
-    static void            _unknown();
+    static void             _unknown();
 
 }; // class CommandHandler
 
