@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 01:36:32 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 14:55:32 by nmathieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "ps2.h"
 #include "vga.h"
 #include "pic.h"
+#include "pit.h"
 
 // UI
 #include "window_manager.h"
@@ -40,6 +41,7 @@ void _init() {
     cpu::gdt::init();
     cpu::idt::init();
     pic::init();
+    pit::init(100); // 100Hz
     vga::init();
     ps2::init();
 #ifdef _DEBUG
