@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 13:13:09 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 19:35:13 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 17:49:32 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,9 @@
 namespace ui {
 
 enum class Action: u8 {
-    Released    = 0,
-    Pressed     = 1,
-    Repeat      = 2, // Not used
-
-    First       = Released,
-    Last        = Repeat
+    Released,
+    Pressed,
+    Repeat
 };
 
 /**
@@ -33,13 +30,13 @@ enum class Action: u8 {
  * Used to store the state of a key and the translater character it represents.
 */
 struct KeyEvent {
-    Action      m_action;
-    Key         m_key;
-    vga::Char   m_character;
+    Key         m_key       = Key::Unknown;
+    Action      m_action    = Action::Released;
+    vga::Char   m_character = vga::Char::Empty;
 
-    bool        m_uppercase;
-    bool        m_control;
-    bool        m_alt;
+    bool        m_uppercase = false;
+    bool        m_control   = false;
+    bool        m_alt       = false;
 };
 
 /**

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:44:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 01:03:56 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 17:50:40 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ private:
 
     void    _setMod(const Modifier mod, const bool pressed);
     void    _setLock(const Modifier mod, const bool pressed);
-    bool    _setModifiers(const KeyEvent& out, const bool isExtended);
+    bool    _setModifiers(
+        const KeyEvent& out,
+        const bool isExtended);
 
 }; // class QwertyLayout
 

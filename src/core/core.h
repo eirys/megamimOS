@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:34:43 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 18:45:17 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 17:35:29 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void hlt() {
     asm volatile ("hlt");
 }
 
+// TODO Check
 static inline
 void callException(const u8 e) {
     // call int with e as parameter

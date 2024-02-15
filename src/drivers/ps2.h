@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:40:56 by etran             #+#    #+#             */
-/*   Updated: 2024/02/13 18:43:39 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 17:31:23 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,16 +96,6 @@ u8 poll() {
         core::pause();
     }
     return readData();
-}
-
-/**
- * @brief Tests if the keyboard LED is on.
-*/
-static inline
-bool isLedOn(const u8 led_mask) {
-    core::outB(COMMAND_REGISTER, 0xED);
-    core::outB(DATA_PORT, led_mask);
-    return readData() == 0xFA;
 }
 
 } // namespace ps2

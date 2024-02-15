@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window_manager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:24:57 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 14:19:59 by nmathieu         ###   ########.fr       */
+/*   Updated: 2024/02/15 17:23:05 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,15 @@ void WindowManager::draw() {
     currentTerminal().draw();
 }
 
-void    WindowManager::handleInput() {
-    draw();
-    return;
+Command WindowManager::getCommand() {
+    // draw();
+    // return;
 
-    Command res = currentTerminal().getCommand();
-    switch (res) {
-        case Command::Clear:    currentTerminal().resetInner(); break;
-        default:                break;
-    }
+    return currentTerminal().getCommand();
+    // switch (res) {
+    //     case Command::Clear:    currentTerminal().resetInner(); break;
+    //     default:                break;
+    // }
 }
 
 /* -------------------------------------------- */

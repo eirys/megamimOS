@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 00:17:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 01:34:47 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 17:43:41 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,6 @@ namespace ui {
 /* -------------------------------------------- */
 /*                     ENUMS                    */
 /* -------------------------------------------- */
-
-enum class CommandResult: u8 {
-    Success = 0,
-    Failure = 1,
-    Exit = 2
-};
 
 enum class Command: u8 {
     Clear   = 0,
@@ -63,8 +57,8 @@ public:
 
     /* ---------------------------------------- */
 
-    static Command          parse(const vga::Char* buf, const u32 len);
-    static CommandResult    execute(Command cmd);
+    static Command      parse(const vga::Char* buf, const u32 len);
+    static void         execute(Command cmd);
 
 private:
     /* ---------------------------------------- */
@@ -90,8 +84,13 @@ private:
 
     static u32              _getWordLen(const vga::Char* buf, const u32 len);
 
-    static void             _halt();
+    static void             _clear();
+    static void             _help();
+    static void             _reboot();
     static void             _panic();
+    static void             _halt();
+
+    // static void             _echo(const vga::Char* buf, const u32 len);
 
 }; // class CommandHandler
 

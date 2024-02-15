@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window_manager.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 14:17:28 by nmathieu         ###   ########.fr       */
+/*   Updated: 2024/02/15 17:23:09 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ public:
 
     static void         init();
     static void         draw();
-    static void         handleInput();
+    static Command      getCommand();
 
     /* ---------------------------------------- */
 

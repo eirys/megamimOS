@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:01:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 19:07:47 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 17:51:52 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,13 @@ namespace ui {
  * @param out The output KeyEvent.
  */
 TranslateResult QwertyLayout::translate(const u8 input, KeyEvent& out) {
-    out.m_character = vga::Char::Empty;
-    out.m_action = isPressed(input);
-
     if (input == 0xE0) {
         // The scancode is part of an escape sequence.
         m_isExtended = true;
-        return TranslateResult::Ignore;
+        return TranslateResult::Continue;
     }
+
+    out.m_action = isPressed(input);
 
     const bool isExtended = m_isExtended;
     m_isExtended = false;
@@ -41,11 +40,11 @@ TranslateResult QwertyLayout::translate(const u8 input, KeyEvent& out) {
     }
 
     if (_setModifiers(out, isExtended)) {
-        return TranslateResult::Ignore;
+        return TranslateResult::Success;
     }
 
     if (out.m_action == Action::Released) {
-        return TranslateResult::Ignore;
+        return TranslateResult::Success;
     }
 
     out.m_uppercase = isUppercase(m_modifiers);
@@ -142,15 +141,13 @@ TranslateResult QwertyLayout::translate(const u8 input, KeyEvent& out) {
         case Key::End:
         case Key::PageUp:
         case Key::PageDown:
-            return TranslateResult::Command;
-
         case Key::Escape:
-            return TranslateResult::Exit;
+            return TranslateResult::Success;
 
         default:
             return TranslateResult::Invalid;
     }
-    return TranslateResult::Print;
+    return TranslateResult::Success;
 }
 
 /* -------------------------------------------- */
@@ -270,15 +267,18 @@ void QwertyLayout::_setLock(const Modifier mod, const bool pressed) {
     if (pressed) { m_modifiers ^= mod; }
 }
 
-bool QwertyLayout::_setModifiers(const KeyEvent& out, const bool isExtended) {
-    const bool pressed = out.m_action == Action::Pressed;
+bool QwertyLayout::_setModifiers(
+    const KeyEvent& out,
+    const bool isExtended
+) {
+    const bool isPressed = out.m_action == Action::Pressed;
     switch (out.m_key) {
-        case Key::LShift:   _setMod(Modifier::LShift, pressed); break;
-        case Key::RShift:   _setMod(Modifier::RShift, pressed); break;
-        case Key::LCtrl:    isExtended ? _setMod(Modifier::RCtrl, pressed): _setMod(Modifier::LCtrl, pressed); break;
-        case Key::LAlt:     isExtended ? _setMod(Modifier::RAlt, pressed): _setMod(Modifier::LAlt, pressed); break;
-        case Key::Caps:     _setLock(Modifier::Caps, pressed); break;
-        case Key::NumLock:  _setLock(Modifier::Num, pressed); break;
+        case Key::LShift:   _setMod(Modifier::LShift, isPressed); break;
+        case Key::RShift:   _setMod(Modifier::RShift, isPressed); break;
+        case Key::LCtrl:    isExtended ? _setMod(Modifier::RCtrl, isPressed): _setMod(Modifier::LCtrl, isPressed); break;
+        case Key::LAlt:     isExtended ? _setMod(Modifier::RAlt, isPressed): _setMod(Modifier::LAlt, isPressed); break;
+        case Key::Caps:     _setLock(Modifier::Caps, isPressed); break;
+        case Key::NumLock:  _setLock(Modifier::Num, isPressed); break;
 
         default: return false;
     }

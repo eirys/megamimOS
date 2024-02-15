@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 14:22:31 by nmathieu         ###   ########.fr       */
+/*   Updated: 2024/02/15 17:52:44 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,23 @@ void _init() {
 }
 
 static
-void _exit() {
+void _handleCommand() {
+    const ui::Command cmd = ui::WindowManager::getCommand();
+
     ui::WindowManager::newLine();
-    *ui::WindowManager::get() << (i8*)"Good bye!";
-    vga::disableCursor();
+    ui::CommandHandler::execute(cmd);
+
+    ui::WindowManager::prompt();
 }
 
 static
-void _handleCommand(const ui::KeyEvent& event) {
+void _handleInput(const ui::KeyEvent& event) {
+    if (event.m_action == ui::Action::Released)
+        return;
+
     switch (event.m_key) {
         case ui::Key::Enter:
-        case ui::Key::NumpadEnter:  return ui::WindowManager::handleInput();
+        case ui::Key::NumpadEnter:  return _handleCommand();
         case ui::Key::Backspace:    return event.m_control ? ui::WindowManager::eraseLine() : ui::WindowManager::eraseChar();
         case ui::Key::CursorLeft:   return event.m_control ? ui::WindowManager::moveCursorToBeginningOfWord() : ui::WindowManager::moveCursorLeft();
         case ui::Key::CursorRight:  return event.m_control ? ui::WindowManager::moveCursorToEndOfWord() : ui::WindowManager::moveCursorRight();
@@ -81,8 +87,8 @@ void _handleCommand(const ui::KeyEvent& event) {
             event.m_control ? (event.m_uppercase ? ui::WindowManager::switchToPrevious() : ui::WindowManager::switchToNext()) :
             void() /* winManager.completeCommand() */;
 
-        default:
-            break;
+        case ui::Key::Escape:
+        default:                    *ui::WindowManager::get() << event.m_character; break;
     }
 }
 
@@ -118,16 +124,13 @@ void megamimOS_cpp(const MultibootInfo& info) {
     ui::QwertyLayout    layout;
 
     for (;;) {
-        ui::KeyEvent event;
+        ui::KeyEvent event{};
         ui::TranslateResult result = layout.translate(ps2::poll(), event);
 
         switch (result) {
-            case ui::TranslateResult::Print:    *ui::WindowManager::get() << event.m_character; break;
-            case ui::TranslateResult::Exit:     return _exit();
-            case ui::TranslateResult::Command:  _handleCommand(event); break;
-
-            case ui::TranslateResult::Invalid:
-            case ui::TranslateResult::Ignore:   break;
+            case ui::TranslateResult::Success:  _handleInput(event); break;
+            case ui::TranslateResult::Continue:
+            case ui::TranslateResult::Invalid:  break;
         }
 
         ui::WindowManager::draw();
