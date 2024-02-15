@@ -12,7 +12,6 @@
 
 // Drivers
 #include "ps2.h"
-#include "state/signal.h"
 #include "vga.h"
 #include "pic.h"
 #include "pit.h"

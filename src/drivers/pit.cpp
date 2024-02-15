@@ -30,7 +30,7 @@ constexpr u32 PIC_FREQ_TIMES_3 = 3579545;
 /// @brief The number of microseconds in a tick sent by the PIT. Note that
 /// this value may drift over time due to the PIT's lack of precision (usually
 /// a couple seconds per day);
-u32 tick_duration_us;
+u32 tickDurationMicros;
 
 /// @brief Divides two numbers and rounds the result to the nearest integer (rather
 /// than simply returning the closest integer to 0 as a simple division would when
@@ -54,18 +54,18 @@ u32 freqToReloadValue(u32 freq) {
 /// @brief Converts a reload value understood by the PIT to a period in
 /// microseconds.
 static
-u32 reloadValueToUs(u32 reload_value) {
-    const u32 microsecs_per_second = 1000000;
-    return divideRounded(3 * reload_value * microsecs_per_second, PIC_FREQ_TIMES_3);
+u32 reloadValueToMicros(u32 reloadValue) {
+    constexpr u32 microsecsPerSecond = 1000000;
+    return divideRounded(3 * reloadValue * microsecsPerSecond, PIC_FREQ_TIMES_3);
 }
 
 /// @brief Initializes the PIT to send ticks at the given frequency.
 void init(u32 frequency) {
-    u32 reload_value = freqToReloadValue(frequency);
-    tick_duration_us = reloadValueToUs(reload_value);
+    u32 reloadValue = freqToReloadValue(frequency);
+    tickDurationMicros = reloadValueToMicros(reloadValue);
     core::outB(COMMAND_PORT, 0b110100);
-    core::outB(DATA_PORT, (u8)reload_value);
-    core::outB(DATA_PORT, (u8)(reload_value >> 8));
+    core::outB(DATA_PORT, (u8)reloadValue);
+    core::outB(DATA_PORT, (u8)(reloadValue >> 8));
 }
 
 }
