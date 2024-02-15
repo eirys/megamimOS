@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pic_handler.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:17:12 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 14:05:16 by nmathieu         ###   ########.fr       */
+/*   Updated: 2024/02/15 21:47:33 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "pic.h"
 #include "idt_decl.h"
 #include "debug.h"
+#include "pit.h"
 
 namespace cpu::idt {
 
@@ -24,7 +25,7 @@ namespace cpu::idt {
 
 _DECL_INTERNAL
 void timerInternal() {
-    // do stuff
+    pit::
     pic::sendEOI(pic::IRQ::Timer);
 }
 

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 19:14:01 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 21:25:12 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void megamimOS_cpp(const MultibootInfo& info) {
     ui::QwertyLayout    layout;
 
     for (;;) {
-        ui::KeyEvent event{};
+        ui::KeyEvent        event{};
         ui::TranslateResult result = layout.translate(ps2::poll(), event);
 
         switch (result) {

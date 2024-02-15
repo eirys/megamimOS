@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 00:17:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 19:40:21 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 21:33:26 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ public:
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    CommandHandler() = default;
     CommandHandler(CommandHandler&& other) = default;
     CommandHandler(const CommandHandler& other) = default;
     CommandHandler& operator=(CommandHandler&& other) = default;
@@ -78,6 +77,10 @@ private:
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
+    CommandHandler() = default;
+
+    /* ---------------------------------------- */
+
     static u32              _getWordLen(const vga::Char* buf, const u32 len);
 
     static void             _clear();
@@ -87,7 +90,7 @@ private:
     static void             _halt();
     static void             _version();
 
-    static void            _unknown();
+    static void             _unknown();
 
 }; // class CommandHandler
 
