@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
+#    By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/15 01:47:21 by etran            ###   ########.fr        #
+#    Updated: 2024/02/15 14:52:47 by nmathieu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(DRIVER_DIR)/vga.cpp \
 					$(DRIVER_DIR)/pic.cpp \
 					$(DRIVER_DIR)/serial.cpp \
+					$(DRIVER_DIR)/pit.cpp \
 					$(GDT_DIR)/gdt.cpp \
 					$(IDT_DIR)/pic_handler.cpp \
 					$(IDT_DIR)/idt.cpp \
@@ -94,8 +95,8 @@ CFLAGS			:=	-std=c++20 \
 					-fno-rtti \
 					-nostdlib \
 					-nodefaultlibs \
-					-mgeneral-regs-only \
 					-mno-red-zone \
+					-mgeneral-regs-only \
 					-O3 \
 					-m32
 

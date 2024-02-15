@@ -31,3 +31,4 @@ void __cxa_guard_release() {}
 
 void operator delete(void *) {}
 void operator delete(void *, unsigned int) {}
+void operator delete(void *, unsigned long int) {}

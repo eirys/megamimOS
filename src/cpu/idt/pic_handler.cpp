@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pic_handler.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:17:12 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 01:46:54 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 14:52:02 by nmathieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ namespace cpu::idt {
 _DECL_INTERNAL
 void timerInternal() {
     // do stuff
-    LOG("Timer interrupt\n");
+    LOG(".");
     pic::sendEOI(pic::IRQ::Timer);
 }
 

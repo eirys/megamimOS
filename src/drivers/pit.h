@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pit.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 14:47:09 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 18:26:29 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 14:43:12 by nmathieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,6 @@
 
 namespace pit {
 
-/* -------------------------------------------- */
-/*                   PIT PORTS                  */
-/* -------------------------------------------- */
-
-static constexpr const u16 CHANNEL_0 = 0x40;
-static constexpr const u16 CHANNEL_1 = 0x41;
-static constexpr const u16 CHANNEL_2 = 0x42;
-static constexpr const u16 COMMAND = 0x43;
-
-/* -------------------------------------------- */
+void init(u32 frequency);
 
 }  // namespace pit
