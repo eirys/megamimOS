@@ -12,6 +12,7 @@
 
 // Drivers
 #include "ps2.h"
+#include "state/signal.h"
 #include "vga.h"
 #include "pic.h"
 #include "pit.h"
@@ -20,11 +21,14 @@
 #include "window_manager.h"
 #include "qwerty.h"
 
+// State
+#include "signal.h"
+
 // CPU
 #include "idt.h"
 #include "gdt.h"
 
-#include "debug.h"
+// Other
 #include "panic.h"
 
 /* -------------------------------------------- */
@@ -38,6 +42,11 @@ struct MultibootInfo {
 /* -------------------------------------------- */
 
 static
+void _basicSignalHandler() {
+    ui::WindowManager::currentTerminal() << "Signal received!";
+}
+
+static
 void _init() {
     cpu::gdt::init();
     cpu::idt::init();
@@ -45,8 +54,9 @@ void _init() {
     pit::init(100); // 100Hz
     vga::init();
     ps2::init();
+    kfs::SignalManager::get().registerHandler(kfs::Signal::User1, _basicSignalHandler);
 #ifdef _DEBUG
-    serial::init();
+    // serial::init();
 #endif
 
     core::sti();
@@ -125,6 +135,8 @@ void megamimOS_cpp(const MultibootInfo& info) {
     ui::QwertyLayout    layout;
 
     for (;;) {
+        kfs::SignalManager::get().update();
+
         ui::KeyEvent event{};
         ui::TranslateResult result = layout.translate(ps2::poll(), event);
 
