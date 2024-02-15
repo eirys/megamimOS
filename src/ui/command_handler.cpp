@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:24:31 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 19:23:36 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 19:39:50 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,12 @@ namespace ui {
 /*                    PUBLIC                    */
 /* -------------------------------------------- */
 
-Command  CommandHandler::parse(const vga::Char* buf, const u32 len) {
+Command  CommandHandler::parse(const vga::Char* buf, u32 len) {
+    while (!buf->isAlphanum() && len > 0) {
+        --len;
+        ++buf;
+    }
+
     if (_getWordLen(buf, len) == 0)
         return Command::Empty;
 
@@ -57,8 +62,9 @@ void CommandHandler::execute(Command cmd) {
 
 u32 CommandHandler::_getWordLen(const vga::Char* buf, const u32 len) {
     u32 wordLen = 0;
+
     while (wordLen < len && buf[wordLen].isAlphanum())
-        wordLen++;
+        ++wordLen;
     return wordLen;
 }
 

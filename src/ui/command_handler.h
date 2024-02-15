@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 00:17:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 19:10:46 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 19:40:21 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ public:
 
     /* ---------------------------------------- */
 
-    static Command      parse(const vga::Char* buf, const u32 len);
+    static Command      parse(const vga::Char* buf, u32 len);
     static void         execute(Command cmd);
 
 private:
