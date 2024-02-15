@@ -23,7 +23,6 @@ SRC_DIR			:=	src
 OBJ_DIR			:=	obj
 CONFIG_DIR		:=	config
 ISO_DIR			:=	isodir
-LIB_DIR			:=	lib
 
 CORE_DIR		:=	core
 DRIVER_DIR		:=	drivers
@@ -34,6 +33,7 @@ LAYOUT_DIR		:=	$(UI_DIR)/layout
 CPU_DIR			:=	cpu
 IDT_DIR			:=	$(CPU_DIR)/idt
 GDT_DIR			:=	$(CPU_DIR)/gdt
+LIB_DIR			:=	lib
 
 # ---------------- SUB DIRECTORIES ------------- #
 SUBDIRS			:=	. \
@@ -43,7 +43,8 @@ SUBDIRS			:=	. \
 					$(LAYOUT_DIR) \
 					$(GDT_DIR) \
 					$(IDT_DIR) \
-					$(CPU_DIR)
+					$(CPU_DIR) \
+					$(LIB_DIR)
 
 OBJ_SUBDIRS		:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
@@ -63,7 +64,14 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(GDT_DIR)/gdt.cpp \
 					$(IDT_DIR)/pic_handler.cpp \
 					$(IDT_DIR)/idt.cpp \
-					$(IDT_DIR)/exception.cpp
+					$(IDT_DIR)/exception.cpp \
+					$(LIB_DIR)/memcmp.cpp \
+					$(LIB_DIR)/memcpy.cpp \
+					$(LIB_DIR)/memset.cpp \
+					$(LIB_DIR)/memmove.cpp \
+					$(LIB_DIR)/strlen.cpp \
+					$(LIB_DIR)/strcpy.cpp \
+					$(LIB_DIR)/strcmp.cpp
 
 SRC_FILES_ASM	:=	boot.s \
 					$(GDT_DIR)/load_gdt.s \
@@ -77,10 +85,10 @@ OBJ_CPP			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES_CPP:.cpp=.o))
 DEP				:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES_CPP:.cpp=.d))
 
 # ----------------- COMPILATION ---------------- #
-ASM				:=	nasm
+ASM				?=	nasm
 ASFLAGS			:=	-felf32
 
-CXX				:=	c++
+CXX				?=	c++
 MACROS			:=	KERNEL_NAME=\"$(NAME)\" \
 					_DEBUG
 
@@ -105,7 +113,7 @@ INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS)) \
 					-I$(LIB_DIR)
 DEFINES			:=	$(addprefix -D,$(MACROS))
 
-LD				:=	ld
+LD				?=  ld
 LD_SCRIPT		:=	$(CONFIG_DIR)/megamimOS.ld
 LD_LIBS			:=	$(LIB_DIR)/libmegamim.a
 
