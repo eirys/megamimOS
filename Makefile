@@ -96,6 +96,7 @@ CFLAGS			:=	-std=c++20 \
 					-nostdlib \
 					-nodefaultlibs \
 					-mno-red-zone \
+					-mgeneral-regs-only \
 					-O3 \
 					-m32
 
