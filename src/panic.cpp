@@ -6,7 +6,7 @@
 /*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 13:00:21 by nmathieu          #+#    #+#             */
-/*   Updated: 2024/02/15 13:00:21 by nmathieu         ###   ########.fr       */
+/*   Updated: 2024/02/15 14:22:14 by nmathieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void beginKernelPanic(char const *msg) noexcept
     vgaPanicPrint("    ((_ `^--' /_<  \\\n");
     vgaPanicPrint("    `` `-'(((/  (((/\n");
     vgaPanicPrint("\n");
-    fg = vga::Color::Ash;
+    fg = vga::Color::Cloud;
     vgaPanicPrint(msg);
     fg = vga::Color::Immaculate;
     vgaPanicPrint("\n");
