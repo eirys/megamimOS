@@ -15,6 +15,7 @@
 #include "vga.h"
 #include "core.h"
 #include "lib.h"
+#include "panic.h"
 
 namespace ui {
 
@@ -71,7 +72,7 @@ void CommandHandler::_halt() {
 }
 
 void CommandHandler::_panic() {
-    _halt();
+    beginKernelPanic();
 }
 
 } // namespace ui

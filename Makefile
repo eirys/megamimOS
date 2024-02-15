@@ -50,6 +50,7 @@ INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
 
 # ---------------- SOURCE FILES ---------------- #
 SRC_FILES_CPP	:=	main.cpp \
+					panic.cpp \
 					$(CORE_DIR)/runtime.cpp \
 					$(LAYOUT_DIR)/qwerty.cpp \
 					$(UI_DIR)/terminal.cpp \

@@ -69,10 +69,12 @@ void putChar(
     const Char character,
     const u8 x,
     const u8 y,
-    const Color fontColor
+    const Color fontColor,
+    const Color bgColor
 ) {
-    BUFFER[2 * (y * WIDTH + x)] = (u8)character;
-    BUFFER[2 * (y * WIDTH + x) + 1] = (u8)fontColor;
+    u32 index = 2 * ((u32)y * WIDTH + (u32)x);
+    BUFFER[index] = (u8)character;
+    BUFFER[index + 1] = (u8)fontColor | ((u8)bgColor << 4);
 }
 
 void setBgColor(
@@ -80,13 +82,14 @@ void setBgColor(
     const u8 y,
     const Color bgColor
 ) {
-    BUFFER[2 * (y * WIDTH + x) + 1] = (u8)BUFFER[2 * (y * WIDTH + x) + 1] | (u8)bgColor << 4;
+    u32 index = 2 * ((u32)y * WIDTH + (u32)x);
+    BUFFER[index] = (u8)BUFFER[index] | (u8)bgColor << 4;
 }
 
-void clearBuffer(Color color) {
+void clearBuffer(Color fg, Color bg) {
     for (u8 i = 0; i < WIDTH; i++) {
         for (u8 j = 0; j < HEIGHT; j++) {
-            putChar(Char::Empty, i, j, color);
+            putChar(Char::Empty, i, j, fg, bg);
         }
     }
 }
