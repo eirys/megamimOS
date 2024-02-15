@@ -15,10 +15,22 @@
 
 namespace pit  {
 
-/// @brief The number of nanoseconds in a tick sent by the PIT. Note that
+constexpr u16 DATA_PORT = 0x40;
+constexpr u16 COMMAND_PORT = 0x43;
+
+constexpr u32 MAX_FREQUENCY = 1193181;
+constexpr u32 MIN_FREQUENCY = 10;
+
+/// @brief The frequency of the PIT, multiplied by 3.
+///
+/// Using a value multiplied by 3 allows us to avoid floating point
+/// and rounding errors during computations.
+constexpr u32 PIC_FREQ_TIMES_3 = 3579545;
+
+/// @brief The number of microseconds in a tick sent by the PIT. Note that
 /// this value may drift over time due to the PIT's lack of precision (usually
 /// a couple seconds per day);
-u32 tick_duration_ns;
+u32 tick_duration_us;
 
 /// @brief Divides two numbers and rounds the result to the nearest integer (rather
 /// than simply returning the closest integer to 0 as a simple division would when
@@ -31,28 +43,29 @@ u32 divideRounded(u32 num, u32 denom) {
 /// @brief Converts a frequency in Hertz to a reload value for the PIT.
 static
 u32 freqToReloadValue(u32 freq) {
-    if (freq <= 10)
+    if (freq <= MIN_FREQUENCY)
         return 0x10000;
-    else if (freq >= 1193181)
+    else if (freq >= MAX_FREQUENCY)
         return 1;
     else
-        return divideRounded(3579545, 3 * freq);
+        return divideRounded(PIC_FREQ_TIMES_3, 3 * freq);
 }
 
 /// @brief Converts a reload value understood by the PIT to a period in
-/// nanoseconds.
+/// microseconds.
 static
-u32 reloadValueToNs(u32 reload_value) {
-    return divideRounded(3 * reload_value * 1000000000, 3579545);
+u32 reloadValueToUs(u32 reload_value) {
+    const u32 microsecs_per_second = 1000000;
+    return divideRounded(3 * reload_value * microsecs_per_second, PIC_FREQ_TIMES_3);
 }
 
 /// @brief Initializes the PIT to send ticks at the given frequency.
 void init(u32 frequency) {
     u32 reload_value = freqToReloadValue(frequency);
-    tick_duration_ns = reloadValueToNs(reload_value);
-    core::outB(0x43, 0b110100);
-    core::outB(0x40, (u8)reload_value);
-    core::outB(0x40, (u8)(reload_value >> 8));
+    tick_duration_us = reloadValueToUs(reload_value);
+    core::outB(COMMAND_PORT, 0b110100);
+    core::outB(DATA_PORT, (u8)reload_value);
+    core::outB(DATA_PORT, (u8)(reload_value >> 8));
 }
 
 }

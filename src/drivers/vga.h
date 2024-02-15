@@ -249,14 +249,15 @@ void putChar(
     const Char character,
     const u8 x,
     const u8 y,
-    const Color fontColor = Color::Immaculate
+    const Color fontColor = Color::Immaculate,
+    const Color bgColor = Color::Carbon
 );
 void setBgColor(
     const u8 x,
     const u8 y,
     const Color bgColor
 );
-void clearBuffer(Color color = Color::Immaculate);
+void clearBuffer(Color foreground = Color::Immaculate, Color background = Color::Carbon);
 
 /* ------------------ CURSOR ------------------ */
 

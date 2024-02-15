@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   idt.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:48:02 by etran             #+#    #+#             */
-/*   Updated: 2024/02/14 21:21:35 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 13:08:28 by nmathieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,28 @@ void _load() {
     constexpr const bool disableInt = false;
 
     IDT[(u8)Exception::DivisionError] = _createGateDescriptor((void*)divisionError, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::Debug] = _createGateDescriptor((void*)debug, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::NonMaskableInterrupt] = _createGateDescriptor((void*)nonMaskableInterrupt, enableInt, Ring::Kernel);
     IDT[(u8)Exception::Breakpoint] = _createGateDescriptor((void*)breakpoint, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::Overflow] = _createGateDescriptor((void*)overflow, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::BoundRangeExceeded] = _createGateDescriptor((void*)boundRangeExceeded, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::InvalidOpcode] = _createGateDescriptor((void*)invalidOpcode, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::DeviceNotAvailable] = _createGateDescriptor((void*)deviceNotAvailable, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::DoubleFault] = _createGateDescriptor((void*)doubleFault, disableInt, Ring::Kernel);
+    IDT[(u8)Exception::InvalidTSS] = _createGateDescriptor((void*)invalidTss, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::SegmentNotPresent] = _createGateDescriptor((void*)segmentNotPresent, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::StackSegmentFault] = _createGateDescriptor((void*)stackSegmentFault, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::GeneralProtectionFault] = _createGateDescriptor((void*)generalProtectionFault, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::PageFault] = _createGateDescriptor((void*)pageFault, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::x87FPUError] = _createGateDescriptor((void*)x87FloatingPoint, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::AlignmentCheck] = _createGateDescriptor((void*)alignmentCheck, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::MachineCheck] = _createGateDescriptor((void*)machineCheck, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::SimdFloatingPoint] = _createGateDescriptor((void*)simdFloatingPoint, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::Virtualization] = _createGateDescriptor((void*)virtualization, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::ControlProtection] = _createGateDescriptor((void*)controlProtection, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::HypervisorInjection] = _createGateDescriptor((void*)hypervisorInjection, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::VMMCommunication] = _createGateDescriptor((void*)vmmCommunication, enableInt, Ring::Kernel);
+    IDT[(u8)Exception::Security] = _createGateDescriptor((void*)security, enableInt, Ring::Kernel);
 
     IDT[pic::OFFSET + (u8)pic::IRQ::Timer] = _createGateDescriptor((void*)timerInterrupt, disableInt, Ring::Kernel);
     IDT[pic::OFFSET + (u8)pic::IRQ::Keyboard] = _createGateDescriptor((void*)keyboardInterrupt, disableInt, Ring::Kernel);

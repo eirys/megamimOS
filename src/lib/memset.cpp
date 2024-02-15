@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   runtime.cpp                                        :+:      :+:    :+:   */
+/*   memset.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 21:06:45 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 00:59:37 by etran            ###   ########.fr       */
+/*   Created: 2024/02/08 20:57:23 by etran             #+#    #+#             */
+/*   Updated: 2024/02/14 15:55:22 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * This file is necessary for inheritance, and other obscure reasons...
- */
-#include "lib.h"
+#include "types.h"
 
-// Inheritance
-extern "C" void __cxa_pure_virtual() { asm volatile("hlt"); }
+namespace lib {
 
-// Static initialization
-extern "C" void __cxa_guard_acquire() {}
+void* memset(void* dest, i32 value, u32 n) noexcept {
+    i32* d = (i32*)dest;
+    for (u32 i = 0; i < n; i++) {
+        d[i] = value;
+    }
+    return dest;
+}
 
-extern "C" void __cxa_guard_release() {}
+} // namespace lib
 
-void operator delete(void *) {}
-void operator delete(void *, long unsigned int) {}
-void operator delete(void *, unsigned int) {}
+extern "C" void* memset(void *dst, i32 value, u32 n)  {
+    return lib::memset(dst, value, n);
+}

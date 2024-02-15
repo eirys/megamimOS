@@ -14,6 +14,8 @@
 
 # include "types.h"
 
+namespace cpu::idt {
+
 /**
  * @brief The Interrupt Frame: the state of the CPU when an interrupt occurs.
  * @note It is pushed onto the stack when an interrupt occurs, so that
@@ -26,3 +28,10 @@ struct InterruptFrame {
     u32 m_sp; // Stack Pointer
     u32 m_ss; // Stack Segment
 };
+
+/**
+ * @brief The error code received by an exception.
+*/
+using ErrorCode = unsigned long;
+
+}

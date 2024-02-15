@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window_manager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:24:57 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 01:09:03 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 14:19:59 by nmathieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,18 +163,20 @@ void WindowManager::clearScreen() {
 /*                    PRIVATE                   */
 /* -------------------------------------------- */
 
-void WindowManager::_putStr(const u8 begin, const i8* str) {
-    for (u8 i = begin; str[i] != 0; ++i) {
-        vga::putChar(vga::Char(str[i]), i, 0, vga::Color::Carbon);
+void WindowManager::_putStr(u8 x, u8 y, const i8* str) {
+    while (*str) {
+        vga::putChar(vga::Char(*str), x, y, vga::Color::Carbon);
+        ++str;
+        ++x;
     }
 }
 
-void WindowManager::_putNbr(const u8 begin, u32 nbr) {
+void WindowManager::_putNbr(u8 x, u8 y, u32 nbr) {
     i8  buf[32];
     u32 cur = 32;
 
     if (nbr == 0) {
-        vga::putChar('0', begin, 0, vga::Color::Carbon);
+        vga::putChar('0', x, y, vga::Color::Carbon);
         return;
     }
     while (nbr) {
@@ -184,15 +186,15 @@ void WindowManager::_putNbr(const u8 begin, u32 nbr) {
     }
 
     for (u32 i = cur; i < 32; i++) {
-        vga::putChar(buf[i], begin + i - cur, 0, vga::Color::Carbon);
+        vga::putChar(buf[i], x + i - cur, y, vga::Color::Carbon);
     }
 }
 
 void WindowManager::_putTitle() {
-    _putStr(0, KERNEL_NAME);
+    _putStr(0, 0, KERNEL_NAME);
     vga::putChar(vga::Char::Heart, 11, 0, vga::Color::Crimson);
     vga::putChar(vga::Char::Hash, 13, 0, vga::Color::Carbon);
-    _putNbr(14, (u32)m_currentTerminal);
+    _putNbr(14, 0, (u32)m_currentTerminal);
 
     for (u8 i = 0; i < vga::WIDTH; ++i) {
         vga::setBgColor(i, 0, vga::Color::Cloud);

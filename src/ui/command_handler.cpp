@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_handler.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:24:31 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 01:30:48 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 13:05:49 by nmathieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "vga.h"
 #include "core.h"
 #include "lib.h"
+#include "panic.h"
 
 namespace ui {
 
@@ -71,7 +72,7 @@ void CommandHandler::_halt() {
 }
 
 void CommandHandler::_panic() {
-    _halt();
+    beginKernelPanic("Explicit panic.");
 }
 
 } // namespace ui
