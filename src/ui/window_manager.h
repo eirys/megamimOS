@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window_manager.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 01:37:27 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 14:17:28 by nmathieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ private:
 
     /* ---------------------------------------- */
 
-    static void         _putStr(const u8 begin, const i8* str);
-    static void         _putNbr(const u8 begin, u32 nbr);
+    static void         _putStr(u8 x, u8 y, const i8* str);
+    static void         _putNbr(u8 x, u8 y, u32 nbr);
     static void         _putTitle();
 
 }; // class WindowManager

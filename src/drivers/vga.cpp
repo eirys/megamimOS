@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vga.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:36:28 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 01:42:03 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 14:19:50 by nmathieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void setBgColor(
     const Color bgColor
 ) {
     u32 index = 2 * ((u32)y * WIDTH + (u32)x);
-    BUFFER[index] = (u8)BUFFER[index] | (u8)bgColor << 4;
+    BUFFER[index + 1] = ((u8)BUFFER[index + 1] & 0x0F) | ((u8)bgColor << 4);
 }
 
 void clearBuffer(Color fg, Color bg) {
