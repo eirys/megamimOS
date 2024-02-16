@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 02:30:23 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 14:02:45 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ public:
 
     static void         switchToNext();
     static void         switchToPrevious();
-
-    static Terminal&    currentTerminal();
 
     /* ---------------------------------------- */
 
@@ -88,6 +86,8 @@ private:
     WindowManager() = default;
 
     /* ---------------------------------------- */
+
+    static Terminal&    _currentTerminal();
 
     static void         _putStr(u8 x, u8 y, const i8* str);
     static void         _putNbr(u8 x, u8 y, u32 nbr);

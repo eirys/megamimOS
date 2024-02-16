@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 21:06:45 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 00:59:37 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 14:27:36 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ extern "C" void __cxa_pure_virtual() { asm volatile("hlt"); }
 extern "C" void __cxa_guard_acquire() {}
 
 extern "C" void __cxa_guard_release() {}
+extern "C" void __dso_handle() {}
+extern "C" void __cxa_atexit() {}
 
 void operator delete(void *) {}
 void operator delete(void *, long unsigned int) {}

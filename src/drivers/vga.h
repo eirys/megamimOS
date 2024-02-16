@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 18:06:37 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 15:00:36 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ public:
         AUmlaut         = 0x84,
         AGrave          = 0x85,
         ARing           = 0x86,
-        Ccedilla        = 0x87,
+        CCedilla        = 0x87,
         ECircumflex     = 0x88,
         EUmlaut         = 0x89,
         EGrave          = 0x8A,
@@ -198,8 +198,44 @@ public:
         MediumShade     = 0xB1,
         DarkShade       = 0xB2,
 
+        // dont care...
+
+        Alpha           = 0xE0,
+        Beta            = 0xE1,
+        GammaM          = 0xE2,
+        Pi              = 0xE3,
+        SigmaM          = 0xE4,
+        Sigma           = 0xE5,
+        Mu              = 0xE6,
+        Tau             = 0xE7,
+        PhiM            = 0xE8,
+        Theta           = 0xE9,
+        OmegaM          = 0xEA,
+        Delta           = 0xEB,
+        Infinity        = 0xEC,
+        Phi             = 0xED,
+        Epsilon         = 0xEE,
+        Intersect       = 0xEF,
+
+        TripleBar       = 0xF0,
+        PlusMinus       = 0xF1,
+        AboveEqual      = 0xF2,
+        BelowEqual      = 0xF3,
+        IntegralUpper   = 0xF4,
+        IntegralLower   = 0xF5,
+        Division        = 0xF6,
+        Approximation   = 0xF7,
+        Degree          = 0xF8,
+        BulletXS        = 0xF9,
+        MiddleDot       = 0xFA,
+        SquareRoot      = 0xFB,
+        NasalRelease    = 0xFC,
+        Square          = 0xFD,
+        BlackSquare     = 0xFE,
+        NBS             = 0xFF,
+
         First = Empty,
-        Last = DarkShade
+        Last = NBS
     };
 
     /* ---------------------------------------- */
