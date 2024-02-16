@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 01:57:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 03:13:41 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 14:37:29 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include "ilayout.h"
 #include "key_event.h"
 #include "event_handler.h"
+#include "layout_handler.h"
+#include "ilayout.h"
 
 #include "debug.h"
 
@@ -78,8 +80,8 @@ void Keyboard::_handleInput(const KeyEvent& event) {
         case Key::Delete:       return WindowManager::deleteChar();
         case Key::Home:         return WindowManager::moveCursorToBeginning();
         case Key::End:          return WindowManager::moveCursorToEnd();
-        case Key::PageUp:       return WindowManager::scrollPageUp();
-        case Key::PageDown:     return WindowManager::scrollPageDown();
+        case Key::PageUp:       return event.m_control ? LayoutHandler::switchToPrevLayout() : WindowManager::scrollPageUp();
+        case Key::PageDown:     return event.m_control ? LayoutHandler::switchToNextLayout() : WindowManager::scrollPageDown();
         case Key::Tab:          if (event.m_control) { event.m_uppercase ? WindowManager::switchToPrevious() : WindowManager::switchToNext(); }
                                 break;
 

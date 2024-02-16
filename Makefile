@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/16 02:13:20 by etran            ###   ########.fr        #
+#    Updated: 2024/02/16 14:22:35 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,8 @@ ISO_DIR			:=	isodir
 
 CORE_DIR		:=	core
 DRIVER_DIR		:=	drivers
+LIB_DIR			:=	lib
+STATE_DIR		:=	state
 
 UI_DIR			:=	ui
 LAYOUT_DIR		:=	$(UI_DIR)/layout
@@ -34,8 +36,6 @@ INPUT_DIR		:=	$(UI_DIR)/input
 CPU_DIR			:=	cpu
 IDT_DIR			:=	$(CPU_DIR)/idt
 GDT_DIR			:=	$(CPU_DIR)/gdt
-LIB_DIR			:=	lib
-STATE_DIR		:=	state
 
 # ---------------- SUB DIRECTORIES ------------- #
 SUBDIRS			:=	. \
@@ -58,11 +58,14 @@ SRC_FILES_CPP	:=	main.cpp \
 					panic.cpp \
 					$(CORE_DIR)/runtime.cpp \
 					$(LAYOUT_DIR)/qwerty.cpp \
+					$(LAYOUT_DIR)/azerty.cpp \
+					$(LAYOUT_DIR)/layout_handler.cpp \
 					$(UI_DIR)/terminal.cpp \
 					$(UI_DIR)/window_manager.cpp \
 					$(UI_DIR)/command_handler.cpp \
 					$(INPUT_DIR)/event_handler.cpp \
 					$(INPUT_DIR)/keyboard.cpp \
+					$(INPUT_DIR)/scancode.cpp \
 					$(DRIVER_DIR)/vga.cpp \
 					$(DRIVER_DIR)/pic.cpp \
 					$(DRIVER_DIR)/serial.cpp \

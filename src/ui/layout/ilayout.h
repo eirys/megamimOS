@@ -6,13 +6,25 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 13:13:15 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 03:07:37 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 15:20:01 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 # include "types.h"
+
+enum class Accent: u8 {
+    Grave = 0,
+    Acute,
+    Circumflex,
+    Tilde,
+    Umlaut,
+    Cedilla,
+    Ring,
+
+    None
+};
 
 namespace ui {
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   qwerty.h                                           :+:      :+:    :+:   */
+/*   azerty.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 23:44:59 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 14:14:41 by etran            ###   ########.fr       */
+/*   Created: 2024/02/16 13:20:50 by etran             #+#    #+#             */
+/*   Updated: 2024/02/16 16:04:52 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,26 @@
 namespace ui {
 
 /**
- * @brief Scancode interpreter for the US-QWERTY layout.
+ * @brief Scancode interpreter for the FR-AZERTY layout.
  */
-class QwertyLayout final: public ILayout {
+class AzertyLayout final: public ILayout {
 public:
     /* ---------------------------------------- */
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    QwertyLayout() = default;
-    ~QwertyLayout() = default;
+    AzertyLayout() = default;
+    ~AzertyLayout() = default;
 
-    QwertyLayout(QwertyLayout&& other) = delete;
-    QwertyLayout(const QwertyLayout& other) = delete;
-    QwertyLayout& operator=(QwertyLayout&& other) = delete;
-    QwertyLayout& operator=(const QwertyLayout& other) = delete;
+    AzertyLayout(AzertyLayout&& other) = delete;
+    AzertyLayout(const AzertyLayout& other) = delete;
+    AzertyLayout& operator=(AzertyLayout&& other) = delete;
+    AzertyLayout& operator=(const AzertyLayout& other) = delete;
 
     /* ---------------------------------------- */
 
     static
-    QwertyLayout&       get();
+    AzertyLayout&       get();
 
     /* ---------------------------------------- */
 
@@ -51,8 +51,19 @@ private:
     /* ---------------------------------------- */
 
     Modifier    m_modifiers = Modifier::None;
+    Accent      m_accent = Accent::None;
     bool        m_isExtended = false;
 
-}; // class QwertyLayout
+    /* ---------------------------------------- */
+    /*                  METHODS                 */
+    /* ---------------------------------------- */
+
+    void        _updateAccent(KeyEvent& out);
+    bool        _setAccent(
+        const Key key,
+        const bool isUppercase,
+        const bool isAltGr);
+
+}; // class AzertyLayout
 
 } // namespace ui

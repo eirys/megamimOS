@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:24:57 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 02:30:26 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 14:02:53 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@ void WindowManager::init() {
         const u8 colorRaw = (u8)id + (u8)vga::Color::Indigo;
         m_terminals[id].init((vga::Color)colorRaw);
     }
-    currentTerminal().draw();
+    _currentTerminal().draw();
     _putTitle();
 }
 
 void WindowManager::draw() {
-    currentTerminal().draw();
+    _currentTerminal().draw();
 }
 
 Command WindowManager::getCommand() {
-    return currentTerminal().getCommand();
+    return _currentTerminal().getCommand();
 }
 
 /* -------------------------------------------- */
@@ -63,7 +63,7 @@ void WindowManager::switchToPrevious() {
     _putTitle();
 }
 
-Terminal& WindowManager::currentTerminal() {
+Terminal& WindowManager::_currentTerminal() {
     return m_terminals[m_currentTerminal];
 }
 
@@ -73,82 +73,82 @@ Terminal& WindowManager::currentTerminal() {
  * @brief Writes a str to terminal internal buffer.
  */
 void WindowManager::write(const i8* str) {
-    currentTerminal() << str;
+    _currentTerminal() << str;
 }
 
 /**
  * @brief Writes a char to terminal internal buffer.
  */
 void WindowManager::write(const vga::Char character) {
-    currentTerminal() << character;
+    _currentTerminal() << character;
 }
 
 /* -------------------------------------------- */
 
 void WindowManager::eraseChar() {
-    currentTerminal().eraseChar();
+    _currentTerminal().eraseChar();
 }
 
 void WindowManager::eraseLine() {
-    currentTerminal().eraseLine();
+    _currentTerminal().eraseLine();
 }
 
 void WindowManager::deleteChar() {
-    currentTerminal().deleteChar();
+    _currentTerminal().deleteChar();
 }
 
 void WindowManager::newLine() {
-    currentTerminal().insertNewline();
+    _currentTerminal().insertNewline();
 }
 
 void WindowManager::prompt() {
-    currentTerminal().prompt();
+    _currentTerminal().prompt();
 }
 
 /* -------------------------------------------- */
 
 void WindowManager::scrollUp() {
-    currentTerminal().offsetUpward();
+    _currentTerminal().offsetUpward();
 }
 
 void WindowManager::scrollDown() {
-    currentTerminal().offsetDownward();
+    _currentTerminal().offsetDownward();
 }
 
 void WindowManager::moveCursorLeft() {
-    currentTerminal().moveCursorLeftward();
+    _currentTerminal().moveCursorLeftward();
 }
 
 void WindowManager::moveCursorRight() {
-    currentTerminal().moveCursorRightward();
+    _currentTerminal().moveCursorRightward();
 }
 
 void WindowManager::moveCursorToBeginning() {
-    currentTerminal().moveCursorToStart();
+    _currentTerminal().moveCursorToStart();
 }
 
 void WindowManager::moveCursorToEnd() {
-    currentTerminal().moveCursorToEnd();
+    _currentTerminal().moveCursorToEnd();
 }
 
 void WindowManager::scrollPageDown() {
-    currentTerminal().focusOnCommandLine();
+    _currentTerminal().focusOnCommandLine();
 }
 
 void WindowManager::scrollPageUp() {
-    currentTerminal().focusOnTopOfBuffer();
+    _currentTerminal().focusOnTopOfBuffer();
 }
 
 void WindowManager::moveCursorToBeginningOfWord() {
-    currentTerminal().moveCursorToBeginningOfWord();
+    _currentTerminal().moveCursorToBeginningOfWord();
 }
 
 void WindowManager::moveCursorToEndOfWord() {
-    currentTerminal().moveCursorToEndOfWord();
+    _currentTerminal().moveCursorToEndOfWord();
 }
 
 void WindowManager::clearScreen() {
-    currentTerminal().resetInner();
+    _currentTerminal().resetInner();
     _putTitle();
 }
 

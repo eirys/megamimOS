@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 13:00:02 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 14:20:00 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "keyboard.h"
 #include "event_handler.h"
 #include "window_manager.h"
-#include "qwerty.h"
+#include "layout_handler.h"
 
 // State
 #include "signal.h"
@@ -46,7 +46,7 @@ struct MultibootInfo {
 
 static
 void _basicSignalHandler() {
-    ui::WindowManager::currentTerminal() << "Signal received!";
+    ui::WindowManager::get() << "Signal received!";
 }
 
 static
@@ -63,6 +63,7 @@ void _init() {
 #endif
     ui::EventHandler::init();
     ui::WindowManager::init();
+    ui::LayoutHandler::init();
 
     core::sti();
 }
@@ -74,10 +75,8 @@ void megamimOS_cpp(const MultibootInfo& info) {
     (void)info;
     _init();
 
-    ui::QwertyLayout layout;
-
     for (;;) {
-        ui::Keyboard::handle(layout);
+        ui::Keyboard::handle(ui::LayoutHandler::getLayout());
         kfs::SignalManager::get().update();
 
         core::hlt();

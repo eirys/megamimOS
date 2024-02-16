@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 23:47:51 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 16:32:02 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 15:44:17 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ enum class Key: u8 {
     Semicolon,
 
     Grave,
-    Quote,
+    Apostrophe,
 
     Backslash,
     Slash,
@@ -102,7 +102,7 @@ enum class Key: u8 {
     LCtrl,
 
     RShift,
-    RAlt,
+    RAlt, // Also known as AltGr.
     RCtrl,
 
     Caps,
