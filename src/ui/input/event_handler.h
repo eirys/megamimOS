@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 21:29:58 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 02:59:41 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 03:16:51 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,28 +37,11 @@ public:
     /* ---------------------------------------- */
 
     static void     init();
-
-    /// Inserts a scancode into the event handnler.
-    ///
-    /// # Critical Section
-    ///
-    /// This function must be called while interrupts are disabled.
     static void     insertScancode(const u8 scancode);
 
     /* ---------------------------------------- */
 
-    /// Copies the scane-codes currently buffered in the event
-    /// handler to the provided buffer.
-    ///
-    /// The mumber of bytes copied is written to `count`.
-    ///
-    /// Note that at most `MAX_SCANCODES` bytes can be written
-    /// regardless of the initial value of `count`.
-    ///
-    /// # Critical Section
-    ///
-    /// This function must be called while interrupts are disabled.
-    static void    copyTo(u8* out, u8& count);
+    static void     copyTo(u8* out, u8& count);
 
 private:
     /* ---------------------------------------- */
