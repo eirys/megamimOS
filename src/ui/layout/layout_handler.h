@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:10:40 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 16:48:22 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 22:07:12 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@
 namespace ui {
 
 enum class Layout: u8 {
-    Azerty = 0,
-    Qwerty,
+    Qwerty = 0,
+    Azerty,
 
-    First   = Azerty,
-    Last    = Qwerty
+    First   = Qwerty,
+    Last    = Azerty
 };
 
 class ILayout;
