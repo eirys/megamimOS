@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:24:57 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 19:27:14 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 02:30:26 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ u8          WindowManager::m_currentTerminal;
 /*                    PUBLIC                    */
 /* -------------------------------------------- */
 
-WindowManager* WindowManager::get() {
+WindowManager& WindowManager::get() {
     static WindowManager wm;
-    return &wm;
+    return wm;
 }
 
 void WindowManager::init() {

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 00:17:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 21:33:26 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 00:59:04 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,13 @@
 
 # include "types.h"
 # include "utils.h"
+# include "commands.h"
 
 namespace vga {
 class Char;
 }
 
 namespace ui {
-
-/* -------------------------------------------- */
-/*                     ENUMS                    */
-/* -------------------------------------------- */
-
-enum class Command: u8 {
-    Clear   = 0,
-    Help,
-    Panic,
-    Reboot,
-    Halt,
-    Version,
-
-    Empty,
-    Unknown,
-
-    First = Clear,
-    Last = Version
-};
 
 class CommandHandler final {
 public:

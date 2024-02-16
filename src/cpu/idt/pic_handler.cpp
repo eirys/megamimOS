@@ -6,15 +6,15 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:17:12 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 21:47:33 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 02:53:35 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pic_handler.h"
 #include "pic.h"
 #include "idt_decl.h"
-#include "debug.h"
-#include "pit.h"
+#include "event_handler.h"
+#include "ps2.h"
 
 namespace cpu::idt {
 
@@ -25,7 +25,6 @@ namespace cpu::idt {
 
 _DECL_INTERNAL
 void timerInternal() {
-    pit::
     pic::sendEOI(pic::IRQ::Timer);
 }
 
@@ -39,7 +38,7 @@ void timerInterrupt(InterruptFrame* frame) {
 
 _DECL_INTERNAL
 void keyboardInternal() {
-    // do stuff
+    ui::EventHandler::insertScancode(ps2::readData());
     pic::sendEOI(pic::IRQ::Keyboard);
 }
 

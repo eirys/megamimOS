@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/15 19:27:52 by etran            ###   ########.fr        #
+#    Updated: 2024/02/16 02:13:20 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ DRIVER_DIR		:=	drivers
 
 UI_DIR			:=	ui
 LAYOUT_DIR		:=	$(UI_DIR)/layout
+INPUT_DIR		:=	$(UI_DIR)/input
 
 CPU_DIR			:=	cpu
 IDT_DIR			:=	$(CPU_DIR)/idt
@@ -41,6 +42,7 @@ SUBDIRS			:=	. \
 					$(DRIVER_DIR) \
 					$(UI_DIR) \
 					$(LAYOUT_DIR) \
+					$(INPUT_DIR) \
 					$(GDT_DIR) \
 					$(IDT_DIR) \
 					$(CPU_DIR) \
@@ -57,6 +59,8 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(UI_DIR)/terminal.cpp \
 					$(UI_DIR)/window_manager.cpp \
 					$(UI_DIR)/command_handler.cpp \
+					$(INPUT_DIR)/event_handler.cpp \
+					$(INPUT_DIR)/keyboard.cpp \
 					$(DRIVER_DIR)/vga.cpp \
 					$(DRIVER_DIR)/pic.cpp \
 					$(DRIVER_DIR)/serial.cpp \

@@ -6,12 +6,13 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:17:38 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 18:55:24 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 02:34:37 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "terminal.h"
 #include "lib.h"
+#include "command_handler.h"
 
 namespace ui {
 
@@ -123,19 +124,14 @@ void Terminal::insertNewline() {
 }
 
 void Terminal::resetInner() {
-
     m_scrollAmount = 0U;
     m_cursor = 0U;
     m_lineLength = 0U;
     m_isPrompt = false;
 
-    // for (u32 i = 0; i < vga::WIDTH * TERMINAL_HEIGHT; i++) {
-    //     m_data[i] = (u8)vga::Char::Empty;
-    // }
     lib::memset(m_data, (u8)vga::Char::Empty, vga::WIDTH * TERMINAL_HEIGHT - 1);
 
     vga::clearBuffer(vga::Color::Barbie);
-    // focusOnCommandLine();
 }
 
 void Terminal::deleteChar() {
