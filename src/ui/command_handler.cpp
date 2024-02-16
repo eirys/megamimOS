@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:24:31 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 19:39:50 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 03:32:34 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "lib.h"
 #include "panic.h"
 #include "window_manager.h"
+#include "signal.h"
 
 namespace ui {
 
@@ -50,6 +51,7 @@ void CommandHandler::execute(Command cmd) {
         case Command::Halt:     _halt(); break;
         case Command::Version:  _version(); break;
         case Command::Unknown:  _unknown(); break;
+        case Command::SendSignal: _sendSignal(); break;
         case Command::Empty:
         default:
             break;
@@ -108,6 +110,17 @@ void CommandHandler::_version() {
 
 void CommandHandler::_unknown() {
     WindowManager::write("Unknown command. Type 'help' for a list of available commands.");
+}
+
+void CommandHandler::_sendSignal() {
+    static kfs::Signal signalToSend = kfs::Signal::First;
+
+    WindowManager::currentTerminal() << "Sending signal " << (u32)signalToSend << "...";
+    kfs::SignalManager::get().schedule(signalToSend);
+
+    signalToSend = (kfs::Signal)((u32)signalToSend + 1);
+    if ((u32)signalToSend > (u32)kfs::Signal::Last)
+        signalToSend = kfs::Signal::First;
 }
 
 } // namespace ui

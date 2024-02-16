@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 03:05:13 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 03:31:51 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,17 @@
 #include "window_manager.h"
 #include "qwerty.h"
 
+// State
+#include "signal.h"
+#include "time.h"
+
 // CPU
 #include "idt.h"
 #include "gdt.h"
 
-#include "debug.h"
+// Other
 #include "panic.h"
+#include "debug.h"
 
 /* -------------------------------------------- */
 
@@ -40,13 +45,19 @@ struct MultibootInfo {
 /* -------------------------------------------- */
 
 static
+void _basicSignalHandler() {
+    ui::WindowManager::currentTerminal() << "Signal received!";
+}
+
+static
 void _init() {
     cpu::gdt::init();
     cpu::idt::init();
     pic::init();
-    pit::init(100); // 100Hz
+    pit::init(1000); // 100Hz
     vga::init();
     ps2::init();
+    kfs::SignalManager::get().registerHandler(kfs::Signal::User1, _basicSignalHandler);
 #ifdef _DEBUG
     serial::init();
 #endif
@@ -64,6 +75,8 @@ void megamimOS_cpp(const MultibootInfo& info) {
     _init();
 
     ui::QwertyLayout layout;
+
+    // kfs::sleep(1000000); // one second
 
     for (;;) {
         ui::Keyboard::handle(layout);

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 00:17:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 00:59:04 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 03:28:54 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ private:
         "reboot",
         "halt",
         "version",
+        "sendSignal",
     };
 
     /* ---------------------------------------- */
@@ -71,6 +72,7 @@ private:
     static void             _panic();
     static void             _halt();
     static void             _version();
+    static void             _sendSignal();
 
     static void             _unknown();
 
