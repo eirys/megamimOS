@@ -54,7 +54,7 @@ public:
     /* ---------------------------------------- */
 
     inline
-    void putString(const i8* str) {
+    void putString(const char* str) {
         while (*str)
             putChar(vga::Char(*str++));
     }
@@ -148,7 +148,7 @@ private:
 
 }; // class Terminal
 
-Terminal& operator<<(Terminal& term, const i8* str) {
+Terminal& operator<<(Terminal& term, const char* str) {
     term.putString(str);
     return term;
 }

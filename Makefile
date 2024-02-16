@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
+#    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/09 13:37:24 by etran            ###   ########.fr        #
+#    Updated: 2024/02/16 00:36:09 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SUBDIRS			:=	. \
 
 OBJ_SUBDIRS		:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
+INC_LIB_DIR		:=	$(LIB_DIR)/include
 
 # ---------------- SOURCE FILES ---------------- #
 SRC_FILES_CPP	:=	main.cpp \
@@ -73,7 +74,7 @@ CFLAGS			:=	-std=c++20 \
 					-m32
 
 INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS)) \
-					-I$(LIB_DIR)
+					-I$(INC_LIB_DIR)
 DEFINES			:=	$(addprefix -D,$(MACROS))
 
 LD				:=	ld
@@ -138,7 +139,7 @@ run-grub: all
 
 .PHONY: clean
 clean:
-	@echo "Removing objects."
+	@echo "Removing object files."
 	@$(RM) $(OBJ_DIR)
 	@echo "Removing $(ISO)".
 	@$(RM) $(ISO)
