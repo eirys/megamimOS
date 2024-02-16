@@ -22,6 +22,7 @@
 
 // State
 #include "signal.h"
+#include "time.h"
 
 // CPU
 #include "idt.h"
@@ -50,7 +51,7 @@ void _init() {
     cpu::gdt::init();
     cpu::idt::init();
     pic::init();
-    pit::init(100); // 100Hz
+    pit::init(1000); // 100Hz
     vga::init();
     ps2::init();
     kfs::SignalManager::get().registerHandler(kfs::Signal::User1, _basicSignalHandler);
@@ -132,6 +133,8 @@ void megamimOS_cpp(const MultibootInfo& info) {
     _init();
 
     ui::QwertyLayout    layout;
+
+    // kfs::sleep(1000000); // one second
 
     for (;;) {
         kfs::SignalManager::get().update();

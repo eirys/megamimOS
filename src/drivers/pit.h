@@ -16,6 +16,10 @@
 
 namespace pit {
 
+/// The number of microseconds between each tick
+/// emitted by the PIT.
+extern u32 tickDurationMicros;
+
 void init(u32 frequency);
 
 }  // namespace pit
