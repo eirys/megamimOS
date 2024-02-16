@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/16 21:37:59 by etran             #+#    #+#             */
+/*   Updated: 2024/02/16 21:38:01 by etran            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #pragma once
 
@@ -6,25 +17,27 @@
 
 namespace kfs {
 
-/// A signal that can be delivered.
+/**
+ * @brief A signal that can be delivered.
+ */
 enum class Signal {
-    /// A user-defined signal.
-    User1,
-    /// A user-defined signal.
-    User2,
+    User1,     // A user-defined signal.
+    User2,     // A user-defined signal.
 
     First = User1,
     Last = User2,
 };
 
-/// The signal manager is responsible for handling signals within
-/// the kernel.
-///
-/// When a signal is scheduled to be delivered within the kernel, a
-/// routine in the signal manager is invoked to handle the signal.
-///
-/// The default routine is always triggers a kernel panic to avoid
-/// undefined behavior.
+/**
+ * @brief The signal manager is responsible for handling signals within
+ * the kernel.
+ *
+ * @note When a signal is scheduled to be delivered within the kernel, a
+ * routine in the signal manager is invoked to handle the signal.
+ *
+ * @note The default routine is always triggers a kernel panic to avoid
+ * undefined behavior.
+ */
 class SignalManager final {
 public:
     /* ---------------------------------------- */
@@ -48,27 +61,26 @@ public:
 
     /* ---------------------------------------- */
 
-    static void     init();
-
-    /// Returns the global signal manager.
-    static inline
-    SignalManager&  get() {
-        static SignalManager instance;
-        return instance;
-    }
+    static void init();
 
     /* ---------------------------------------- */
 
-    /// Sets the signal handler for a given signal.
-    static void    registerHandler(Signal signal, SignalHandler handler);
+    /**
+     * @brief Registers a signal handler for a given signal.
+    */
+    static void registerHandler(Signal signal, SignalHandler handler);
 
-    /// Schedules a signal to be delivered to the appropriate signal
-    /// handler on the next tick.
-    bool    schedule(Signal signal);
+    /**
+     * @brief Schedules a signal to be delivered to the appropriate signal
+     * handler on the next tick.
+     */
+    static bool schedule(Signal signal);
 
-    /// Updates the signal manager, delivering any pending signals
-    /// to the appropriate signal handlers.
-    void    update();
+    /**
+     * @brief Updates the signal manager, delivering any pending signals
+     * to the appropriate signal handlers.
+     */
+    static void update();
 
 
 private:
@@ -76,15 +88,19 @@ private:
     /*              STATIC MEMBERS              */
     /* ---------------------------------------- */
 
-    static constexpr u32 SIGNAL_COUNT = enumSize<Signal>();
+    static constexpr u32    SIGNAL_COUNT = enumSize<Signal>();
 
-    /// The signal handlers for each signal.
-    static SignalHandler m_handlers[SIGNAL_COUNT] = { nullptr };
+    /**
+     * @brief The signal handlers for each signal.
+    */
+    static SignalHandler    m_handlers[SIGNAL_COUNT];
 
-    /// A bitfield of pending signals.
-    ///
-    /// Each pending signal is represented by a bit in the bitfield.
-    static u32 m_pending = 0;
+    /**
+     * @brief A bitfield of pending signals.
+     *
+     * @note Each pending signal is represented by a bit in the bitfield.
+    */
+    static u32              m_pending;
 
     /* ---------------------------------------- */
     /*                  METHODS                 */

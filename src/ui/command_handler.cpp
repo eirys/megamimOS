@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:24:31 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 14:02:29 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 21:40:48 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,8 @@ void CommandHandler::_sendSignal() {
     static kfs::Signal signalToSend = kfs::Signal::First;
 
     WindowManager::get() << "Sending signal " << (u32)signalToSend << "...";
-    kfs::SignalManager::get().schedule(signalToSend);
+
+    kfs::SignalManager::schedule(signalToSend);
 
     signalToSend = (kfs::Signal)((u32)signalToSend + 1);
     if ((u32)signalToSend > (u32)kfs::Signal::Last)

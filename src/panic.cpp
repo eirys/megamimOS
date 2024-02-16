@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 13:00:21 by nmathieu          #+#    #+#             */
-/*   Updated: 2024/02/15 17:19:33 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 21:29:52 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 #include "core.h"
 #include "vga.h"
 
-
 /// @brief The current position of the cursor within the VGA buffer used
 /// when the panic function needs to print stuff to the screen.
 static u8 x = 0;
+
 /// @brief Same shit but this controls the height of the cursor rather than
 /// its horizontal position.
 static u8 y = 0;
+
 /// @brief The current foreground color. The background is always red.
 static vga::Color fg = vga::Color::Immaculate;
 

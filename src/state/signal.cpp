@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 21:12:48 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 21:13:03 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 21:40:36 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,14 @@
 namespace kfs {
 
 /* -------------------------------------------- */
-/*                    STATIC                    */
+/*                STATIC MEMBERS                */
+/* -------------------------------------------- */
+
+SignalManager::SignalHandler    SignalManager::m_handlers[SIGNAL_COUNT] = { nullptr };
+u32                             SignalManager::m_pending = 0;
+
+/* -------------------------------------------- */
+/*                    PUBLIC                    */
 /* -------------------------------------------- */
 
 static
@@ -25,15 +32,15 @@ void _basicSignalHandler() {
     ui::WindowManager::get() << "Signal received!";
 }
 
-/* -------------------------------------------- */
-/*                    PUBLIC                    */
-/* -------------------------------------------- */
-
 void SignalManager::init() {
-    registerHandler(kfs::Signal::User1, _basicSignalHandler);
+    registerHandler(Signal::User1, _basicSignalHandler);
 }
 
 /* -------------------------------------------- */
+
+void SignalManager::registerHandler(Signal signal, SignalHandler handler) {
+    m_handlers[(u32)signal] = handler;
+}
 
 bool SignalManager::schedule(Signal signal) {
     if (m_pending & (1 << (u32)signal)) {
@@ -45,11 +52,11 @@ bool SignalManager::schedule(Signal signal) {
 }
 
 void SignalManager::update() {
-    for (u32 rawSignal = (u32)Signal::First; rawSignal <= (u32)Signal::Last; ++rawSignal) {
+    for (u32 rawSignal = (u32)Signal::First; rawSignal < SIGNAL_COUNT; ++rawSignal) {
         if (m_pending & (1 << rawSignal)) {
             SignalHandler handler = m_handlers[rawSignal];
             if (!handler) {
-                beginKernelPanic("Received a signal without an associated handler.");
+                return beginKernelPanic("Received a signal without an associated handler.");
             }
 
             handler();
@@ -59,8 +66,4 @@ void SignalManager::update() {
     m_pending = 0;
 }
 
-void SignalManager::registerHandler(Signal signal, SignalHandler handler) {
-    m_handlers[(u32)signal] = handler;
-}
-
-}
+} // namespace kfs
