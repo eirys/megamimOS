@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pic_handler.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:17:12 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 14:05:16 by nmathieu         ###   ########.fr       */
+/*   Updated: 2024/02/16 03:30:38 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "pic.h"
 #include "pit.h"
 #include "idt_decl.h"
-#include "debug.h"
+#include "event_handler.h"
+#include "ps2.h"
 #include "time.h"
 
 namespace cpu::idt {
@@ -40,7 +41,7 @@ void timerInterrupt(InterruptFrame* frame) {
 
 _DECL_INTERNAL
 void keyboardInternal() {
-    // do stuff
+    ui::EventHandler::insertScancode(ps2::readData());
     pic::sendEOI(pic::IRQ::Keyboard);
 }
 

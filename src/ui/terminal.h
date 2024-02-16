@@ -6,14 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:42:55 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 18:43:55 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 02:36:08 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 # include "vga.h"
-# include "command_handler.h"
+# include "commands.h"
 
 namespace ui {
 
@@ -70,7 +70,7 @@ public:
 
     /* ---------------- GETTER ---------------- */
 
-    vga::Color getColor() const;
+    vga::Color  getColor() const;
 
 private:
     /* ---------------------------------------- */
@@ -97,9 +97,9 @@ private:
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    void _scrollUp();
-    void _offsetLineByOneToRight();
-    void _offsetLineByOneToLeft();
+    void            _scrollUp();
+    void            _offsetLineByOneToRight();
+    void            _offsetLineByOneToLeft();
 
 }; // class Terminal
 

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 00:17:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 19:40:21 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 03:28:54 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 # include "types.h"
 # include "utils.h"
+# include "commands.h"
 
 namespace vga {
 class Char;
@@ -21,33 +22,12 @@ class Char;
 
 namespace ui {
 
-/* -------------------------------------------- */
-/*                     ENUMS                    */
-/* -------------------------------------------- */
-
-enum class Command: u8 {
-    Clear   = 0,
-    Help,
-    Panic,
-    Reboot,
-    Halt,
-    Version,
-    SendSignal,
-
-    Empty,
-    Unknown,
-
-    First = Clear,
-    Last = SendSignal
-};
-
 class CommandHandler final {
 public:
     /* ---------------------------------------- */
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    CommandHandler() = default;
     CommandHandler(CommandHandler&& other) = default;
     CommandHandler(const CommandHandler& other) = default;
     CommandHandler& operator=(CommandHandler&& other) = default;
@@ -78,6 +58,10 @@ private:
 
     /* ---------------------------------------- */
     /*                  METHODS                 */
+    /* ---------------------------------------- */
+
+    CommandHandler() = default;
+
     /* ---------------------------------------- */
 
     static u32              _getWordLen(const vga::Char* buf, const u32 len);

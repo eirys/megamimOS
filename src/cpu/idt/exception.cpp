@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exception.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:52:05 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 13:08:48 by nmathieu         ###   ########.fr       */
+/*   Updated: 2024/02/16 12:48:03 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exception.h"
-#include "idt_decl.h"
 #include "debug.h"
 #include "core.h"
 #include "panic.h"

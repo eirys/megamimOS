@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ilayout.h                                          :+:      :+:    :+:   */
+/*   keyboard.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/08 13:13:15 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 03:07:37 by etran            ###   ########.fr       */
+/*   Created: 2024/02/16 01:55:59 by etran             #+#    #+#             */
+/*   Updated: 2024/02/16 02:58:50 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,36 +16,37 @@
 
 namespace ui {
 
-enum class TranslateResult: u8 {
-    Continue,
-    Success,
-    Invalid
-};
-
+class ILayout;
 struct KeyEvent;
 
-class ILayout {
+class Keyboard final {
 public:
     /* ---------------------------------------- */
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    virtual ~ILayout() = default;
+    Keyboard(Keyboard&& other) = delete;
+    Keyboard(const Keyboard& other) = delete;
+    Keyboard& operator=(Keyboard&& other) = delete;
+    Keyboard& operator=(const Keyboard& other) = delete;
+    ~Keyboard() = default;
 
+    /* ---------------------------------------- */
+
+    static void     handle(ILayout& layout);
+
+private:
     /* ---------------------------------------- */
     /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    virtual
-    TranslateResult translate(const u8 scancode, KeyEvent& out) = 0;
+    Keyboard() = default;
 
-protected:
-    /* ---------------------------------------- */
-    /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    ILayout() = default;
+    static void     _handleInput(const KeyEvent& event);
+    static void     _handleCommand();
 
-}; // class ILayout
+}; // class Keyboard
 
 } // namespace ui

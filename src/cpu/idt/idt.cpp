@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   idt.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:48:02 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 13:08:28 by nmathieu         ###   ########.fr       */
+/*   Updated: 2024/02/16 12:52:55 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ GateDescriptor _createGateDescriptor(
  */
 static
 void _load() {
-    // TODO
     constexpr const bool enableInt = true;
     constexpr const bool disableInt = false;
 
