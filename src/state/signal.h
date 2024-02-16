@@ -27,35 +27,71 @@ enum class Signal {
 /// undefined behavior.
 class SignalManager final {
 public:
+    /* ---------------------------------------- */
+    /*                 TYPEDEFS                 */
+    /* ---------------------------------------- */
+
     /// The signal handler is a function that is invoked when a signal
     /// is delivered.
     using SignalHandler = void(*)();
 
-    /// Sets the signal handler for a given signal.
-    void registerHandler(Signal signal, SignalHandler handler);
+    /* ---------------------------------------- */
+    /*                  METHODS                 */
+    /* ---------------------------------------- */
 
-    /// Schedules a signal to be delivered to the appropriate signal
-    /// handler on the next tick.
-    bool schedule(Signal signal);
+    ~SignalManager() = default;
 
-    /// Updates the signal manager, delivering any pending signals
-    /// to the appropriate signal handlers.
-    void update();
+    SignalManager(SignalManager&& other) = delete;
+    SignalManager(const SignalManager& other) = delete;
+    SignalManager& operator=(SignalManager&& other) = delete;
+    SignalManager& operator=(const SignalManager& other) = delete;
+
+    /* ---------------------------------------- */
+
+    static void     init();
 
     /// Returns the global signal manager.
     static inline
-    SignalManager& get() {
+    SignalManager&  get() {
         static SignalManager instance;
         return instance;
     }
 
+    /* ---------------------------------------- */
+
+    /// Sets the signal handler for a given signal.
+    static void    registerHandler(Signal signal, SignalHandler handler);
+
+    /// Schedules a signal to be delivered to the appropriate signal
+    /// handler on the next tick.
+    bool    schedule(Signal signal);
+
+    /// Updates the signal manager, delivering any pending signals
+    /// to the appropriate signal handlers.
+    void    update();
+
+
 private:
+    /* ---------------------------------------- */
+    /*              STATIC MEMBERS              */
+    /* ---------------------------------------- */
+
+    static constexpr u32 SIGNAL_COUNT = enumSize<Signal>();
+
     /// The signal handlers for each signal.
-    SignalHandler m_handlers[enumSize<Signal>()] = { 0 };
+    static SignalHandler m_handlers[SIGNAL_COUNT] = { nullptr };
+
     /// A bitfield of pending signals.
     ///
     /// Each pending signal is represented by a bit in the bitfield.
-    u32 m_pending = 0;
+    static u32 m_pending = 0;
+
+    /* ---------------------------------------- */
+    /*                  METHODS                 */
+    /* ---------------------------------------- */
+
+    SignalManager() = default;
+
 };
 
-}
+} // namespace kfs
