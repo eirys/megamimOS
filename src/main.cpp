@@ -56,7 +56,7 @@ void _init() {
     ps2::init();
     kfs::SignalManager::get().registerHandler(kfs::Signal::User1, _basicSignalHandler);
 #ifdef _DEBUG
-    serial::init();
+    // serial::init();
 #endif
 
     core::sti();

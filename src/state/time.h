@@ -2,8 +2,8 @@
 
 namespace kfs {
 
-/// The total number of ticks since the system booted.
-extern u32 tickCountSinceBoot;
+/// The total number of microseconds since the system booted.
+extern u32 microsecondsSinceBoot;
 
 /// Sleeps for the given number of microseconds.
 ///

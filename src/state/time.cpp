@@ -3,12 +3,11 @@
 
 namespace kfs {
 
-u32 tickCountSinceBoot;
+u32 microsecondsSinceBoot;
 
 void sleep(u32 microseconds) {
-    const u32 usPerTick = pit::tickDurationMicros;
-    u32 end = tickCountSinceBoot * usPerTick + microseconds;
-    while (tickCountSinceBoot * usPerTick < end) {
+    u32 end = microsecondsSinceBoot + microseconds;
+    while (microsecondsSinceBoot < end) {
         core::hlt();
     }
 }

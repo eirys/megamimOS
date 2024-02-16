@@ -12,6 +12,7 @@
 
 #include "pic_handler.h"
 #include "pic.h"
+#include "pit.h"
 #include "idt_decl.h"
 #include "debug.h"
 #include "time.h"
@@ -25,7 +26,7 @@ namespace cpu::idt {
 
 _DECL_INTERNAL
 void timerInternal() {
-    ++kfs::tickCountSinceBoot;
+    kfs::microsecondsSinceBoot += pit::tickDurationMicros;
     pic::sendEOI(pic::IRQ::Timer);
 }
 
