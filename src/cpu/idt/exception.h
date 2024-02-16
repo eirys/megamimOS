@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   exception.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 14:54:18 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 13:08:13 by nmathieu         ###   ########.fr       */
+/*   Updated: 2024/02/16 12:50:57 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 # include "types.h"
+# include "idt_decl.h"
 
 namespace cpu::idt {
 
 # define _DECL_INTERRUPT    __attribute__ ((interrupt))
-# define ErrorCode unsigned long
 
 /**
  * @brief Exception codes: Interrupts triggered by the CPU when an error occurs.
@@ -96,8 +96,6 @@ _DECL_INTERRUPT void    hypervisorInjection(InterruptFrame* frame);
 _DECL_INTERRUPT void    vmmCommunication(InterruptFrame* frame, ErrorCode code);
 _DECL_INTERRUPT void    security(InterruptFrame* frame, ErrorCode code);
 
-
 # undef _DECL_INTERRUPT
-# undef ErrorCode
 
 } // namespace cpu::idt

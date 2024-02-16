@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 03:31:51 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 13:00:02 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ void megamimOS_cpp(const MultibootInfo& info) {
 
     ui::QwertyLayout layout;
 
-    // kfs::sleep(1000000); // one second
-
     for (;;) {
         ui::Keyboard::handle(layout);
+        kfs::SignalManager::get().update();
+
         core::hlt();
     }
 }
