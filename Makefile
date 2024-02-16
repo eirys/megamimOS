@@ -74,7 +74,8 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(LIB_DIR)/strlen.cpp \
 					$(LIB_DIR)/strcpy.cpp \
 					$(LIB_DIR)/strcmp.cpp \
-					$(STATE_DIR)/signal.cpp
+					$(STATE_DIR)/signal.cpp \
+					$(STATE_DIR)/time.cpp
 
 SRC_FILES_ASM	:=	boot.s \
 					$(GDT_DIR)/load_gdt.s \
