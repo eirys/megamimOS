@@ -6,7 +6,7 @@
 #    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/10 20:03:30 by jodufour         ###   ########.fr        #
+#    Updated: 2024/02/16 00:36:09 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SUBDIRS			:=	. \
 
 OBJ_SUBDIRS		:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 INC_SUBDIRS		:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS))
+INC_LIB_DIR		:=	$(LIB_DIR)/include
 
 # ---------------- SOURCE FILES ---------------- #
 SRC_FILES_CPP	:=	main.cpp \
@@ -60,7 +61,7 @@ ASFLAGS			:=	-felf32
 CXX				:=	c++
 MACROS			:=	KERNEL_NAME=\"$(NAME)\"
 
-CXXFLAGS		:=	-std=c++20 \
+CFLAGS			:=	-std=c++20 \
 					-MMD \
 					-MP \
 					-fno-builtin \
@@ -73,7 +74,7 @@ CXXFLAGS		:=	-std=c++20 \
 					-m32
 
 INCLUDES		:=	$(addprefix -I./,$(INC_SUBDIRS)) \
-					-I$(LIB_DIR)
+					-I$(INC_LIB_DIR)
 DEFINES			:=	$(addprefix -D,$(MACROS))
 
 LD				:=	ld
@@ -114,7 +115,7 @@ $(NAME): $(OBJ_CPP) $(OBJ_ASM) $(LD_SCRIPT)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR) $(OBJ_SUBDIRS)
 	@echo "Compiling file $<..."
-	@$(CXX) $(CXXFLAGS) $(INCLUDES) $(DEFINES) -c $< -o $@
+	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c $< -o $@
 
 # Compile obj files (asm)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
@@ -138,7 +139,7 @@ run-grub: all
 
 .PHONY: clean
 clean:
-	@echo "Removing objects."
+	@echo "Removing object files."
 	@$(RM) $(OBJ_DIR)
 	@echo "Removing $(ISO)".
 	@$(RM) $(ISO)

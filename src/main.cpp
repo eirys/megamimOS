@@ -37,7 +37,7 @@ void _init() {
 static inline
 void _exit(ui::WindowManager& winManager) {
     winManager.newLine();
-    winManager << (i8*)"Good bye!";
+    winManager << "Good bye!";
     vga::disableCursor();
 }
 
@@ -60,7 +60,7 @@ static inline
 void _panic(ui::WindowManager& winManager) {
     core::panic();
     winManager.newLine();
-    winManager << (i8*)"PANIC KERNEL PANIC! ABORTING!";
+    winManager << "PANIC KERNEL PANIC! ABORTING!";
     // vga::disableCursor();
 }
 /* -------------------------------------------- */

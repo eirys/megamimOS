@@ -6,7 +6,7 @@
 #    By: jodufour <jodufour@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/08 14:44:58 by etran             #+#    #+#              #
-#    Updated: 2024/02/15 02:22:44 by jodufour         ###   ########.fr        #
+#    Updated: 2024/02/16 00:46:10 by jodufour         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ OBJ			:=	$(addprefix $(OBJ_DIR)/,$(SRC:.s=.o))
 TEST_SRC	:=	\
 	$(addsuffix .cpp, \
 		$(addprefix $(TEST_DIR)/, \
-			main \
+			tester \
 			memcmp \
 			memcpy \
 			memmov \
@@ -61,7 +61,7 @@ ASFLAGS		+=	-g
 endif
 
 CXX			:=	$(shell which c++)
-CXXFLAGS	:=	-c \
+CFLAGS		:=	-c \
 				-Wall \
 				-Wextra \
 				-m32 \
@@ -70,7 +70,7 @@ CXXFLAGS	:=	-c \
 				-MP \
 				-I$(INC_DIR)
 ifeq ($(DEBUG),1)
-CXXFLAGS	+=	-g \
+CFLAGS		+=	-g \
 				-fsanitize=address
 endif
 
@@ -91,7 +91,7 @@ RM			:=	$(shell which rm) -rf
 # ---------------------------------------------- #
 
 .PHONY: all
-all: $(NAME) $(TEST)
+all: $(NAME)
 
 .PHONY: test
 test: $(TEST)
@@ -121,19 +121,20 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@$(MKDIR) $(@D)
 	@echo "Compiling file $<..."
-	@$(CXX) $(CXXFLAGS) $< $(OUTPUT_OPTION)
+	@$(CXX) $(CFLAGS) $< $(OUTPUT_OPTION)
 
 
 .PHONY: clean
 clean:
-	@${RM} $(OBJ_DIR) $(NAME) $(TEST)
-	@echo "Removed object files, $(NAME), and $(TEST)."
+	@echo 'Removing object files.'
+	@$(RM) $(OBJ_DIR)
 
 .PHONY: fclean
 fclean: clean
+	@echo 'Removing $(NAME).'
+	@${RM} $(NAME)
+	@echo 'Removing $(TEST).'
+	@${RM} $(TEST)
 
 .PHONY: re
-re: clean all
-
-.PHONY: fre
-fre: fclean all
+re: fclean all

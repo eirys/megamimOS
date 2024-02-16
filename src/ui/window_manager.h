@@ -89,7 +89,7 @@ public:
     /* ---------------------------------------- */
 
     inline
-    void write(const i8* str) {
+    void write(const char* str) {
         currentTerminal() << str;
     }
 
@@ -135,7 +135,7 @@ private:
 }; // class WindowManager
 
 inline
-WindowManager& operator<<(WindowManager& wm, const i8* str) {
+WindowManager& operator<<(WindowManager& wm, const char* str) {
     wm.write(str);
     return wm;
 }
