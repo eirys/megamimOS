@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/16 14:22:35 by etran            ###   ########.fr        #
+#    Updated: 2024/02/18 21:53:20 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,8 @@ CPU_DIR			:=	cpu
 IDT_DIR			:=	$(CPU_DIR)/idt
 GDT_DIR			:=	$(CPU_DIR)/gdt
 
+MEMORY_DIR		:=	memory
+
 # ---------------- SUB DIRECTORIES ------------- #
 SUBDIRS			:=	. \
 					$(CORE_DIR) \
@@ -48,6 +50,7 @@ SUBDIRS			:=	. \
 					$(IDT_DIR) \
 					$(CPU_DIR) \
 					$(LIB_DIR) \
+					$(MEMORY_DIR) \
 					$(STATE_DIR)
 
 OBJ_SUBDIRS		:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
@@ -82,7 +85,8 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(LIB_DIR)/strcpy.cpp \
 					$(LIB_DIR)/strcmp.cpp \
 					$(STATE_DIR)/signal.cpp \
-					$(STATE_DIR)/time.cpp
+					$(STATE_DIR)/time.cpp \
+					$(MEMORY_DIR)/balloc.cpp
 
 SRC_FILES_ASM	:=	boot.s \
 					$(GDT_DIR)/load_gdt.s \

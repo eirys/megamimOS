@@ -6,9 +6,12 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 21:30:52 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/18 21:57:08 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// Boot
+#include "multiboot.h"
 
 // Drivers
 #include "ps2.h"
@@ -30,22 +33,22 @@
 #include "idt.h"
 #include "gdt.h"
 
+// Memory
+#include "balloc.h"
+
 // Other
 #include "panic.h"
 #include "debug.h"
 
 /* -------------------------------------------- */
 
-/**
- * @todo :P)
-*/
-struct MultibootInfo {
-};
-
-/* -------------------------------------------- */
-
 static
-void _init() {
+void _init(const multiboot::Info& info) {
+    multiboot::MemoryMap memMap;
+    if (!info.getLargestMemoryRegion(memMap))
+        return beginKernelPanic("No memory available");
+    mem::ballocInit(memMap.base_addr_low + memMap.length_low, memMap.base_addr_low);
+
     cpu::gdt::init();
     cpu::idt::init();
     pic::init();
@@ -66,9 +69,8 @@ void _init() {
 /* -------------------------------------------- */
 
 extern "C"
-void megamimOS_cpp(const MultibootInfo& info) {
-    (void)info;
-    _init();
+void megamimOS_cpp(const multiboot::Info& info) {
+    _init(info);
 
     for (;;) {
         ui::Keyboard::handle(ui::LayoutHandler::getLayout());

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 13:00:21 by nmathieu          #+#    #+#             */
-/*   Updated: 2024/02/16 21:29:52 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/18 21:55:51 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void vgaPanicPrint(char const *msg) noexcept
 
 /// @brief Stops the kernel with the provided message.
 /// @param msg A message explaining what has gone wrong.
+__attribute__ ((noreturn))
 void beginKernelPanic(char const *msg) noexcept
 {
     // Make sure that interrupts won't trigger and maybe
