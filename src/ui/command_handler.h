@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 00:17:41 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 03:28:54 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/19 13:26:40 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ private:
     static constexpr u32    MAX_CMD_LEN = 32;
     static constexpr u32    COMMAND_COUNT = enumSize<Command>();
     static constexpr i8     COMMANDS_NAME[COMMAND_COUNT][MAX_CMD_LEN] = {
-        "clear",
-        "help",
-        "panic",
-        "reboot",
-        "halt",
-        "version",
-        "sendSignal",
+        "clear\0",
+        "help\0",
+        "panic\0",
+        "reboot\0",
+        "halt\0",
+        "version\0",
+        "sendSignal\0",
     };
 
     /* ---------------------------------------- */

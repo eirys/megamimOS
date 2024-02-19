@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:24:31 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 14:02:29 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/19 13:34:18 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,22 @@ namespace ui {
 /* -------------------------------------------- */
 
 Command  CommandHandler::parse(const vga::Char* buf, u32 len) {
-    while (!buf->isAlphanum() && len > 0) {
+    while (buf->isWhitespace() && len > 0) {
         --len;
         ++buf;
     }
 
-    if (_getWordLen(buf, len) == 0)
+    const u32 wordLen = _getWordLen(buf, len);
+
+    if (wordLen == 0 && len == 0)
         return Command::Empty;
+    else if (wordLen == 0)
+        return Command::Unknown;
 
     for (u8 cmdIndex = 0; cmdIndex < COMMAND_COUNT; cmdIndex++) {
-        if (lib::memcmp(buf, COMMANDS_NAME[cmdIndex], lib::strlen(COMMANDS_NAME[cmdIndex])) == 0)
+        if (lib::strlen(COMMANDS_NAME[cmdIndex]) != wordLen)
+            continue;
+        if (lib::memcmp((i8*)buf, COMMANDS_NAME[cmdIndex], wordLen) == 0)
             return (Command)cmdIndex;
     }
 
@@ -65,7 +71,7 @@ void CommandHandler::execute(Command cmd) {
 u32 CommandHandler::_getWordLen(const vga::Char* buf, const u32 len) {
     u32 wordLen = 0;
 
-    while (wordLen < len && buf[wordLen].isAlphanum())
+    while (wordLen < len && !buf[wordLen].isWhitespace())
         ++wordLen;
     return wordLen;
 }

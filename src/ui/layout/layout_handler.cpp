@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 14:10:31 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 16:49:15 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/19 13:25:13 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ Layout      LayoutHandler::m_currentLayout;
 void LayoutHandler::init() {
     m_currentLayout = Layout::First;
 
-    m_layout[1] = &QwertyLayout::get();
-    m_layout[0] = &AzertyLayout::get();
+    m_layout[0] = &QwertyLayout::get();
+    m_layout[1] = &AzertyLayout::get();
 }
 
 void LayoutHandler::switchToNextLayout() {
