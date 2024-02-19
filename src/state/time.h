@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   time.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/16 21:31:14 by etran             #+#    #+#             */
+/*   Updated: 2024/02/16 21:40:12 by etran            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #pragma once
+
+# include "types.h"
 
 namespace kfs {
 
@@ -12,4 +26,4 @@ extern u32 microsecondsSinceBoot;
 /// sleep at least the requested time.
 void sleep(u32 microseconds);
 
-}
+} // namespace kfs

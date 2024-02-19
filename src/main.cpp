@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 14:20:00 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 21:30:52 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,6 @@ struct MultibootInfo {
 /* -------------------------------------------- */
 
 static
-void _basicSignalHandler() {
-    ui::WindowManager::get() << "Signal received!";
-}
-
-static
 void _init() {
     cpu::gdt::init();
     cpu::idt::init();
@@ -57,7 +52,7 @@ void _init() {
     pit::init(1000); // 100Hz
     vga::init();
     ps2::init();
-    kfs::SignalManager::get().registerHandler(kfs::Signal::User1, _basicSignalHandler);
+    kfs::SignalManager::init();
 #ifdef _DEBUG
     serial::init();
 #endif
@@ -77,7 +72,7 @@ void megamimOS_cpp(const MultibootInfo& info) {
 
     for (;;) {
         ui::Keyboard::handle(ui::LayoutHandler::getLayout());
-        kfs::SignalManager::get().update();
+        kfs::SignalManager::update();
 
         core::hlt();
     }

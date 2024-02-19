@@ -122,7 +122,8 @@ void CommandHandler::_sendSignal() {
     static kfs::Signal signalToSend = kfs::Signal::First;
 
     WindowManager::get() << "Sending signal " << (u32)signalToSend << "...";
-    kfs::SignalManager::get().schedule(signalToSend);
+
+    kfs::SignalManager::schedule(signalToSend);
 
     signalToSend = (kfs::Signal)((u32)signalToSend + 1);
     if ((u32)signalToSend > (u32)kfs::Signal::Last)
