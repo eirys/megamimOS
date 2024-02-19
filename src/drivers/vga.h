@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:38:11 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 15:00:36 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/19 13:22:28 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,7 @@ public:
     bool    isAlpha() const;
     bool    isNum() const;
     bool    isAlphanum() const;
+    bool    isWhitespace() const;
 
 private:
     /* ---------------------------------------- */

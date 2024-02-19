@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vga.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmathieu <nmathieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 19:36:28 by etran             #+#    #+#             */
-/*   Updated: 2024/02/15 14:19:50 by nmathieu         ###   ########.fr       */
+/*   Updated: 2024/02/19 13:22:51 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ bool Char::isNum() const {
 
 bool Char::isAlphanum() const {
     return isAlpha() || isNum();
+}
+
+bool Char::isWhitespace() const {
+    return m_inner == vga::Char::Empty || m_inner == vga::Char::Space;
 }
 
 /* -------------------------------------------- */
