@@ -6,11 +6,12 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 21:33:13 by etran             #+#    #+#             */
-/*   Updated: 2024/02/18 21:52:05 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 12:50:39 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "balloc.h"
+#include "panic.h"
 
 namespace mem {
 
@@ -30,6 +31,7 @@ void ballocInit(u32 top, u32 base) {
  */
 void *balloc(u32 size, u32 align) {
     if (size < g_ballocTop - g_ballocBase) {
+        beginKernelPanic("balloc: too big size");
         return nullptr;
     }
 
@@ -37,6 +39,7 @@ void *balloc(u32 size, u32 align) {
     const u32 addr = (g_ballocTop - size) & ~mask;
 
     if (addr < g_ballocBase) {
+        beginKernelPanic("balloc: out of memory");
         return nullptr;
     }
 
