@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:24:31 by etran             #+#    #+#             */
-/*   Updated: 2024/02/22 16:50:13 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 16:57:20 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "panic.h"
 #include "window_manager.h"
 #include "signal.h"
+#include "paging.h"
 
 namespace ui {
 
@@ -108,7 +109,7 @@ void CommandHandler::_version() {
 }
 
 void CommandHandler::_pageFault() {
-    constexpr const u32 PAGE_FAULT_ADDRESS = 0x66666666;
+    constexpr const u32 PAGE_FAULT_ADDRESS = mem::RANDOM_ADDRESS + 0x666;
 
     WindowManager::write("Simulating a page fault...");
     u32* ptr = (u32*)PAGE_FAULT_ADDRESS;

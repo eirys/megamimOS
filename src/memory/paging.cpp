@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 13:44:57 by etran             #+#    #+#             */
-/*   Updated: 2024/02/22 16:32:49 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 16:54:47 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void init(u32 upperBound) {
         beginKernelPanic("mem::init: mapping failed");
 
     // Remap at 0x66666000 for testing purposes
-    if (!kernelAddressSpace.createMapping4Kib(0x66666000, 0, AddressSpace::Flags::None))
+    if (!kernelAddressSpace.createMapping4Kib(RANDOM_ADDRESS, 0, AddressSpace::Flags::None))
         beginKernelPanic("mem::init: mapping failed");
 
     enable_paging(kernelAddressSpace.getCR3());

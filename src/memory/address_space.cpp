@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 14:45:45 by etran             #+#    #+#             */
-/*   Updated: 2024/02/22 14:39:48 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 16:56:55 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,12 @@ AddressSpace::AddressSpace() {
 /* -------------------------------------------- */
 
 bool AddressSpace::createMapping4Kib(u32 virtualAddress, u32 physicalAddress, Flags flags) {
+#ifdef _DEBUG
     if (physicalAddress & 0xFFF) {
         beginKernelPanic("createMapping4Kib: physicalAddress is not aligned to 4K");
         return false;
     }
+#endif
 
     u32*        pagesDirectory = (u32*)m_cr3;
     const u32   pagesDirectoryEntryIndex = virtualAddress >> 22;
@@ -76,10 +78,12 @@ bool AddressSpace::createMapping4Kib(u32 virtualAddress, u32 physicalAddress, Fl
 }
 
 bool AddressSpace::createMapping4Mib(u32 virtualAddress, u32 physicalAddress, Flags flags) {
+#ifdef _DEBUG
     if (physicalAddress & 0x3FFFFF) {
         beginKernelPanic("createMapping4Mib: physicalAddress is not aligned to 4M");
         return false;
     }
+#endif
 
     u32*        pagesDirectory = (u32*)m_cr3;
     const u32   pagesDirectoryEntryIndex = virtualAddress >> 22;
@@ -95,10 +99,12 @@ bool AddressSpace::createMapping4Mib(u32 virtualAddress, u32 physicalAddress, Fl
 }
 
 bool AddressSpace::createMapping(u32 virtualBase, u32 physicalBase, u32 size, Flags flags) {
+#ifdef _DEBUG
     if (virtualBase % FOUR_KIB != 0 || physicalBase != 0 || size % FOUR_KIB != 0) {
         beginKernelPanic("createMapping: invalid alignment or size");
         return false;
     }
+#endif
 
     while (size) {
         if (virtualBase % FOUR_MIB == 0 &&
