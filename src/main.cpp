@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/22 15:05:33 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 16:49:35 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 // Memory
 #include "paging.h"
 #include "balloc.h"
+#include "kalloc.h"
 
 // Other
 #include "panic.h"

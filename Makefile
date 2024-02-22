@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/22 14:17:41 by etran            ###   ########.fr        #
+#    Updated: 2024/02/22 16:37:57 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,6 +87,7 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(STATE_DIR)/signal.cpp \
 					$(STATE_DIR)/time.cpp \
 					$(MEMORY_DIR)/balloc.cpp \
+					$(MEMORY_DIR)/kalloc.cpp \
 					$(MEMORY_DIR)/paging.cpp \
 					$(MEMORY_DIR)/address_space.cpp
 

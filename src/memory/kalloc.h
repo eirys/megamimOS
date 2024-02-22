@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   paging.h                                           :+:      :+:    :+:   */
+/*   kalloc.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/22 13:43:18 by etran             #+#    #+#             */
-/*   Updated: 2024/02/22 16:49:30 by etran            ###   ########.fr       */
+/*   Created: 2024/02/22 16:31:49 by etran             #+#    #+#             */
+/*   Updated: 2024/02/22 16:41:13 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "types.h"
+# include "types.h"
 
 namespace mem {
 
-void init(const u32 upperBound);
+u32     kalloc();
+void    kfree(u32 physicalFrame);
+void    kinit(u32 maxFreePages);
+
+void*   valloc();
 
 } // namespace mem

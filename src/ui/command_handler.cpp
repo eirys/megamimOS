@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:24:31 by etran             #+#    #+#             */
-/*   Updated: 2024/02/22 14:30:34 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 16:50:13 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,10 @@ void CommandHandler::_version() {
 }
 
 void CommandHandler::_pageFault() {
+    constexpr const u32 PAGE_FAULT_ADDRESS = 0x66666666;
+
     WindowManager::write("Simulating a page fault...");
-    u32* ptr = (u32*)0x66666666;
+    u32* ptr = (u32*)PAGE_FAULT_ADDRESS;
     *ptr = 0;
 }
 
