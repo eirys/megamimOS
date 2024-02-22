@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   memory.h                                           :+:      :+:    :+:   */
+/*   paging.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/16 22:50:13 by etran             #+#    #+#             */
-/*   Updated: 2024/02/18 21:42:23 by etran            ###   ########.fr       */
+/*   Created: 2024/02/22 13:43:18 by etran             #+#    #+#             */
+/*   Updated: 2024/02/22 13:59:26 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-# include "types.h"
+#include "types.h"
 
-namespace memory {
+namespace mem {
 
+void init(const u32 upperBound);
 
-
-} // namespace memory
+} // namespace mem

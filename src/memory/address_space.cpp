@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 14:45:45 by etran             #+#    #+#             */
-/*   Updated: 2024/02/22 13:40:57 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 14:39:48 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "balloc.h"
 #include "panic.h"
 #include "lib.h"
+#include "debug.h"
 
 namespace mem {
 
@@ -54,19 +55,22 @@ bool AddressSpace::createMapping4Kib(u32 virtualAddress, u32 physicalAddress, Fl
         *pagesDirectoryEntry = (u32)balloc(PAGE_TABLE_SIZE * sizeof(u32), FOUR_KIB);
         lib::memset((void*)*pagesDirectoryEntry, 0, PAGE_TABLE_SIZE * sizeof(u32));
         *pagesDirectoryEntry |= PRESENT_FLAG | (u32)flags;
-    }
-
-    if (*pagesDirectoryEntry & HUGE_PAGE) {
+    }  else if (*pagesDirectoryEntry & HUGE_PAGE) {
         return false;
+    } else {
+        if ((*pagesDirectoryEntry & (u32)Flags::Writable) && !((u32)flags & (u32)Flags::Writable)) {
+            *pagesDirectoryEntry &= ~(u32)Flags::Writable;
+        }
     }
 
     u32*        pagesTable = (u32*)(*pagesDirectoryEntry & ~0xFFF);
     const u32   pagesTableEntryIndex = (virtualAddress >> 12) & 0x3FF;
     u32*        pagesTableEntry = pagesTable + pagesTableEntryIndex;
 
-    if (!(*pagesTableEntry & PRESENT_FLAG)) {
-        *pagesTableEntry |= physicalAddress | PRESENT_FLAG | (u32)flags;
-    }
+    if (*pagesTableEntry & PRESENT_FLAG)
+        return false;
+
+    *pagesTableEntry |= physicalAddress | PRESENT_FLAG | (u32)flags;
 
     return true;
 }

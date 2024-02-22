@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/18 21:57:08 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 14:05:18 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 #include "gdt.h"
 
 // Memory
+#include "paging.h"
 #include "balloc.h"
 
 // Other
@@ -44,10 +45,15 @@
 
 static
 void _init(const multiboot::Info& info) {
+#ifdef _DEBUG
+    serial::init();
+#endif
     multiboot::MemoryMap memMap;
     if (!info.getLargestMemoryRegion(memMap))
         return beginKernelPanic("No memory available");
     mem::ballocInit(memMap.base_addr_low + memMap.length_low, memMap.base_addr_low);
+
+    mem::init(info.upperBound());
 
     cpu::gdt::init();
     cpu::idt::init();
@@ -56,9 +62,6 @@ void _init(const multiboot::Info& info) {
     vga::init();
     ps2::init();
     kfs::SignalManager::init();
-#ifdef _DEBUG
-    serial::init();
-#endif
     ui::EventHandler::init();
     ui::WindowManager::init();
     ui::LayoutHandler::init();

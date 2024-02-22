@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 00:58:19 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 03:32:47 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 14:26:11 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,13 @@ enum class Command: u8 {
     Halt,
     Version,
     SendSignal,
+    PageFault,
 
     Empty,
     Unknown,
 
     First = Clear,
-    Last = SendSignal
+    Last = PageFault
 };
 
 } // namespace ui

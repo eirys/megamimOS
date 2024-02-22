@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/30 15:41:37 by etran             #+#    #+#              #
-#    Updated: 2024/02/19 14:45:02 by etran            ###   ########.fr        #
+#    Updated: 2024/02/22 14:17:41 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,11 +87,13 @@ SRC_FILES_CPP	:=	main.cpp \
 					$(STATE_DIR)/signal.cpp \
 					$(STATE_DIR)/time.cpp \
 					$(MEMORY_DIR)/balloc.cpp \
+					$(MEMORY_DIR)/paging.cpp \
 					$(MEMORY_DIR)/address_space.cpp
 
 SRC_FILES_ASM	:=	boot.s \
 					$(GDT_DIR)/load_gdt.s \
-					$(IDT_DIR)/load_idt.s
+					$(IDT_DIR)/load_idt.s \
+					$(MEMORY_DIR)/enable_paging.s
 
 SRC_ASM			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_ASM))
 SRC_CPP			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES_CPP))
@@ -138,7 +140,7 @@ GRUB_CFG		:=	grub.cfg
 GRUB			:=	grub-mkrescue
 
 QEMU			:=	qemu-system-i386
-QEMU_FLAGS		:=	-serial stdio
+QEMU_FLAGS		:=	-serial stdio -m 510M
 
 # -------------------- MISC -------------------- #
 RM				:=	rm -rf

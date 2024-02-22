@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 20:52:05 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 12:48:03 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 14:29:58 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "debug.h"
 #include "core.h"
 #include "panic.h"
+#include "idt_decl.h"
 
 namespace cpu::idt {
 
@@ -173,7 +174,33 @@ void generalProtectionFault(InterruptFrame *frame, ErrorCode code) {
 }
 
 _DECL_INTERNAL
-void pageFaultInternal() {
+void pageFaultInternal(InterruptFrame *frame, ErrorCode code) {
+    LOG("PAGE FAULT!"); NL;
+
+    // REad the CR2 register
+    u32 cr2;
+    asm volatile("mov %%cr2, %0" : "=r"(cr2));
+
+
+    LOG("Instr="); LOG_NUM(frame->m_ip); NL;
+    LOG("Addr="); LOG_NUM(cr2); NL;
+
+    if (code & 0x1) {
+        LOG("Page-protection violation"); NL;
+    } else {
+        LOG("Non-present page"); NL;
+    }
+    if (code & 0x2) {
+        LOG("Write access"); NL;
+    } else {
+        LOG("Read access"); NL;
+    }
+    if (code & 0x4) {
+        LOG("User-mode access"); NL;
+    } else {
+        LOG("Supervisor-mode access"); NL;
+    }
+
     beginKernelPanic("Received an unexpected #PF exception.");
 }
 
@@ -181,7 +208,7 @@ _DECL_INTERRUPT
 void pageFault(InterruptFrame *frame, ErrorCode code) {
     (void)frame;
     (void)code;
-    pageFaultInternal();
+    pageFaultInternal(frame, code);
 }
 
 _DECL_INTERNAL

@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 01:24:31 by etran             #+#    #+#             */
-/*   Updated: 2024/02/16 21:40:48 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 14:30:34 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void CommandHandler::execute(Command cmd) {
         case Command::Version:  _version(); break;
         case Command::Unknown:  _unknown(); break;
         case Command::SendSignal: _sendSignal(); break;
+        case Command::PageFault: _pageFault(); break;
         case Command::Empty:
         default:
             break;
@@ -104,6 +105,12 @@ void CommandHandler::_reboot() {
 
 void CommandHandler::_version() {
     WindowManager::write("KFS pre-alpha 0.0.1 (jk just a school project lol)");
+}
+
+void CommandHandler::_pageFault() {
+    WindowManager::write("Simulating a page fault...");
+    u32* ptr = (u32*)0x66666666;
+    *ptr = 0;
 }
 
 /* -------------------------------------------- */

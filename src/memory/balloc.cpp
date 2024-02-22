@@ -6,12 +6,13 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 21:33:13 by etran             #+#    #+#             */
-/*   Updated: 2024/02/22 12:50:39 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 14:12:43 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "balloc.h"
 #include "panic.h"
+#include "debug.h"
 
 namespace mem {
 
@@ -24,13 +25,15 @@ static u32 g_ballocBase;
 void ballocInit(u32 top, u32 base) {
     g_ballocTop = top;
     g_ballocBase = base;
+    LOG("Initialized balloc with "); LOG_NUM(g_ballocTop - g_ballocBase); LOG(" bytes"); NL;
 }
 
 /**
  * @brief Bump allocator.
  */
 void *balloc(u32 size, u32 align) {
-    if (size < g_ballocTop - g_ballocBase) {
+    LOG("Allocating: "); LOG_NUM(size); LOG(" bytes with alignment "); LOG_NUM(align); NL;
+    if (size > g_ballocTop - g_ballocBase) {
         beginKernelPanic("balloc: too big size");
         return nullptr;
     }
@@ -39,7 +42,7 @@ void *balloc(u32 size, u32 align) {
     const u32 addr = (g_ballocTop - size) & ~mask;
 
     if (addr < g_ballocBase) {
-        beginKernelPanic("balloc: out of memory");
+        beginKernelPanic("balloc: too big align");
         return nullptr;
     }
 

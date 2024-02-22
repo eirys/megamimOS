@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 14:23:18 by etran             #+#    #+#             */
-/*   Updated: 2024/02/22 13:37:26 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 14:31:12 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ public:
     /* ---------------------------------------- */
 
     enum class Flags: u32 {
+        None            = 0,
         // Present      = 1 << 0, // Not available for users
         Writable        = 1 << 1,
         User            = 1 << 2,
@@ -68,6 +69,13 @@ public:
 
     // `virtualBase` and `physicalBase` must be aligned to 4K.
     bool createMapping(u32 virtualBase, u32 physicalBase, u32 size, Flags flags);
+
+    /* ---------------------------------------- */
+
+    inline
+    u32 getCR3() const {
+        return m_cr3;
+    }
 
 private:
     /* ---------------------------------------- */

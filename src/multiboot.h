@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 20:25:46 by etran             #+#    #+#             */
-/*   Updated: 2024/02/18 21:46:29 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 13:59:12 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,20 @@ struct Info {
             }
         }
         return true;
+    }
+
+    u32 upperBound() const {
+        u32 max = 0;
+
+        MmapIterator iter = mmapIterator();
+        MemoryMap memMap;
+        while (iter.next(memMap)) {
+            if (memMap.base_addr_low + memMap.length_low > max) {
+                max = memMap.base_addr_low + memMap.length_low;
+            }
+        }
+
+        return max;
     }
 
 };
