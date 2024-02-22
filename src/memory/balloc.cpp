@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 21:33:13 by etran             #+#    #+#             */
-/*   Updated: 2024/02/22 14:12:43 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 15:00:02 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,18 @@ namespace mem {
 
 static u32 g_ballocTop;
 static u32 g_ballocBase;
+static u32 g_ballocInitialTop;
+
+bool ballocIsConsumed(u32 physicalFrame) {
+    return physicalFrame >= g_ballocTop && physicalFrame < g_ballocInitialTop;
+}
 
 /**
  * @brief Initialize the bump allocator.
  */
 void ballocInit(u32 top, u32 base) {
     g_ballocTop = top;
+    g_ballocInitialTop = top;
     g_ballocBase = base;
     LOG("Initialized balloc with "); LOG_NUM(g_ballocTop - g_ballocBase); LOG(" bytes"); NL;
 }

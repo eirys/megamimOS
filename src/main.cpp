@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/22 14:05:18 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 15:05:33 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,23 @@
 
 /* -------------------------------------------- */
 
+template<typename F>
+void forEachFreePage(const multiboot::Info& info, F callback) {
+    multiboot::MemoryMap memMap;
+    multiboot::MmapIterator iter = info.mmapIterator();
+    while (iter.next(memMap)) {
+        if (memMap.type != (u32)multiboot::MemoryType::Available)
+            continue;
+        for (u32 i = 0; i < memMap.length_low; i += 0x1000)
+        {
+            u32 addr = memMap.base_addr_low + i;
+            if (mem::ballocIsConsumed(addr))
+                continue;
+            callback(addr);
+        }
+    }
+}
+
 static
 void _init(const multiboot::Info& info) {
 #ifdef _DEBUG
@@ -54,6 +71,11 @@ void _init(const multiboot::Info& info) {
     mem::ballocInit(memMap.base_addr_low + memMap.length_low, memMap.base_addr_low);
 
     mem::init(info.upperBound());
+
+    u32 maxFreePages = 0;
+    forEachFreePage(info, [&maxFreePages](u32 addr) { (void)addr; maxFreePages++; });
+    mem::kinit(maxFreePages);
+    forEachFreePage(info, [](u32 addr) { mem::kfree(addr); });
 
     cpu::gdt::init();
     cpu::idt::init();
