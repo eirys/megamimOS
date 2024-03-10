@@ -6,42 +6,21 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:57:47 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 17:48:00 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/16 14:02:45 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "terminal.h"
-#include "key_event.h"
+# include "terminal.h"
 
 namespace ui {
-
-enum class TerminalID: u8 {
-    User0 = 0,
-    User1,
-    User2,
-    User3,
-    User4,
-
-    First = User0,
-    Last = User4
-};
 
 class WindowManager final {
 public:
     /* ---------------------------------------- */
     /*                  METHODS                 */
     /* ---------------------------------------- */
-
-    WindowManager() {
-        for (u8 id = 0; id < TERMINAL_COUNT; id++) {
-            const u8 colorRaw = (u8)id + (u8)vga::Color::Indigo;
-            m_terminals[id].setColor((vga::Color)colorRaw);
-            m_terminals[id].setId(id);
-        }
-        currentTerminal().reset();
-    }
 
     ~WindowManager() = default;
 
@@ -52,98 +31,71 @@ public:
 
     /* ---------------------------------------- */
 
-    inline
-    Terminal& operator[](const TerminalID id) {
-        return m_terminals[static_cast<u8>(id)];
-    }
+    static WindowManager&   get();
 
-    inline
-    const Terminal& operator[](const TerminalID id) const {
-        return m_terminals[static_cast<u8>(id)];
-    }
+    static void         init();
+    static void         draw();
+    static Command      getCommand();
 
     /* ---------------------------------------- */
 
-    inline
-    void switchToNext() {
-        m_current = static_cast<TerminalID>((static_cast<u8>(m_current) + 1) % TERMINAL_COUNT);
-        currentTerminal().reset();
-    }
-
-    inline
-    void switchToPrevious() {
-        m_current = static_cast<TerminalID>((static_cast<u8>(m_current) + TERMINAL_COUNT - 1) % TERMINAL_COUNT);
-        currentTerminal().reset();
-    }
-
-    inline
-    Terminal& currentTerminal() {
-        return m_terminals[static_cast<u8>(m_current)];
-    }
-
-    inline
-    const Terminal& currentTerminal() const {
-        return m_terminals[static_cast<u8>(m_current)];
-    }
+    static void         switchToNext();
+    static void         switchToPrevious();
 
     /* ---------------------------------------- */
 
-    inline
-    void write(const char* str) {
-        currentTerminal() << str;
-    }
+    static void         write(const i8* str);
+    static void         write(const vga::Char character);
 
-    inline
-    void write(const vga::Char character) {
-        currentTerminal() << character;
-    }
+    /* ---------------------------------------- */
 
-    inline
-    void eraseChar() {
-        currentTerminal().eraseChar();
-    }
+    static void         eraseChar();
+    static void         eraseLine();
+    static void         deleteChar();
+    static void         newLine();
+    static void         prompt();
 
-    inline
-    void newLine() {
-        currentTerminal().insertNewline();
-    }
+    /* ---------------------------------------- */
 
-    inline
-    void scrollUp() {
-        currentTerminal().offsetUpward();
-    }
-
-    inline
-    void scrollDown() {
-        currentTerminal().offsetDownward();
-    }
+    static void         scrollUp();
+    static void         scrollDown();
+    static void         moveCursorLeft();
+    static void         moveCursorRight();
+    static void         moveCursorToBeginning();
+    static void         moveCursorToEnd();
+    static void         scrollPageDown();
+    static void         scrollPageUp();
+    static void         moveCursorToBeginningOfWord();
+    static void         moveCursorToEndOfWord();
+    static void         clearScreen();
 
 private:
     /* ---------------------------------------- */
     /*              STATIC MEMBERS              */
     /* ---------------------------------------- */
 
-    static constexpr u8 TERMINAL_COUNT = enumSize<TerminalID>();
+    static constexpr u8 TERMINAL_COUNT = 5U;
+
+    static Terminal    m_terminals[TERMINAL_COUNT];
+    static u8          m_currentTerminal;
 
     /* ---------------------------------------- */
-    /*                   DATA                   */
+    /*                  METHODS                 */
     /* ---------------------------------------- */
 
-    Terminal    m_terminals[TERMINAL_COUNT];
-    TerminalID  m_current = TerminalID::First;
+    WindowManager() = default;
+
+    /* ---------------------------------------- */
+
+    static Terminal&    _currentTerminal();
+
+    static void         _putStr(u8 x, u8 y, const i8* str);
+    static void         _putNbr(u8 x, u8 y, u32 nbr);
+    static void         _putTitle();
 
 }; // class WindowManager
 
-inline
-WindowManager& operator<<(WindowManager& wm, const char* str) {
-    wm.write(str);
-    return wm;
-}
-
-inline
-WindowManager& operator<<(WindowManager& wm, const vga::Char character) {
-    wm.write(character);
-    return wm;
-}
+WindowManager& operator<<(WindowManager& wm, const i8* str);
+WindowManager& operator<<(WindowManager& wm, const vga::Char character);
 
 } // namespace ui

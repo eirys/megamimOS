@@ -1,7 +1,6 @@
 obj
 lib/obj
 lib/libmegamim.a
-lib/test.out
 megamimOS
 megamimOS.iso
 .vscode

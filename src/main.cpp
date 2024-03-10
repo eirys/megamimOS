@@ -6,84 +6,102 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:41:49 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 17:31:41 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/22 16:49:35 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Boot
+#include "multiboot.h"
+
+// Drivers
 #include "ps2.h"
 #include "vga.h"
+#include "pic.h"
+#include "pit.h"
+
+// UI
+#include "keyboard.h"
+#include "event_handler.h"
 #include "window_manager.h"
-#include "qwerty.h"
-#include "serial.h"
-#include "lib.h"
+#include "layout_handler.h"
+
+// State
+#include "signal.h"
+#include "time.h"
+
+// CPU
+#include "idt.h"
+#include "gdt.h"
+
+// Memory
+#include "paging.h"
+#include "balloc.h"
+#include "kalloc.h"
+
+// Other
+#include "panic.h"
+#include "debug.h"
 
 /* -------------------------------------------- */
 
-/**
- * @todo :P)
-*/
-struct MultibootInfo {
-};
-
-/* -------------------------------------------- */
-
-static inline
-void _init() {
-    vga::clearBuffer();
-    ps2::readData();
-    serial::init();
-}
-
-static inline
-void _exit(ui::WindowManager& winManager) {
-    winManager.newLine();
-    winManager << "Good bye!";
-    vga::disableCursor();
-}
-
-static
-void _handleCommand(ui::WindowManager& winManager, const ui::KeyEvent& event) {
-    switch (event.m_key) {
-        case ui::Key::Backspace:    return winManager.eraseChar();
-        case ui::Key::Enter:        return winManager.newLine();
-        case ui::Key::Tab:          return event.m_uppercase ? winManager.switchToPrevious() : winManager.switchToNext();
-        case ui::Key::CursorUp:     return winManager.scrollUp();
-        case ui::Key::CursorDown:   return winManager.scrollDown();
-        case ui::Key::CursorLeft:
-        case ui::Key::CursorRight:
-        default:
-            break;
+template<typename F>
+void forEachFreePage(const multiboot::Info& info, F callback) {
+    multiboot::MemoryMap memMap;
+    multiboot::MmapIterator iter = info.mmapIterator();
+    while (iter.next(memMap)) {
+        if (memMap.type != (u32)multiboot::MemoryType::Available)
+            continue;
+        for (u32 i = 0; i < memMap.length_low; i += 0x1000)
+        {
+            u32 addr = memMap.base_addr_low + i;
+            if (mem::ballocIsConsumed(addr))
+                continue;
+            callback(addr);
+        }
     }
 }
 
-static inline
-void _panic(ui::WindowManager& winManager) {
-    core::panic();
-    winManager.newLine();
-    winManager << "PANIC KERNEL PANIC! ABORTING!";
-    // vga::disableCursor();
+static
+void _init(const multiboot::Info& info) {
+#ifdef _DEBUG
+    serial::init();
+#endif
+    multiboot::MemoryMap memMap;
+    if (!info.getLargestMemoryRegion(memMap))
+        return beginKernelPanic("No memory available");
+    mem::ballocInit(memMap.base_addr_low + memMap.length_low, memMap.base_addr_low);
+
+    mem::init(info.upperBound());
+
+    u32 maxFreePages = 0;
+    forEachFreePage(info, [&maxFreePages](u32 addr) { (void)addr; maxFreePages++; });
+    mem::kinit(maxFreePages);
+    forEachFreePage(info, [](u32 addr) { mem::kfree(addr); });
+
+    cpu::gdt::init();
+    cpu::idt::init();
+    pic::init();
+    pit::init(1000); // 100Hz
+    vga::init();
+    ps2::init();
+    kfs::SignalManager::init();
+    ui::EventHandler::init();
+    ui::WindowManager::init();
+    ui::LayoutHandler::init();
+
+    core::sti();
 }
+
 /* -------------------------------------------- */
 
 extern "C"
-void megamimOS_cpp(const MultibootInfo& info) {
-    _init();
-
-    ui::WindowManager   winManager;
-    ui::QwertyLayout    layout;
-
-   vga::enableCursor(0xe, 0xf);
+void megamimOS_cpp(const multiboot::Info& info) {
+    _init(info);
 
     for (;;) {
-        ui::KeyEvent event;
-        ui::TranslateResult result = layout.translate(ps2::poll(), event);
+        ui::Keyboard::handle(ui::LayoutHandler::getLayout());
+        kfs::SignalManager::update();
 
-        switch (result) {
-            case ui::TranslateResult::Print:    winManager << event.m_character; break;
-            case ui::TranslateResult::Invalid:  /* return */ /* _panic(winManager); */ break;
-            case ui::TranslateResult::Exit:     return _exit(winManager);
-            case ui::TranslateResult::Ignore:   break;
-            case ui::TranslateResult::Command:  _handleCommand(winManager, event); break;
-        }
+        core::hlt();
     }
 }

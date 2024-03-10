@@ -6,14 +6,14 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:40:56 by etran             #+#    #+#             */
-/*   Updated: 2024/02/08 17:03:51 by etran            ###   ########.fr       */
+/*   Updated: 2024/02/15 17:31:23 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "types.h"
-#include "core.h"
+# include "types.h"
+# include "core.h"
 
 namespace ps2 {
 
@@ -67,6 +67,15 @@ u8 readData() {
     return core::inB(DATA_PORT);
 }
 
+
+/**
+ * @brief Empty ps2 output buffer.
+ */
+static inline
+void init() {
+    readData();
+}
+
 /**
  * @brief Checks if the output buffer is full,
  * aka if the first bit of the status register is set.
@@ -78,7 +87,8 @@ bool isOutputFull() {
 }
 
 /**
- * @brief Pause the CPU until the user presses a key.
+ * @brief Pause the CPU until the user presses a key, and
+ * returns the scancode from the PS/2 controller.
 */
 static inline
 u8 poll() {
@@ -86,16 +96,6 @@ u8 poll() {
         core::pause();
     }
     return readData();
-}
-
-/**
- * @brief Tests if the keyboard LED is on.
-*/
-static inline
-bool isLedOn(const u8 led_mask) {
-    core::outB(COMMAND_REGISTER, 0xED);
-    core::outB(DATA_PORT, led_mask);
-    return readData() == 0xFA;
 }
 
 } // namespace ps2
